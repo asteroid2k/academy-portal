@@ -10,7 +10,12 @@ const routes = [
   {
     path: "/signin",
     name: "Signin",
-    component: () => import("../views/Signin.vue"),
+    component: () => import("../views/Applicant/Signin.vue"),
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    component: () => import("../views/Applicant/Signup.vue"),
   },
 ];
 
