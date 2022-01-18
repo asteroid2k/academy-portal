@@ -12,6 +12,11 @@ const routes = [
     name: "Signin",
     component: () => import("../views/Signin.vue"),
   },
+  {
+    path: "/applicationform",
+    name: "Application Form",
+    component: () => import("../views/Applicant/Signup.vue"),
+  },
 ];
 
 const router = createRouter({
