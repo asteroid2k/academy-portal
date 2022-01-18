@@ -26,16 +26,12 @@ export default {
   },
   methods: {
     async handleSubmit(values) {
-      console.log(values);
-
       try {
         let resp = await instance.post("/auth/signin", values);
-        console.log(resp);
         if (resp.data) {
           notyf.success(resp.data.message);
         }
       } catch ({ response }) {
-        console.log(response.data);
         const { errors, message } = response.data;
         if (errors) {
           notyf.error(Object.values(errors)[0]);
