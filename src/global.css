@@ -4,4 +4,8 @@
 
 :root {
   --primary: #7557d3;
+  --text-color: #211f26;
+  --sub-text-color: rgba(33, 31, 38, 0.71);
+  --accent-color: #ffffff;
+  --accent-color2: #fdc840;
 }
