@@ -17,6 +17,17 @@ const routes = [
     name: "Signup",
     component: () => import("../views/Applicant/Signup.vue"),
   },
+  {
+    path: "/assessment",
+    name: "Assessment",
+    component: () => import("../views/Applicant/Assessment.vue"),
+  },
+  // ADMIN ROUTES
+  {
+    path: "/admin/signin",
+    name: "AdminSignin",
+    component: () => import("../views/admin/Signin.vue"),
+  },
 ];
 
 const router = createRouter({
