@@ -23,7 +23,9 @@ export default {
           <nav>
             <a>Home</a>
             <a><router-link to="/signin">Sign In</router-link></a>
-            <a><router-link to="/signup">Register Now </router-link></a>
+            <a class="reg-button"
+              ><router-link to="/signup">Register Now </router-link></a
+            >
           </nav>
         </div>
       </div>

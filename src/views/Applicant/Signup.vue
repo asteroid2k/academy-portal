@@ -101,8 +101,8 @@ input {
 }
 .name {
   display: flex;
-
   gap: 30px;
+  margin-top: 22px;
 }
 .form-section {
   display: flex;
@@ -116,7 +116,7 @@ input {
   font-weight: normal;
   font-size: 14px;
   line-height: 17px;
-  margin-top: 8px;
+  margin-top: 10px;
   /* identical to box height */
   color: #4f4f4f;
 }
@@ -142,8 +142,5 @@ label {
   line-height: 17px;
   /* identical to box height */
   color: #4f4f4f;
-}
-.name {
-  margin-top: 8px;
 }
 </style>
