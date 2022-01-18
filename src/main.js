@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./global.css";
+import "notyf/notyf.min.css";
 
 const app = createApp(App);
 app.use(router);

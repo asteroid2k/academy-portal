@@ -12,6 +12,11 @@ const store = createStore({
       token: "",
     };
   },
+  getters: {
+    token(state) {
+      return state.token;
+    },
+  },
   mutations: {
     SET_TOKEN(state, payload) {
       state.token = payload;

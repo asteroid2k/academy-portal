@@ -1,7 +1,9 @@
 <script>
 import HomePageCards from "../components/HomePageCards.vue";
 export default {
-  data() {},
+  data() {
+    return {};
+  },
   components: { HomePageCards },
 };
 </script>
