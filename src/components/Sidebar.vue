@@ -52,6 +52,7 @@ export default {
 .avatar {
   width: 80px;
   height: 80px;
+  margin: auto;
 }
 .user-display {
   background-color: var(--primary);
