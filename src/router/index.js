@@ -28,7 +28,7 @@ const routes = [
     component: () => import("../views/Forgot.vue"),
   },
   {
-    path: "/apply",
+    path: "/apply/:id",
     name: "Apply",
     component: () => import("../views/Applicant/ApplyForm.vue"),
   },
@@ -37,6 +37,12 @@ const routes = [
     path: "/admin/signin",
     name: "AdminSignin",
     component: () => import("../views/admin/Signin.vue"),
+  },
+  // NOT FOUND
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 
