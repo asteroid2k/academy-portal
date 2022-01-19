@@ -82,7 +82,9 @@ export default {
             ><router-link to="/signup"><u> Sign Up</u></router-link></a
           >
         </p>
-        <p>Forgot Password?</p>
+        <router-link :to="{ name: 'Forgot' }"
+          ><p>Forgot Password?</p></router-link
+        >
       </div>
     </Form>
   </body>
