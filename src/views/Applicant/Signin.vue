@@ -1,6 +1,46 @@
 <script>
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { object, string } from "yup";
+import { notyf, instance } from "../../helpers";
+
 export default {
-  data() {},
+  name: "Signin",
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
+  data() {
+    const schema = object({
+      email: string()
+        .min(2)
+        .required("Email is required")
+        .email("Enter a valid Email"),
+      password: string().min(8).required("Password is required"),
+    });
+    return {
+      email: "",
+      password: "",
+      schema,
+    };
+  },
+  methods: {
+    async handleSubmit(values) {
+      try {
+        let resp = await instance.post("/auth/signin", values);
+        if (resp.data) {
+          notyf.success(resp.data.message);
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors)[0]);
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -11,14 +51,29 @@ export default {
     </div>
     <h1>Applicant Log In</h1>
 
-    <div class="login">
-      <label for="">Email Address</label>
-      <input type="text" name="" id="" />
+    <Form
+      class="login form"
+      @submit="handleSubmit"
+      action=""
+      :validation-schema="schema"
+    >
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <Field type="text" name="email" id="email" v-model="email" />
+        <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <Field
+          type="password"
+          name="password"
+          id="password"
+          v-model="password"
+        />
+        <ErrorMessage name="password" class="text-red-600 text-xs pt-1 px-2" />
+      </div>
 
-      <label for="">Password</label>
-      <input type="password" placeholder="" />
-
-      <button>Sign In</button>
+      <button type="submit">Sign In</button>
 
       <div class="login-footer">
         <p>
@@ -29,15 +84,15 @@ export default {
         </p>
         <p>Forgot Password?</p>
       </div>
-    </div>
+    </Form>
   </body>
 </template>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 body {
   background: #ffffff;
@@ -81,7 +136,6 @@ input {
   padding: 12px;
   width: 100%;
   height: 48px;
-  margin-bottom: 22px;
 }
 button {
   background: #7557d3;
