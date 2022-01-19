@@ -22,6 +22,16 @@ const routes = [
     name: "Assessment",
     component: () => import("../views/Applicant/Assessment.vue"),
   },
+  {
+    path: "/forgot",
+    name: "Forgot",
+    component: () => import("../views/Forgot.vue"),
+  },
+  {
+    path: "/apply",
+    name: "Apply",
+    component: () => import("../views/Applicant/ApplyForm.vue"),
+  },
   // ADMIN ROUTES
   {
     path: "/admin/signin",
