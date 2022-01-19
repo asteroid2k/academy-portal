@@ -20,7 +20,32 @@ const routes = [
   {
     path: "/applicationform",
     name: "Application Form",
-    component: () => import("../views/Applicant/Signup.vue"),
+    component: () => import("../views/Applicant/ApplicationForm.vue"),
+  },
+  {
+    path: "/forgotpassword",
+    name: "Forgot Password",
+    component: () => import("../views/Applicant/ForgotPassword.vue"),
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () => import("../views/Applicant/Dashboard.vue"),
+  },
+  {
+    path: "/assessment",
+    name: "Assessment",
+    component: () => import("../views/Applicant/Assessment.vue"),
+  },
+  {
+    path: "/admin-dashboard",
+    name: "AdminDashboard",
+    component: () => import("../views/Admin/AdminDashboard.vue"),
+  },
+  {
+    path: "/logout",
+    name: "Logout",
+    component: () => import("../views/Logout.vue"),
   },
 ];
 

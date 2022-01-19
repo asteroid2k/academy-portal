@@ -1,145 +1,258 @@
-<script>
-export default {
-  data() {},
-};
-</script>
-
 <template>
-  <div class="main-container">
-    <div class="logo">
-      <img src="../assets/enyata.svg" alt="" />
-    </div>
-
-    <div class="form-head">
-      <p>Applicant Sign Up</p>
-    </div>
-
-    <section class="form-section">
-      <form class="form">
-        <div class="name">
-          <div class="first-name">
-            <div><label for="fname">First Name</label></div>
-            <input type="text" name="fname" />
+  <div class="app-section">
+    <div class="app-container">
+      <div class="app-title">
+        <div class="app-image-con">
+          <img class="app-image" src="../../assets/logo.png" alt="" />
+        </div>
+        <h2 class="app-text">Application Form</h2>
+      </div>
+      <form class="app-form-container" enctype="multipart/form-data">
+        <div class="app-form-buttons">
+          <div class="dotted">
+            <div>
+              <button class="upload-btn">+ Upload CV</button>
+              <input type="file" name="files_path" ref="file" />
+            </div>
           </div>
-          <div class="last-name">
-            <div class="last-name">
-              <div><label for="lname">Last Name</label></div>
-              <input type="text" name="lname" />
+          <div class="dotted">
+            <div>
+              <button class="upload-btn">+ Upload Photo</button>
+              <input type="file" name="files_path" ref="file" />
             </div>
           </div>
         </div>
-
-        <div class="name">
-          <div class="email">
-            <div><label for="mail">Email Address</label></div>
-            <input type="text" name="mail" />
-          </div>
-          <div class="Phone">
-            <div class="phone-number">
-              <div><label for="phone">Phone Number</label></div>
-              <input type="tel" name="lname" />
+        <div class="input-container">
+          <div class="input-con">
+            <div class="int">
+              <label for="firstname">First Name</label>
+              <input
+                type="text"
+                class="input"
+                name="firstname"
+                v-model="firstname"
+                required
+              />
+            </div>
+            <div class="int">
+              <label for="lastname">Last Name</label>
+              <input
+                type="text"
+                class="input"
+                name="firstname"
+                v-model="lastname"
+                required
+              />
             </div>
           </div>
-        </div>
-
-        <div class="name">
-          <div class="password">
-            <div><label for="password">Password</label></div>
-            <input type="password" name="password" />
-          </div>
-          <div class="Phone">
-            <div class="confirm-password">
-              <div><label for="con-password">Confirm Password</label></div>
-              <input type="password" name="con-password" />
+          <div class="input-con">
+            <div class="int">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="input"
+                name="email"
+                v-model="email"
+                required
+              />
+            </div>
+            <div class="int">
+              <label for="date_of_birth">Date of Birth</label>
+              <input
+                type="date"
+                class="input"
+                name="date_of_birth"
+                v-model="date_of_birth"
+                required
+              />
             </div>
           </div>
+          <div class="input-con">
+            <div class="int">
+              <label for="address">Address</label>
+              <input
+                type="text"
+                class="input"
+                name="address"
+                v-model="address"
+                required
+              />
+            </div>
+            <div class="int">
+              <label for="lastname">University</label>
+              <input
+                type="text"
+                class="input"
+                name="university"
+                v-model="university"
+                required
+              />
+            </div>
+          </div>
+          <div class="input-con">
+            <div class="int">
+              <label for="course_of_study">Course of Study</label>
+              <input
+                type="text"
+                class="input"
+                name="course_of_study"
+                v-model="course_of_study"
+                required
+              />
+            </div>
+            <div class="int">
+              <label for="lastname">CGPA</label>
+              <input
+                type="text"
+                class="input"
+                name="cgpa"
+                v-model="cgpa"
+                required
+              />
+            </div>
+          </div>
+          <button class="submit" type="submit">Submit</button>
         </div>
-
-        <div class="bt1"><button class="sign-up">Sign Up</button></div>
-
-        <p class="end">
-          Already have an account
-          <router-link to="/" class="signin">Sign in?</router-link>
-        </p>
       </form>
-    </section>
+    </div>
   </div>
 </template>
 
+<script>
+export default {
+  name: "AppForm",
+};
+</script>
+
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
-.main-container {
-  font-family: "Lato";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.logo {
+
+.app-section {
+  font-family: "Lato";
+  margin: 50px;
+}
+
+.app-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Lato;
+}
+
+.app-image-con {
+  width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 200px;
 }
-.form-head {
-  margin-top: 27px;
+.app-image {
+  width: 8%;
 }
-.form-head p {
-  text-align: center;
-  font-family: "Lato";
+
+.app-text {
+  font-size: 24px;
   font-style: italic;
   font-weight: 500;
-  font-size: 24px;
   line-height: 29px;
-  color: #2b3c4e;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-top: 24px;
 }
-input {
-  border: 1.5px solid #bdbdbd;
-  box-sizing: border-box;
-  border-radius: 4px;
-  width: 20vw;
-  padding: 5px;
-}
-.name {
-  display: flex;
 
-  gap: 30px;
+.app-form-container {
+  width: 963px;
+  background: #ffffff;
+  box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
+  border-radius: 8px;
+  margin: 15px auto 0;
+  padding-bottom: 20px;
 }
-.form-section {
+
+.app-form-buttons input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.app-form-buttons {
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 64px;
+  padding-top: 23px;
+  position: relative;
+  overflow: hidden;
 }
-.end {
-  text-align: center;
-  font-family: Lato;
-  font-style: italic;
+
+.upload-btn {
+  width: 211px;
+  height: 49.97px;
+  border: 1.5px dashed #2b3c4e;
+  box-sizing: border-box;
+  border-radius: 2.87205px;
+  background-color: #ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 16px 0;
+  font-family: "Lato";
   font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  margin-top: 8px;
-  /* identical to box height */
-  color: #4f4f4f;
+  font-size: 16px;
+  color: #2b3c4e;
+  padding: 0 13.97px 0;
 }
-button {
-  background: #7557d3;
-  border-radius: 4px;
-  color: white;
+
+.input-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.input-con {
+  display: flex;
+  padding-left: 20px;
   width: 100%;
-  padding: 8px 0;
+  margin-top: 10px;
 }
-.bt1 {
-  margin-top: 32px;
-  padding: 0 50px;
-}
-.signin {
-  font-style: italic;
+.int {
+  width: 50%;
 }
 label {
   font-family: Lato;
-  font-style: normal;
-  font-weight: normal;
   font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
   line-height: 17px;
-  /* identical to box height */
-  color: #4f4f4f;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #2b3c4e;
 }
-.name {
-  margin-top: 8px;
+.input {
+  width: 390px;
+  height: 48px;
+  border: 1.5px solid #2b3c4e;
+  border-radius: 4px;
+  padding: 10px;
+}
+.submit {
+  display: block;
+  height: 50px;
+  width: 379px;
+  border-radius: 4px;
+  margin: 0 auto;
+  background-color: #7557d3;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 19px;
+  color: white;
+  margin-top: 23px;
 }
 </style>

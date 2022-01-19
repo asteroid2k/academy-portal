@@ -246,6 +246,7 @@ Nav Styles
     flex-direction: column;
     justify-content: center;
     height: 100%;
+    overflow: hidden;
     text-align: center;
   }
   nav a {
@@ -281,7 +282,6 @@ Animations
 
   .reg-button {
     width: 152px;
-    height: 48px;
     margin: 10px auto;
   }
   .reg-button:hover {
