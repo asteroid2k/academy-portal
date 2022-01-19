@@ -1,19 +1,109 @@
+<script>
+export default {
+  name: "Sidebar",
+  props: {
+    routes: Array,
+  },
+};
+</script>
+
 <template>
-  <div class="side bar">
-    <div class="user-display"></div>
-    <div class="links-container">
-      <div class="links-div">
-        <img id="active-icon" src="../assets/dashboard-icon.png" />
-        <router-link class="link" id="active" to="/"> Dashboard</router-link>
+  <div class="entire-page">
+    <div class="sidebar">
+      <div class="user-display">
+        <figure class="avatar">
+          <img src="../assets/avatar1.png" />
+        </figure>
+        <p class="heading">Jane Doe</p>
+        <p class="body">doe@enyata.com</p>
       </div>
-      <div class="links-div">
-        <img src="../assets/assessment-icon.png" />
-        <router-link class="link" to="/assessment">Assessment</router-link>
+      <div></div>
+      <div class="links-container" v-for="(data, index) in routes" :key="index">
+        <img :src="data.image" class="icons" />
+        <router-link class="link" :to="data.routeUrl">{{
+          data.routeName
+        }}</router-link>
       </div>
-      <div class="links-div">
-        <img src="../assets/logout-icon.png" />
+      <div id="logout" class="links-container">
+        <img src="../assets/logout-icon.png" class="icons" />
         <router-link class="link" to="/logout">Logout</router-link>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+* {
+  font-family: Lato;
+  box-sizing: border-box;
+}
+.entire-page {
+  width: 100%;
+}
+.sidebar {
+  width: 292px;
+  box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border-radius: 8px;
+  color: var(--accent-color);
+}
+.avatar {
+  width: 80px;
+  height: 80px;
+}
+.user-display {
+  background-color: var(--primary);
+  text-align: center;
+  padding: 70px 0px;
+  margin-bottom: 28px;
+  width: inherit;
+}
+
+.heading {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  margin: 13px 0px 5px;
+}
+
+.body {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+}
+
+.link {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: left;
+
+  /* identical to box height */
+  color: #2b3c4e;
+}
+
+.links-container {
+  display: flex;
+  margin-bottom: 16px;
+  padding: 20px;
+  text-align: left;
+}
+.links-container:hover {
+  border-left: 4px solid var(--primary);
+}
+.icons {
+  height: 20px;
+  margin-right: 20px;
+}
+
+#logout {
+  margin: 100px 0px 70px;
+}
+</style>
