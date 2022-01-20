@@ -9,6 +9,13 @@ export const notyf = new Notyf({
     y: "top",
   },
   ripple: true,
+  types: [
+    {
+      type: "info",
+      background: "#7557D3",
+      icon: false,
+    },
+  ],
 });
 
 export const questions = [

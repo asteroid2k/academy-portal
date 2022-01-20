@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import store from "../store";
+import { notyf } from "../helpers.js";
 
 const routes = [
   {
@@ -31,6 +33,18 @@ const routes = [
     path: "/apply/:id",
     name: "Apply",
     component: () => import("../views/Applicant/ApplyForm.vue"),
+    //redirect to login if user is not signed in
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token) {
+        notyf.open({
+          type: "info",
+          message: "You are not logged in",
+        });
+        next({ name: "Signin" });
+      } else {
+        next();
+      }
+    },
   },
   // ADMIN ROUTES
   {
