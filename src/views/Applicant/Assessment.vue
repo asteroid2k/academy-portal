@@ -1,5 +1,5 @@
 <script>
-import { questions } from "../../helpers";
+import { questions } from "../../helpers.js";
 import Question from "../../components/Question.vue";
 export default {
   name: "Assessment",
@@ -49,15 +49,17 @@ export default {
         You are about to take your assessment. <br />
         Your timer will start when you click the button
       </p>
-      <p v-else class="max-w-[350px] mx-auto">
+      <div v-else class="max-w-[350px] mx-auto">
         <img
           src="../../assets/hourglass.svg"
           alt=""
           class="w-[72] mx-auto mb-[20px]"
         />
-        We have 4 days left until the next assessment <br />
-        Watch this space
-      </p>
+        <p>
+          We have 4 days left until the next assessment <br />
+          Watch this space
+        </p>
+      </div>
       <button
         class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
         :disabled="questions.length <= 0"

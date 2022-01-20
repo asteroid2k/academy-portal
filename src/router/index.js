@@ -46,6 +46,14 @@ const routes = [
     path: "/logout",
     name: "Logout",
     component: () => import("../views/Logout.vue"),
+    path: "/forgot",
+    name: "Forgot",
+    component: () => import("../views/Forgot.vue"),
+  },
+  {
+    path: "/apply",
+    name: "Apply",
+    component: () => import("../views/Applicant/ApplyForm.vue"),
   },
   // ADMIN ROUTES
   {
