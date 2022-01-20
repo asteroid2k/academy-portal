@@ -1,244 +1,188 @@
+<script>
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { object } from "yup";
+import { notyf, validators } from "../../helpers.js";
+import { mapGetters } from "vuex";
+export default {
+  name: "ApplyForm",
+
+  props: { instance: Function },
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
+  data() {
+    const schema = object({
+      email: validators.email,
+      dob: validators.dob,
+      firstName: validators.nameR,
+      lastName: validators.nameR,
+    });
+    return {
+      schema,
+    };
+  },
+  computed: {
+    ...mapGetters(["token"]),
+  },
+  methods: {
+    async handleSubmit(values) {
+      try {
+        let resp = await this.instance.post(
+          `/application/apply/${this.$route.params.id}`,
+          values
+        );
+        if (resp.data) {
+          notyf.success(resp.data.message);
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        //unauthorized
+        if (response.staus === 401 || 403) {
+          return notyf.error("unauthorized");
+        }
+        console.log(response.status);
+        // handle validation errors
+        if (errors) {
+          return notyf.error(Object.values(errors)[0]);
+          // handle other errors
+        }
+        if (message) {
+          return notyf.error(message);
+        }
+      }
+    },
+  },
+};
+</script>
 <template>
-  <div class="app-container my-8">
-    <div class="app-title">
-      <div class="app-image-con">
-        <img class="app-image" src="../../assets/logo.svg" alt="" />
+  <div class="main my-8">
+    <!-- header -->
+    <div class="heading flex flex-col items-center gap-7">
+      <div class="">
+        <img class="" src="../../assets/logo.svg" alt="" />
       </div>
-      <h2 class="app-text">Application Form</h2>
+      <h2 class="text-2xl font-medium italic">Application Form</h2>
     </div>
-    <form class="app-form-container" enctype="multipart/form-data">
-      <div class="app-form-buttons">
-        <div class="dotted">
-          <div>
-            <button class="upload-btn">+ Upload CV</button>
-            <input type="file" name="files_path" ref="file" />
-          </div>
+    <!-- form -->
+    <Form
+      action=""
+      @submit="handleSubmit"
+      :validation-schema="schema"
+      class="max-w-[960px] px-[70px] pt-[50px] pb-[40px] mx-auto shadow rounded-lg w-full"
+      enctype="multipart/form-data"
+    >
+      <!-- file upload buttons -->
+      <div class="file-uploads flex gap-8 justify-center mb-8">
+        <div
+          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
+        >
+          <label for="cv">+ Upload CV</label>
+          <Field type="file" name="cv" class="sr-only" id="cv" action="" />
+          <ErrorMessage name="cv" class="text-red-600 text-xs pt-1 px-2" />
         </div>
-        <div class="dotted">
-          <div>
-            <button class="upload-btn">+ Upload Photo</button>
-            <input type="file" name="files_path" ref="file" />
-          </div>
+        <div
+          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
+        >
+          <label for="image">+ Upload Photo</label>
+          <Field type="file" name="image" class="sr-only" id="image" />
+          <ErrorMessage name="image" class="text-red-600 text-xs pt-1 px-2" />
         </div>
       </div>
-      <div class="input-container">
-        <div class="input-con">
-          <div class="int">
-            <label for="firstname">First Name</label>
-            <input
-              type="text"
-              class="input"
-              name="firstname"
-              v-model="firstname"
-              required
-            />
-          </div>
-          <div class="int">
-            <label for="lastname">Last Name</label>
-            <input
-              type="text"
-              class="input"
-              name="firstname"
-              v-model="lastname"
-              required
-            />
-          </div>
+      <div class="input-container grid grid-cols-2 gap-x-[65px] gap-y-7">
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="firstname">First Name</label>
+          <Field
+            type="text"
+            class="input border-border-300 h-12 k-input"
+            name="firstName"
+          />
+          <ErrorMessage
+            name="firstName"
+            class="text-red-600 text-xs pt-1 px-2"
+          />
         </div>
-        <div class="input-con">
-          <div class="int">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              class="input"
-              name="email"
-              v-model="email"
-              required
-            />
-          </div>
-          <div class="int">
-            <label for="date_of_birth">Date of Birth</label>
-            <input
-              type="date"
-              class="input"
-              name="date_of_birth"
-              v-model="date_of_birth"
-              required
-            />
-          </div>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="lastname">Last Name</label>
+          <Field
+            type="text"
+            class="input border-border-300 h-12 k-input"
+            name="lastName"
+          />
+          <ErrorMessage
+            name="lastName"
+            class="text-red-600 text-xs pt-1 px-2"
+          />
         </div>
-        <div class="input-con">
-          <div class="int">
-            <label for="address">Address</label>
-            <input
-              type="text"
-              class="input"
-              name="address"
-              v-model="address"
-              required
-            />
-          </div>
-          <div class="int">
-            <label for="lastname">University</label>
-            <input
-              type="text"
-              class="input"
-              name="university"
-              v-model="university"
-              required
-            />
-          </div>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="email">Email</label>
+          <Field
+            type="email"
+            class="input border-border-300 h-12 k-input"
+            name="email"
+          />
+          <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
         </div>
-        <div class="input-con">
-          <div class="int">
-            <label for="course_of_study">Course of Study</label>
-            <input
-              type="text"
-              class="input"
-              name="course_of_study"
-              v-model="course_of_study"
-              required
-            />
-          </div>
-          <div class="int">
-            <label for="lastname">CGPA</label>
-            <input
-              type="text"
-              class="input"
-              name="cgpa"
-              v-model="cgpa"
-              required
-            />
-          </div>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="dob">Date of Birth</label>
+          <Field
+            type="date"
+            class="input border-border-300 h-12 k-input"
+            name="dob"
+            id="dob"
+          />
+          <ErrorMessage name="dob" class="text-red-600 text-xs pt-1 px-2" />
         </div>
-        <button class="submit" type="submit">Submit</button>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="address">Address</label>
+          <Field
+            type="text"
+            class="input border-border-300 h-12 k-input"
+            name="address"
+            id="addresss"
+          />
+          <ErrorMessage name="address" class="text-red-600 text-xs pt-1 px-2" />
+        </div>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="lastname">University</label>
+          <Field
+            type="text"
+            class="input border-border-300 h-12 k-input"
+            name="university"
+          />
+          <ErrorMessage
+            name="university"
+            class="text-red-600 text-xs pt-1 px-2"
+          />
+        </div>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="course_of_study">Course of Study</label>
+          <Field
+            type="text"
+            class="input border-border-300 h-12 k-input"
+            name="course"
+          />
+          <ErrorMessage name="course" class="text-red-600 text-xs pt-1 px-2" />
+        </div>
+        <div class="input-group max-w-[375px] flex flex-col gap-[5px]">
+          <label class="text-sm" for="lastname">CGPA</label>
+          <Field
+            type="text"
+            class="input border-border-300 h-12 k-input"
+            name="gpa"
+          />
+          <ErrorMessage name="gpa" class="text-red-600 text-xs pt-1 px-2" />
+        </div>
       </div>
-    </form>
+      <button
+        class="mt-11 rounded font-bold text-base block max-w-[380px] w-full bg-primary text-white h-12 mx-auto"
+        type="submit"
+      >
+        Submit
+      </button>
+    </Form>
   </div>
 </template>
 
-<script>
-export default {
-  name: "AppForm",
-};
-</script>
-
-<style scoped>
-.app-title {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 50px;
-  font-family: Lato;
-}
-
-.app-image-con {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.app-image {
-  width: 8%;
-}
-
-.app-text {
-  font-size: 24px;
-  font-style: italic;
-  font-weight: 500;
-  line-height: 29px;
-  letter-spacing: 0em;
-  text-align: left;
-  margin-top: 24px;
-}
-
-.app-form-container {
-  width: 963px;
-  background: #ffffff;
-  box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
-  border-radius: 8px;
-  margin: 15px auto 0;
-  padding-bottom: 20px;
-}
-
-.app-form-buttons input[type="file"] {
-  font-size: 100px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-}
-
-.app-form-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 23px;
-  position: relative;
-  overflow: hidden;
-}
-
-.upload-btn {
-  width: 211px;
-  height: 49.97px;
-  border: 1.5px dashed #2b3c4e;
-  box-sizing: border-box;
-  border-radius: 2.87205px;
-  background-color: #ffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 16px 0;
-  font-family: "Lato";
-  font-weight: normal;
-  font-size: 16px;
-  color: #2b3c4e;
-  padding: 0 13.97px 0;
-}
-
-.input-container {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.input-con {
-  display: flex;
-  padding-left: 20px;
-  width: 100%;
-  margin-top: 10px;
-}
-.int {
-  width: 50%;
-}
-label {
-  font-family: Lato;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 17px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #2b3c4e;
-}
-.input {
-  width: 390px;
-  height: 48px;
-  border: 1.5px solid #2b3c4e;
-  border-radius: 4px;
-  padding: 10px;
-}
-.submit {
-  display: block;
-  height: 50px;
-  width: 379px;
-  border-radius: 4px;
-  margin: 0 auto;
-  background-color: #7557d3;
-  font-family: Lato;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 19px;
-  color: white;
-  margin-top: 23px;
-}
-</style>
+<style scoped></style>
