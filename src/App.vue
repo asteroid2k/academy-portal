@@ -1,9 +1,13 @@
 <script>
 import { mapGetters } from "vuex";
 import axios from "axios";
+import Navbar from "./components/Navbar.vue";
 
 export default {
   name: "App",
+  components: {
+    Navbar,
+  },
   computed: {
     ...mapGetters(["token"]),
     instance() {
@@ -19,6 +23,7 @@ export default {
 
 <template>
   <router-view :instance="instance"></router-view>
+  <Navbar />
 </template>
 
 <style></style>

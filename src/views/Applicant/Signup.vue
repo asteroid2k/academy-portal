@@ -69,6 +69,7 @@ export default {
 <style scoped>
 .main-container {
   font-family: "Lato";
+  margin: 80px;
 }
 .logo {
   display: flex;
@@ -77,7 +78,6 @@ export default {
 .logo img {
   width: 110.1px;
   height: 20.84px;
-  margin-top: 80px;
   margin-bottom: 24px;
 }
 .form-head {
