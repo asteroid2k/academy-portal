@@ -21,20 +21,46 @@ const routes = [
   },
 
   {
-    path: "/forgotpassword",
-    name: "Forgot Password",
-    component: () => import("../views/Applicant/ForgotPassword.vue"),
-  },
-  {
     path: "/dashboard",
     name: "Dashboard",
     component: () => import("../views/Applicant/Dashboard.vue"),
+    children: [
+      {
+        path: "/dashboard",
+        name: "UserDashboard",
+        component: () => import("../views/Applicant/UserDashboard.vue"),
+      },
+      {
+        path: "/assessment",
+        name: "Assessment",
+        component: () => import("../views/Applicant/Assessment.vue"),
+      },
+      {
+        path: "/sucess",
+        name: "Success",
+        component: () => import("../components/Success.vue"),
+      },
+
+      {
+        path: "/apply/:id",
+        name: "Apply",
+        component: () => import("../views/Applicant/ApplyForm.vue"),
+        //redirect to login if user is not signed in
+        beforeEnter: (to, from, next) => {
+          if (!store.state.token) {
+            notyf.open({
+              type: "info",
+              message: "You are not logged in",
+            });
+            next({ name: "Signin" });
+          } else {
+            next();
+          }
+        },
+      },
+    ],
   },
-  {
-    path: "/assessment",
-    name: "Assessment",
-    component: () => import("../views/Applicant/Assessment.vue"),
-  },
+
   {
     path: "/admin-dashboard",
     name: "AdminDashboard",
@@ -46,42 +72,48 @@ const routes = [
         component: () => import("../views/Admin/Dashboard.vue"),
       },
       {
-        path: "/admin-dashboard/application",
+        path: "/admin-dashboard/create-application",
         name: "CreateApplication",
-        component: () => import("../views/Admin/Dashboard.vue"),
+        component: () => import("../views/Admin/CreateApplication.vue"),
       },
       {
         path: "/admin-dashboard/assessment",
         name: "CreateAssessment",
         component: () => import("../views/Admin/CreateAssessment.vue"),
       },
+      {
+        path: "/admin-dashboard/assessment-history",
+        name: "AssessmentHistory",
+        component: () => import("../views/Admin/AssessmentHistory.vue"),
+      },
+      {
+        path: "/admin-dashboard/application-entries",
+        name: "ApplicationEntries",
+        component: () => import("../views/Admin/ApplicationEntries.vue"),
+      },
     ],
+  },
+  {
+    path: "/admin-login",
+    name: "AdminLogin",
+    component: () => import("../views/Admin/AdminLogin.vue"),
+  },
+  {
+    path: "/admin-login",
+    name: "AdminLogin",
+    component: () => import("../views/Admin/AdminLogin.vue"),
   },
   {
     path: "/logout",
     name: "Logout",
     component: () => import("../views/Logout.vue"),
+  },
+  {
     path: "/forgot",
     name: "Forgot",
     component: () => import("../views/Forgot.vue"),
   },
-  {
-    path: "/apply/:id",
-    name: "Apply",
-    component: () => import("../views/Applicant/ApplyForm.vue"),
-    //redirect to login if user is not signed in
-    beforeEnter: (to, from, next) => {
-      if (!store.state.token) {
-        notyf.open({
-          type: "info",
-          message: "You are not logged in",
-        });
-        next({ name: "Signin" });
-      } else {
-        next();
-      }
-    },
-  },
+
   // ADMIN ROUTES
   {
     path: "/admin/signin",

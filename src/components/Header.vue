@@ -32,7 +32,7 @@ export default {
 .header-container {
   display: flex;
   justify-content: space-between;
-  margin: 50px;
+  margin: 50px 60px;
   width: 100%;
   color: #2b3c4e;
 }
@@ -41,7 +41,6 @@ export default {
   font-weight: 300;
   font-size: 43.5555px;
   line-height: 52px;
-  /* identical to box height */
   margin-bottom: 14px;
   letter-spacing: -0.02em;
 }
@@ -50,7 +49,6 @@ export default {
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
-  /* identical to box height */
 }
 
 .timer-title {
@@ -66,8 +64,6 @@ export default {
   font-weight: 300;
   font-size: 48px;
   line-height: 58px;
-  /* identical to box height */
-
   text-align: center;
 }
 
@@ -76,10 +72,7 @@ export default {
   font-weight: normal;
   font-size: 12px;
   line-height: 14px;
-  /* identical to box height */
-
   text-align: center;
-
   color: #4f4f4f;
 }
 </style>

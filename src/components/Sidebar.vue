@@ -8,25 +8,30 @@ export default {
 </script>
 
 <template>
-  <!-- <div class="entire-page"> -->
-  <div class="sidebar">
-    <div class="user-display">
-      <figure class="avatar">
-        <img src="../assets/avatar1.png" />
-      </figure>
-      <p class="heading">Jane Doe</p>
-      <p class="body">doe@enyata.com</p>
-    </div>
-    <div></div>
-    <div class="links-container" v-for="(data, index) in routes" :key="index">
-      <img :src="data.image" class="icons" />
-      <router-link class="link" :to="{ name: data.routeUrl }">{{
-        data.routeName
-      }}</router-link>
-    </div>
-    <div id="logout" class="links-container">
-      <img src="../assets/logout-icon.png" class="icons" />
-      <router-link class="link" to="/logout">Logout</router-link>
+  <div class="entire-page">
+    <div class="sidebar">
+      <div class="user-display">
+        <figure class="avatar">
+          <img src="../assets/avatar1.png" />
+        </figure>
+        <p class="heading">Jane Doe</p>
+        <p class="body">doe@enyata.com</p>
+      </div>
+      <div></div>
+      <div class="links-container" v-for="(data, index) in routes" :key="index">
+        <div class="image-container">
+          <img :src="data.image" class="icons" />
+        </div>
+        <router-link class="link" :to="{ name: data.routeUrl }">{{
+          data.routeName
+        }}</router-link>
+      </div>
+      <div id="logout" class="links-container">
+        <div class="image-container">
+          <img src="../assets/logout.svg" class="icons" />
+        </div>
+        <router-link class="link" to="/logout">Logout</router-link>
+      </div>
     </div>
   </div>
   <!-- </div> -->
@@ -34,7 +39,8 @@ export default {
 
 <style scoped>
 .sidebar {
-  width: 292px;
+  width: 290px;
+  height: 1024px;
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
   margin: 0;
   padding: 0;
@@ -73,7 +79,6 @@ export default {
 
 .link {
   font-style: normal;
-  font-weight: bold;
   font-size: 16px;
   line-height: 19px;
   text-align: left;
@@ -84,17 +89,21 @@ export default {
 
 .links-container {
   display: flex;
-  margin-bottom: 16px;
-  padding: 20px;
+  align-items: center;
+  padding: 20px 25px;
   text-align: left;
   border-left: 4px solid white;
 }
 .links-container:hover {
   border-left: 4px solid var(--primary);
+  font-weight: bold;
 }
-.icons {
-  height: 20px;
+
+.image-container {
+  width: 25px;
+  height: fit-content;
   margin-right: 20px;
+  height: fit-content;
 }
 
 #logout {

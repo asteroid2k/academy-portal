@@ -1,9 +1,10 @@
 <script>
 import Sidebar from "../../components/Sidebar.vue";
+import History from "../../components/History.vue";
 
 export default {
   name: "AdminDashboard",
-  components: { Sidebar },
+  components: { Sidebar, History },
   data() {
     return {
       routes: [
@@ -17,21 +18,21 @@ export default {
           image: "../../../src/assets/create-app.svg",
           routeUrl: "CreateApplication",
         },
-        // {
-        //   routeName: "Application Entries",
-        //   image: "../../../src/assets/entries.svg",
-        //   routeUrl: "/application-entries",
-        // },
+        {
+          routeName: "Application Entries",
+          image: "../../../src/assets/entries.svg",
+          routeUrl: "ApplicationEntries",
+        },
         {
           routeName: "Compose Assessment",
           image: "../../../src/assets/assessment-icon.svg",
           routeUrl: "CreateAssessment",
         },
-        // {
-        //   routeName: "Assessment History",
-        //   image: "../../../src/assets/history.png",
-        //   routeUrl: "/assessment-history",
-        // },
+        {
+          routeName: "Assessment History",
+          image: "../../../src/assets/history.svg",
+          routeUrl: "AssessmentHistory",
+        },
         // {
         //   routeName: "Results",
         //   image: "../../../src/assets/results.png",
@@ -60,3 +61,5 @@ export default {
   grid-template-columns: auto 1fr;
 }
 </style>
+
+ 
