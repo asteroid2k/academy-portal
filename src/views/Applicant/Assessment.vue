@@ -1,79 +1,103 @@
 <script>
-import Sidebar from "../../components/Sidebar.vue";
-import Header from "../../components/Header.vue";
-
+import { questions } from "../../helpers";
+import Question from "../../components/Question.vue";
 export default {
   name: "Assessment",
-  components: { Sidebar, Header },
+  components: { Question },
   data() {
     return {
-      routes: [
-        {
-          routeName: "Dashboard",
-          image: "../../../src/assets/dashboard-icon.png",
-          routeUrl: "/dashboard",
-        },
-        {
-          routeName: "Assessment",
-          image: "../../../src/assets/assessment-icon.png",
-          routeUrl: "/assessment",
-        },
-      ],
-      pagedetails: [
-        {
-          title: "Take Assessment",
-          description:
-            "Click the button below to start assessment, you have limited time for this test",
-          timerMin: "00",
-          timerSec: "000",
-        },
-      ],
+      current: 1,
+      confirmed: false,
+      questions,
     };
+  },
+  computed: {
+    question() {
+      return questions[this.current - 1];
+    },
+  },
+  methods: {
+    confirm() {
+      this.confirmed = true;
+    },
   },
 };
 </script>
+
 <template>
-  <div class="entire-page">
-    <div><Sidebar v-bind:routes="routes" /></div>
-    <div class="main-frame">
-      <Header v-bind:pagedetails="pagedetails" />
-      <div class="assessment-frame">
-        <figure class="hourglass-img">
-          <img src="../../assets/hourglass.png" />
-        </figure>
-        <p class="description-text">
-          We have 4 days left until the next assessment
-          <br />Watch this space
+  <div class="main my-[100px] mx-[40px]">
+    <div class="head flex items-baseline justify-between mb-14">
+      <div class="max-w-[550px]">
+        <h1 class="font-light text-[44px]">Take Assessment</h1>
+        <p class="font-medium italic">
+          Click the finish button below to submit assessment, you can go back at
+          any time to edit your answers.
         </p>
-        <button class="assessment">Take Assessment</button>
+      </div>
+      <div>
+        <p class="text-sm">Timer</p>
+        <p class="text-xs">
+          <span class="min text-5xl font-light">00</span>min<span
+            class="sec text-5xl font-light"
+            >010</span
+          >sec
+        </p>
       </div>
     </div>
+    <div v-if="!confirmed" class="text-center">
+      <p v-if="questions.length > 0">
+        You are about to take your assessment. <br />
+        Your timer will start when you click the button
+      </p>
+      <p v-else class="max-w-[350px] mx-auto">
+        <img
+          src="../../assets/hourglass.svg"
+          alt=""
+          class="w-[72] mx-auto mb-[20px]"
+        />
+        We have 4 days left until the next assessment <br />
+        Watch this space
+      </p>
+      <button
+        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
+        :disabled="questions.length <= 0"
+        @click="confirm"
+      >
+        Take Assessment
+      </button>
+    </div>
+    <section v-if="confirmed" class="quiz-area">
+      <!-- Question -->
+      <div class="max-w-[600px] mx-auto w-fit shadow-sm">
+        <Question :question="question" :current="current" />
+      </div>
+      <!-- Question nav buttons -->
+      <div class="flex gap-4 justify-between max-w-[600px] mt-[80px] mx-auto">
+        <button
+          @click="current--"
+          class="w-[125px] border border-black/20 h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          :disabled="current <= 1"
+        >
+          Prev
+        </button>
+
+        <button
+          @click="current++"
+          class="w-[125px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          :disabled="current >= questions.length"
+        >
+          Next
+        </button>
+      </div>
+      <!-- Finish button -->
+      <button
+        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed mx-auto"
+        :disabled="current !== questions.length"
+      >
+        Finish
+      </button>
+    </section>
   </div>
 </template>
 
-<style scoped>
-.entire-page {
-  display: flex;
-}
-.assessment-frame {
-  margin: 150px auto;
-  text-align: center;
-}
-
-.hourglass-img {
-  width: 72px;
-  height: 72px;
-  margin: auto;
-}
-
-.assessment {
-  background: #b1b1b1;
-  border-radius: 4px;
-  padding: 10px 40px;
-  color: var(--accent-color);
-}
-
-.description-text {
-  padding: 22px 0px;
-}
-</style>
+<style></style>

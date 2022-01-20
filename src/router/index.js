@@ -47,6 +47,12 @@ const routes = [
     name: "Logout",
     component: () => import("../views/Logout.vue"),
   },
+  // ADMIN ROUTES
+  {
+    path: "/admin/signin",
+    name: "AdminSignin",
+    component: () => import("../views/admin/Signin.vue"),
+  },
 ];
 
 const router = createRouter({
