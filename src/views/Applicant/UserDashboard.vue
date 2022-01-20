@@ -1,3 +1,14 @@
+
+<script>
+import { mapGetters } from "vuex";
+import axios from "axios";
+import Update from "../../components/Update.vue";
+
+export default {
+  name: "User",
+  components: { Update },
+};
+</script>
 <template>
   <div class="main-frame">
     <p class="heading">Dashboard</p>
@@ -46,7 +57,6 @@
 
 .main-frame {
   margin: 50px 60px;
-  width: 100%;
 }
 .heading {
   font-style: normal;
@@ -109,8 +119,7 @@
 .app-update {
   width: 45%;
   height: 453px;
-  overflow-y: auto;
-  padding: 25px 35px 100px;
+  padding: 25px 10px 100px 35px;
   border: 1px solid #ececf9;
   box-sizing: border-box;
   border-radius: 4px;
@@ -120,7 +129,7 @@
   font-size: 16px;
   line-height: 19px;
   letter-spacing: -0.02em;
-  margin: 10px 0px;
+  margin: 20px 0px;
   color: #2b3c4e;
 }
 .assessment {

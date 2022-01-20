@@ -4,9 +4,7 @@
     <router-link class="link" to="/signup">Sign Up</router-link>
     <router-link class="link" to="/signin">Sign In</router-link>
     <router-link class="link" to="/apply/46546">Application Form</router-link>
-    <router-link class="link" to="/forgotpassword">
-      Forgot Password</router-link
-    >
+    <router-link class="link" to="/forgot"> Forgot Password</router-link>
 
     <router-link class="link" to="/dashboard"> Dashboard</router-link>
     <router-link class="link" to="/admin-dashboard"

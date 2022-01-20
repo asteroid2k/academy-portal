@@ -1,10 +1,9 @@
 <script>
 import Sidebar from "../../components/Sidebar.vue";
-import Update from "../../components/Update.vue";
 
 export default {
   name: "Dashboard",
-  components: { Sidebar, Update },
+  components: { Sidebar },
   data() {
     return {
       routes: [
@@ -32,7 +31,7 @@ export default {
 
 <style scoped>
 .entire-page {
-  display: flex;
-  font-family: Lato;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 </style>

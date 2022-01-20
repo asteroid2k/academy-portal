@@ -25,7 +25,7 @@ export default {
 </script>
 
 <template>
-  <div class="main my-[100px] mx-[40px]">
+  <div class="main my-[50px] mx-[60px]">
     <div class="head flex items-baseline justify-between mb-14">
       <div class="max-w-[550px]">
         <h1 class="font-light text-[44px]">Take Assessment</h1>
@@ -49,9 +49,9 @@ export default {
         You are about to take your assessment. <br />
         Your timer will start when you click the button
       </p>
-      <div v-else class="max-w-[350px] mx-auto">
+      <div v-else class="max-w-[350px] mx-auto my-[150px]">
         <img
-          src="../../assets/hourglass.svg"
+          src="../../assets/hourglass.png"
           alt=""
           class="w-[72] mx-auto mb-[20px]"
         />

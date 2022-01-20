@@ -61,22 +61,6 @@ const routes = [
     ],
   },
 
-<<<<<<< Updated upstream
-=======
-  {
-    path: "/assessment",
-    name: "Assessment",
-    redirect: "/assessment/1",
-    component: () => import("../views/Applicant/TakeAssessment.vue"),
-    children: [
-      {
-        path: "/assessment/:num",
-        name: "Question",
-        component: () => import("../components/Question.vue"),
-      },
-    ],
-  },
->>>>>>> Stashed changes
   {
     path: "/admin-dashboard",
     name: "AdminDashboard",
@@ -88,14 +72,24 @@ const routes = [
         component: () => import("../views/Admin/Dashboard.vue"),
       },
       {
-        path: "/admin-dashboard/application",
+        path: "/admin-dashboard/create-application",
         name: "CreateApplication",
-        component: () => import("../views/Admin/Dashboard.vue"),
+        component: () => import("../views/Admin/CreateApplication.vue"),
       },
       {
         path: "/admin-dashboard/assessment",
         name: "CreateAssessment",
         component: () => import("../views/Admin/CreateAssessment.vue"),
+      },
+      {
+        path: "/admin-dashboard/assessment-history",
+        name: "AssessmentHistory",
+        component: () => import("../views/Admin/AssessmentHistory.vue"),
+      },
+      {
+        path: "/admin-dashboard/application-entries",
+        name: "ApplicationEntries",
+        component: () => import("../views/Admin/ApplicationEntries.vue"),
       },
     ],
   },
