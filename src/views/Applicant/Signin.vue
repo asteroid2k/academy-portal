@@ -60,12 +60,12 @@ export default {
     >
       <div class="input-group">
         <label for="email">Email Address</label>
-        <Field type="text" name="email" id="email" />
+        <Field type="text" name="email" id="email" class="k-input" />
         <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
       </div>
       <div class="input-group">
         <label for="password">Password</label>
-        <Field type="password" name="password" id="password" />
+        <Field type="password" name="password" id="password" class="k-input" />
         <ErrorMessage name="password" class="text-red-600 text-xs pt-1 px-2" />
       </div>
 

@@ -95,7 +95,7 @@ export default {
           <label class="text-sm" for="firstname">First Name</label>
           <Field
             type="text"
-            class="input border-border-300 h-12 k-input"
+            class="border-border-300 h-12 k-input"
             name="firstName"
           />
           <ErrorMessage
@@ -107,7 +107,7 @@ export default {
           <label class="text-sm" for="lastname">Last Name</label>
           <Field
             type="text"
-            class="input border-border-300 h-12 k-input"
+            class="border-border-300 h-12 k-input"
             name="lastName"
           />
           <ErrorMessage
@@ -119,7 +119,7 @@ export default {
           <label class="text-sm" for="email">Email</label>
           <Field
             type="email"
-            class="input border-border-300 h-12 k-input"
+            class="border-border-300 h-12 k-input"
             name="email"
           />
           <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
@@ -128,7 +128,7 @@ export default {
           <label class="text-sm" for="dob">Date of Birth</label>
           <Field
             type="date"
-            class="input border-border-300 h-12 k-input"
+            class="border-border-300 h-12 k-input"
             name="dob"
             id="dob"
           />
@@ -169,7 +169,7 @@ export default {
           <label class="text-sm" for="lastname">CGPA</label>
           <Field
             type="text"
-            class="input border-border-300 h-12 k-input"
+            class="border-border-300 h-12 k-input"
             name="gpa"
           />
           <ErrorMessage name="gpa" class="text-red-600 text-xs pt-1 px-2" />

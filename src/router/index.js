@@ -19,11 +19,7 @@ const routes = [
     name: "Signup",
     component: () => import("../views/Applicant/Signup.vue"),
   },
-  {
-    path: "/applicationform",
-    name: "Application Form",
-    component: () => import("../views/Applicant/ApplicationForm.vue"),
-  },
+
   {
     path: "/forgotpassword",
     name: "Forgot Password",

@@ -20,7 +20,7 @@ body {
 }
 @layer components {
   .k-input {
-    @apply rounded py-1 px-3 border-[1.5px] hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/50;
+    @apply appearance-none rounded py-1 px-3 border-[1.5px] hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/50;
   }
 }
 button {
