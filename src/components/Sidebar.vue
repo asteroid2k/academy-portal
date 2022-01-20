@@ -8,45 +8,37 @@ export default {
 </script>
 
 <template>
-  <div class="entire-page">
-    <div class="sidebar">
-      <div class="user-display">
-        <figure class="avatar">
-          <img src="../assets/avatar1.png" />
-        </figure>
-        <p class="heading">Jane Doe</p>
-        <p class="body">doe@enyata.com</p>
-      </div>
-      <div></div>
-      <div class="links-container" v-for="(data, index) in routes" :key="index">
-        <img :src="data.image" class="icons" />
-        <router-link class="link" :to="data.routeUrl">{{
-          data.routeName
-        }}</router-link>
-      </div>
-      <div id="logout" class="links-container">
-        <img src="../assets/logout-icon.png" class="icons" />
-        <router-link class="link" to="/logout">Logout</router-link>
-      </div>
+  <!-- <div class="entire-page"> -->
+  <div class="sidebar">
+    <div class="user-display">
+      <figure class="avatar">
+        <img src="../assets/avatar1.png" />
+      </figure>
+      <p class="heading">Jane Doe</p>
+      <p class="body">doe@enyata.com</p>
+    </div>
+    <div></div>
+    <div class="links-container" v-for="(data, index) in routes" :key="index">
+      <img :src="data.image" class="icons" />
+      <router-link class="link" :to="{ name: data.routeUrl }">{{
+        data.routeName
+      }}</router-link>
+    </div>
+    <div id="logout" class="links-container">
+      <img src="../assets/logout-icon.png" class="icons" />
+      <router-link class="link" to="/logout">Logout</router-link>
     </div>
   </div>
+  <!-- </div> -->
 </template>
 
 <style scoped>
-* {
-  font-family: Lato;
-  box-sizing: border-box;
-}
-.entire-page {
-  width: 100%;
-}
 .sidebar {
   width: 292px;
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  border-radius: 8px;
   color: var(--accent-color);
 }
 .avatar {
@@ -95,6 +87,7 @@ export default {
   margin-bottom: 16px;
   padding: 20px;
   text-align: left;
+  border-left: 4px solid white;
 }
 .links-container:hover {
   border-left: 4px solid var(--primary);

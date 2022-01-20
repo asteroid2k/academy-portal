@@ -39,6 +39,23 @@ const routes = [
     path: "/admin-dashboard",
     name: "AdminDashboard",
     component: () => import("../views/Admin/AdminDashboard.vue"),
+    children: [
+      {
+        path: "/admin-dashboard",
+        name: "Admin",
+        component: () => import("../views/Admin/Dashboard.vue"),
+      },
+      {
+        path: "/admin-dashboard/application",
+        name: "CreateApplication",
+        component: () => import("../views/Admin/Dashboard.vue"),
+      },
+      {
+        path: "/admin-dashboard/assessment",
+        name: "CreateAssessment",
+        component: () => import("../views/Admin/CreateAssessment.vue"),
+      },
+    ],
   },
   {
     path: "/logout",
