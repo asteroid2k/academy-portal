@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import store from "../store";
+import { notyf } from "../helpers.js";
 
 const routes = [
   {
@@ -17,11 +19,7 @@ const routes = [
     name: "Signup",
     component: () => import("../views/Applicant/Signup.vue"),
   },
-  {
-    path: "/applicationform",
-    name: "Application Form",
-    component: () => import("../views/Applicant/ApplicationForm.vue"),
-  },
+
   {
     path: "/forgotpassword",
     name: "Forgot Password",
@@ -51,15 +49,33 @@ const routes = [
     component: () => import("../views/Forgot.vue"),
   },
   {
-    path: "/apply",
+    path: "/apply/:id",
     name: "Apply",
     component: () => import("../views/Applicant/ApplyForm.vue"),
+    //redirect to login if user is not signed in
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token) {
+        notyf.open({
+          type: "info",
+          message: "You are not logged in",
+        });
+        next({ name: "Signin" });
+      } else {
+        next();
+      }
+    },
   },
   // ADMIN ROUTES
   {
     path: "/admin/signin",
     name: "AdminSignin",
     component: () => import("../views/admin/Signin.vue"),
+  },
+  // NOT FOUND
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 

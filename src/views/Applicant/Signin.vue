@@ -1,10 +1,12 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { object, string } from "yup";
-import { notyf, instance } from "../../helpers";
+import { notyf, validators } from "../../helpers";
+import { mapActions } from "vuex";
 
 export default {
   name: "Signin",
+  props: { instance: Function },
   components: {
     Form,
     Field,
@@ -12,24 +14,23 @@ export default {
   },
   data() {
     const schema = object({
-      email: string()
-        .min(2)
-        .required("Email is required")
-        .email("Enter a valid Email"),
-      password: string().min(8).required("Password is required"),
+      email: validators.email,
+      password: validators.password,
     });
     return {
-      email: "",
-      password: "",
       schema,
     };
   },
   methods: {
+    ...mapActions(["storeToken"]),
     async handleSubmit(values) {
       try {
-        let resp = await instance.post("/auth/signin", values);
-        if (resp.data) {
-          notyf.success(resp.data.message);
+        let resp = await this.instance.post("/auth/signin", values);
+        // console.log(resp);
+        const { data } = resp;
+        if (data) {
+          notyf.success(data.message);
+          this.storeToken(data.token);
         }
       } catch ({ response }) {
         const { errors, message } = response.data;
@@ -59,17 +60,12 @@ export default {
     >
       <div class="input-group">
         <label for="email">Email Address</label>
-        <Field type="text" name="email" id="email" v-model="email" />
+        <Field type="text" name="email" id="email" class="k-input" />
         <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
       </div>
       <div class="input-group">
         <label for="password">Password</label>
-        <Field
-          type="password"
-          name="password"
-          id="password"
-          v-model="password"
-        />
+        <Field type="password" name="password" id="password" class="k-input" />
         <ErrorMessage name="password" class="text-red-600 text-xs pt-1 px-2" />
       </div>
 

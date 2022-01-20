@@ -1,11 +1,6 @@
 import axios from "axios";
 import { Notyf } from "notyf";
-
-export const instance = axios.create({
-  baseURL: "http://localhost:3009/api",
-  timeout: 1000,
-  headers: { Authorization: "foobar" },
-});
+import { date, string, number } from "yup";
 
 export const notyf = new Notyf({
   duration: 3000,
@@ -13,6 +8,14 @@ export const notyf = new Notyf({
     x: "right",
     y: "top",
   },
+  ripple: true,
+  types: [
+    {
+      type: "info",
+      background: "#7557D3",
+      icon: false,
+    },
+  ],
 });
 
 export const questions = [
@@ -83,3 +86,11 @@ export const questions = [
     ],
   },
 ];
+export const validators = {
+  email: string().required().email("Provide a valid email"),
+  password: string().required().min(8),
+  nameR: string().required().min(2),
+  name: string().min(2),
+  gpa: number().required().positive(),
+  dob: date().required("Birth date is required").max(new Date()),
+};

@@ -11,9 +11,9 @@ module.exports = {
           200: "#7D7D7D",
           100: "#B1B1B1",
         },
-        border: { 200: "#BDBDBD", 100: "#EBEBEB" },
+        border: { 300: "#2B3C4E", 200: "#BDBDBD", 100: "#EBEBEB" },
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
