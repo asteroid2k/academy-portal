@@ -26,4 +26,11 @@ export default {
   <!-- <Navbar /> -->
 </template>
 
+<<<<<<< Updated upstream
 <style></style>
+=======
+<style>
+* {
+}
+</style>
+>>>>>>> Stashed changes

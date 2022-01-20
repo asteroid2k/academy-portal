@@ -30,10 +30,19 @@ const routes = [
     name: "Dashboard",
     component: () => import("../views/Applicant/Dashboard.vue"),
   },
+
   {
     path: "/assessment",
     name: "Assessment",
-    component: () => import("../views/Applicant/Assessment.vue"),
+    redirect: "/assessment/1",
+    component: () => import("../views/Applicant/TakeAssessment.vue"),
+    children: [
+      {
+        path: "/assessment/:num",
+        name: "Question",
+        component: () => import("../components/Question.vue"),
+      },
+    ],
   },
   {
     path: "/admin-dashboard",
@@ -56,6 +65,11 @@ const routes = [
         component: () => import("../views/Admin/CreateAssessment.vue"),
       },
     ],
+  },
+  {
+    path: "/admin-login",
+    name: "AdminLogin",
+    component: () => import("../views/Admin/AdminLogin.vue"),
   },
   {
     path: "/logout",

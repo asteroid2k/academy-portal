@@ -61,7 +61,17 @@ export default {
         </p>
       </div>
       <button
-        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
+        class="
+          mt-6
+          px-10
+          py-2
+          bg-primary
+          text-white
+          cursor-pointer
+          disabled:bg-neutral-500/80 disabled:cursor-not-allowed
+          font-bold
+          rounded
+        "
         :disabled="questions.length <= 0"
         @click="confirm"
       >
@@ -77,7 +87,15 @@ export default {
       <div class="flex gap-4 justify-between max-w-[600px] mt-[80px] mx-auto">
         <button
           @click="current--"
-          class="w-[125px] border border-black/20 h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          class="
+            w-[125px]
+            border border-black/20
+            h-10
+            font-bold
+            disabled:opacity-70
+            rounded
+            disabled:cursor-not-allowed
+          "
           :disabled="current <= 1"
         >
           Prev
@@ -85,7 +103,16 @@ export default {
 
         <button
           @click="current++"
-          class="w-[125px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          class="
+            w-[125px]
+            bg-primary
+            text-white
+            h-10
+            font-bold
+            disabled:opacity-70
+            rounded
+            disabled:cursor-not-allowed
+          "
           :disabled="current >= questions.length"
         >
           Next
@@ -93,7 +120,19 @@ export default {
       </div>
       <!-- Finish button -->
       <button
-        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed mx-auto"
+        class="
+          block
+          mt-[75px]
+          w-[200px]
+          bg-primary
+          text-white
+          h-10
+          font-bold
+          disabled:opacity-70
+          rounded
+          disabled:cursor-not-allowed
+          mx-auto
+        "
         :disabled="current !== questions.length"
       >
         Finish
@@ -102,4 +141,3 @@ export default {
   </div>
 </template>
 
-<style></style>

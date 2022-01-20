@@ -12,6 +12,7 @@
     <router-link class="link" to="/admin-dashboard"
       >Admin Dashboard</router-link
     >
+    <router-link class="link" to="/admin-login">Admin Login</router-link>
   </div>
 </template>
 
@@ -20,6 +21,7 @@
   position: absolute;
   top: 35%;
   right: 0px;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

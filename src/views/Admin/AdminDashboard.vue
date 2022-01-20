@@ -1,9 +1,10 @@
 <script>
 import Sidebar from "../../components/Sidebar.vue";
+import History from "../../components/History.vue";
 
 export default {
   name: "AdminDashboard",
-  components: { Sidebar },
+  components: { Sidebar, History },
   data() {
     return {
       routes: [
