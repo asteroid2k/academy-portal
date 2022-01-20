@@ -61,6 +61,22 @@ const routes = [
     ],
   },
 
+<<<<<<< Updated upstream
+=======
+  {
+    path: "/assessment",
+    name: "Assessment",
+    redirect: "/assessment/1",
+    component: () => import("../views/Applicant/TakeAssessment.vue"),
+    children: [
+      {
+        path: "/assessment/:num",
+        name: "Question",
+        component: () => import("../components/Question.vue"),
+      },
+    ],
+  },
+>>>>>>> Stashed changes
   {
     path: "/admin-dashboard",
     name: "AdminDashboard",
@@ -82,6 +98,11 @@ const routes = [
         component: () => import("../views/Admin/CreateAssessment.vue"),
       },
     ],
+  },
+  {
+    path: "/admin-login",
+    name: "AdminLogin",
+    component: () => import("../views/Admin/AdminLogin.vue"),
   },
   {
     path: "/admin-login",

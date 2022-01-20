@@ -26,4 +26,3 @@ export default {
   <Navbar />
 </template>
 
-<style></style>
