@@ -120,6 +120,7 @@ export default {
       </div>
       <!-- Finish button -->
       <button
+        @click="$router.push({ name: 'Success' })"
         class="
           block
           mt-[75px]

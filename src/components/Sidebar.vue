@@ -22,7 +22,7 @@ export default {
         <div class="image-container">
           <img :src="data.image" class="icons" />
         </div>
-        <router-link class="link" :to="data.routeUrl">{{
+        <router-link class="link" :to="{ name: data.routeUrl }">{{
           data.routeName
         }}</router-link>
       </div>

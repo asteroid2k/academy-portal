@@ -23,14 +23,7 @@ export default {
 
 <template>
   <router-view :instance="instance"></router-view>
-  <!-- <Navbar /> -->
+  <Navbar />
 </template>
 
-<<<<<<< Updated upstream
 <style></style>
-=======
-<style>
-* {
-}
-</style>
->>>>>>> Stashed changes
