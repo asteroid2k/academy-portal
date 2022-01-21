@@ -94,6 +94,11 @@ const routes = [
         name: "Results",
         component: () => import("../views/Admin/Results.vue"),
       },
+      {
+        path: "/admin-dashboard/settings",
+        name: "Settings",
+        component: () => import("../views/Admin/ProfileSettings.vue"),
+      },
     ],
   },
   {

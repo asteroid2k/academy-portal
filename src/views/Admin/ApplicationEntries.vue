@@ -65,7 +65,7 @@ export default {
     <div>
       <!-- table -->
       <table class="w-full table-auto border-separate">
-        <thead class="bg-text-400 text-white text-sm">
+        <thead id="sticky-head" class="bg-text-400 text-white text-sm">
           <tr class="text-center">
             <th scope="col" class="py-4 border-text-400">Name</th>
             <th scope="col" class="py-4 border-text-400">Email</th>
@@ -165,5 +165,10 @@ export default {
 <style scoped>
 table {
   border-spacing: 0;
+}
+
+#sticky-head {
+  position: sticky;
+  top: 0px;
 }
 </style>
