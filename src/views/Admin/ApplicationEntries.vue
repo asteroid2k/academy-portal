@@ -1,171 +1,169 @@
 <script>
-import { ref } from "vue";
+import ExpandIcon from "../../assets/expand.svg?component";
+import Top from "../../components/Top.vue";
+import { applications } from "../../helpers.js";
+import PreviewApplication from "../../components/PreviewApplication.vue";
 
 export default {
-  name: "Assessment Entries",
+  name: "ApplicationEntries",
+  components: {
+    Top,
+    ExpandIcon,
+    PreviewApplication,
+  },
   data() {
     return {
-      batchentry: "Batch 1",
+      applications,
+      isOpen: false,
+      pId: 0,
     };
   },
-  setup() {
-    // make users. variable reactive with the ref() function
-    const users = ref([
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-    ]);
+  computed: {
+    previewEntry() {
+      return applications[this.pId];
+    },
+  },
 
-    return {
-      users,
-    };
+  methods: {
+    previewApplication(index) {
+      this.pId = index;
+      this.setIsOpen(true);
+    },
+    setIsOpen(value) {
+      this.isOpen = value;
+    },
   },
 };
 </script>
 <template>
-  <div class="entire-page">
-    <div class="main-frame">
-      <label class="heading" for="entries">Entries -</label>
-      <select class="heading" name="entries" id="batch" v-model="batchentry">
-        <option value="Batch 1">Batch 1</option>
-        <option @click="changeArray()" value="Batch 2">Batch 2</option>
-        <option value="Batch 3">Batch 3</option>
-      </select>
-      <p class="description">
-        Comprises of all that applied for {{ batchentry }}
-      </p>
-      <div class="wrapper">
-        <table id="assessments">
-          <tr class="table-head">
-            <th>Name</th>
-            <th>Email</th>
-            <th>DOB - Age</th>
-            <th>Address</th>
-            <th>University</th>
-            <th>CGPA</th>
-          </tr>
-          <tr v-for="user in users" :key="user.id" class="table-body">
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.dob }}</td>
-            <td>{{ user.address }}</td>
-            <td>{{ user.university }}</td>
-            <td>{{ user.cgpa }}</td>
-          </tr>
-        </table>
+  <section>
+    <PreviewApplication
+      :isOpen="isOpen"
+      :setIsOpen="setIsOpen"
+      :entry="applications[pId]"
+    />
+  </section>
+  <section>
+    <div class="flex flex-col mb-10">
+      <div class="flex items-center">
+        <h1 class="font-light text-[44px]">Entries -&nbsp;</h1>
+        <div>
+          <select
+            name="batch"
+            id=""
+            class="appearance-none h-[50px] text-[40px] border-transparent"
+          >
+            <option class="text-[35px]" value="Batch 1">Batch 1</option>
+            <option class="text-[35px]" value="Batch 2">Batch 2</option>
+          </select>
+        </div>
       </div>
+      <p class="italic text-[13px] -mt-2">
+        Comprises of all that applied for batch 2
+      </p>
     </div>
-  </div>
+    <div>
+      <!-- table -->
+      <table class="w-full table-auto border-separate">
+        <thead class="bg-text-400 text-white text-sm">
+          <tr class="text-center">
+            <th scope="col" class="py-4 border-text-400">Name</th>
+            <th scope="col" class="py-4 border-text-400">Email</th>
+            <th
+              scope="col"
+              class="
+                flex
+                items-center
+                justify-center
+                py-4
+                border-text-400
+                gap-2
+              "
+            >
+              <span>DOB - Age</span>
+              <span><img src="../../assets/ascdesc.svg" alt="" /></span>
+            </th>
+            <th scope="col" class="py-4 border-text-400">Address</th>
+            <th scope="col" class="py-4 border-text-400">University</th>
+            <th
+              scope="col"
+              class="flex items-center py-4 border-text-400 gap-2 px-5"
+            >
+              <span>CGPA</span>
+              <span><img src="../../assets/ascdesc.svg" alt="" /></span>
+            </th>
+            <th scope="col" class="relative px-1 py-3">
+              <span class="sr-only">View</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="text-[15px]">
+          <tr>
+            <td class="py-2"></td>
+          </tr>
+          <tr
+            v-for="(
+              {
+                firstName,
+                lastName,
+                email,
+                dob,
+                age,
+                university,
+                gpa,
+                address,
+              },
+              index
+            ) in applications"
+            :key="index"
+            :data-entry="index"
+            class="text-text-300 hover:shadow-md group transition"
+          >
+            <td
+              class="
+                py-6
+                px-5
+                rounded-lg
+                border-l-8 border-l-transparent
+                group-hover:border-l-primary
+                transition
+              "
+            >
+              {{ firstName + " " + lastName }}
+            </td>
+            <td class="py-5 px-3">{{ email }}</td>
+            <td class="py-5 px-3">
+              {{ dob.split("-").reverse().join("/") }} -
+              <span class="font-medium">{{ age }}</span>
+            </td>
+            <td class="py-5 px-1">{{ address }}</td>
+            <td class="py-5 px-1">
+              {{ university }}
+            </td>
+            <td class="py-5 px-1 text-center rounded-lg">{{ gpa }}</td>
+            <td
+              class="px-1 group rounded-lg border-l border-l-transparent"
+              @click="previewApplication(index)"
+            >
+              <ExpandIcon
+                @click="previewApplication(index)"
+                class="
+                  text-text-400
+                  w-4
+                  stroke-2
+                  group-hover:text-primary
+                  cursor-pointer
+                "
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </template>
-
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-.main-frame {
-  width: 100%;
-}
-
-.heading {
-  font-style: normal;
-  font-weight: 300;
-  font-size: 44px;
-  line-height: 52px;
-  letter-spacing: -0.02em;
-  width: 225px;
-  margin-bottom: 5px;
-  color: #2b3c4e;
-}
-
-select,
-select:focus {
-  outline: none;
-  border: none;
-}
-.description {
-  font-style: italic;
-  font-weight: 500;
-  font-size: 16px;
-  margin-bottom: 60px;
-  line-height: 19px;
-}
-#assessments {
-  border-collapse: collapse;
-  position: relative;
-  width: 100%;
-  font-size: 14px;
-}
-
-#assessments th {
-  padding: 13px 26px;
-  text-align: left;
-  color: white;
-  background: #2b3c4e;
-}
-
-td {
-  padding: 20px 26px;
-}
-.table-body:hover {
-  box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
-    7px 0px 0px 0px var(--primary) inset;
-  border-radius: 7px;
-}
-.table-body {
-  position: relative;
-  top: 28px;
-}
-.table-frame {
-  height: 476px;
-  background: #ffffff;
-  box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
-  border-radius: 8px;
-  padding: 40px 40px 0px;
-}
-.wrapper {
-  overflow-y: auto;
-  height: 400px;
-}
-.table-head {
-  position: sticky;
-  top: 0px;
-  z-index: 1;
+table {
+  border-spacing: 0;
 }
 </style>
