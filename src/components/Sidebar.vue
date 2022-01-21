@@ -4,6 +4,11 @@ export default {
   props: {
     routes: Array,
   },
+  methods: {
+    imgUrl(img) {
+      return new URL(`../assets/${img}`, import.meta.url);
+    },
+  },
 };
 </script>
 
@@ -19,7 +24,7 @@ export default {
     </div>
     <div></div>
     <div class="links-container" v-for="(data, index) in routes" :key="index">
-      <img :src="data.image" class="icons" />
+      <img :src="imgUrl(data.image)" class="icons" />
       <router-link class="link" :to="{ name: data.routeUrl }">{{
         data.routeName
       }}</router-link>

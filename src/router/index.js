@@ -19,12 +19,6 @@ const routes = [
     name: "Signup",
     component: () => import("../views/Applicant/Signup.vue"),
   },
-
-  {
-    path: "/forgotpassword",
-    name: "Forgot Password",
-    component: () => import("../views/Applicant/ForgotPassword.vue"),
-  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -35,6 +29,7 @@ const routes = [
     name: "Assessment",
     component: () => import("../views/Applicant/Assessment.vue"),
   },
+  // ADMIN DASHBOARD
   {
     path: "/admin-dashboard",
     name: "AdminDashboard",
@@ -48,12 +43,17 @@ const routes = [
       {
         path: "/admin-dashboard/application",
         name: "CreateApplication",
-        component: () => import("../views/Admin/Dashboard.vue"),
+        component: () => import("../views/Admin/CreateApplication.vue"),
       },
       {
         path: "/admin-dashboard/assessment",
         name: "CreateAssessment",
         component: () => import("../views/Admin/CreateAssessment.vue"),
+      },
+      {
+        path: "/admin-dashboard/applications",
+        name: "ApplicationEntries",
+        component: () => import("../views/Admin/ApplicationEntries.vue"),
       },
     ],
   },

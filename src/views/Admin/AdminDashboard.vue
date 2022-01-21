@@ -9,22 +9,22 @@ export default {
       routes: [
         {
           routeName: "Dashboard",
-          image: "../../../src/assets/dashboard-icon.svg",
+          image: "dashboard-icon.svg",
           routeUrl: "Admin",
         },
         {
           routeName: "Create Application",
-          image: "../../../src/assets/create-app.svg",
+          image: "create-app.svg",
           routeUrl: "CreateApplication",
         },
-        // {
-        //   routeName: "Application Entries",
-        //   image: "../../../src/assets/entries.svg",
-        //   routeUrl: "/application-entries",
-        // },
+        {
+          routeName: "Application Entries",
+          image: "entries.svg",
+          routeUrl: "ApplicationEntries",
+        },
         {
           routeName: "Compose Assessment",
-          image: "../../../src/assets/assessment-icon.svg",
+          image: "assessment-icon.svg",
           routeUrl: "CreateAssessment",
         },
         // {

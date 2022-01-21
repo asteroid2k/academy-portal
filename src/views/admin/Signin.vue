@@ -1,7 +1,7 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { object, string } from "yup";
-import { notyf, instance } from "../../helpers";
+import { notyf } from "../../helpers";
 
 export default {
   name: "Signin",
