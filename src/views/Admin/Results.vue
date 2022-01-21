@@ -2,7 +2,7 @@
 import { ref } from "vue";
 
 export default {
-  name: "Assessment Entries",
+  name: "Results",
   data() {
     return {
       batchentry: "Batch 1",
@@ -18,38 +18,7 @@ export default {
         address: "3 Sabo Ave, Yaba, Lagos",
         university: "University of Nigeria",
         cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-      },
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
+        testScore: "15",
       },
     ]);
 
@@ -62,10 +31,10 @@ export default {
 <template>
   <div class="entire-page">
     <div class="main-frame">
-      <label class="heading" for="entries">Entries -</label>
+      <label class="heading" for="entries">Results -</label>
       <select class="heading" name="entries" id="batch" v-model="batchentry">
         <option value="Batch 1">Batch 1</option>
-        <option @click="changeArray()" value="Batch 2">Batch 2</option>
+        <option value="Batch 2">Batch 2</option>
         <option value="Batch 3">Batch 3</option>
       </select>
       <p class="description">
@@ -80,6 +49,7 @@ export default {
             <th>Address</th>
             <th>University</th>
             <th>CGPA</th>
+            <th>Test Scores</th>
           </tr>
           <tr v-for="user in users" :key="user.id" class="table-body">
             <td>{{ user.name }}</td>
@@ -88,6 +58,7 @@ export default {
             <td>{{ user.address }}</td>
             <td>{{ user.university }}</td>
             <td>{{ user.cgpa }}</td>
+            <td>{{ user.testScore }}</td>
           </tr>
         </table>
       </div>

@@ -33,13 +33,13 @@ export default {
           image: "../../../src/assets/history.svg",
           routeUrl: "AssessmentHistory",
         },
-        // {
-        //   routeName: "Results",
-        //   image: "../../../src/assets/results.png",
-        //   routeUrl: "/results",
-        // },
-        // {
-        //   routeName: "Settings",
+        {
+          routeName: "Results",
+          image: "../../../src/assets/results.svg",
+          routeUrl: "Results",
+        },
+        //{
+        //  routeName: "Settings",
         //   image: "../../../src/assets/Setting.png",
         //   routeUrl: "/settings",
         // },
