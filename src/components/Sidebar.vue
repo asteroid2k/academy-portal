@@ -13,25 +13,30 @@ export default {
 </script>
 
 <template>
-  <!-- <div class="entire-page"> -->
-  <div class="sidebar">
-    <div class="user-display">
-      <figure class="avatar">
-        <img src="../assets/avatar1.png" />
-      </figure>
-      <p class="heading">Jane Doe</p>
-      <p class="body">doe@enyata.com</p>
-    </div>
-    <div></div>
-    <div class="links-container" v-for="(data, index) in routes" :key="index">
-      <img :src="imgUrl(data.image)" class="icons" />
-      <router-link class="link" :to="{ name: data.routeUrl }">{{
-        data.routeName
-      }}</router-link>
-    </div>
-    <div id="logout" class="links-container">
-      <img src="../assets/logout-icon.png" class="icons" />
-      <router-link class="link" to="/logout">Logout</router-link>
+  <div class="entire-page">
+    <div class="sidebar">
+      <div class="user-display">
+        <figure class="avatar">
+          <img src="../assets/avatar1.png" />
+        </figure>
+        <p class="heading">Jane Doe</p>
+        <p class="body">doe@enyata.com</p>
+      </div>
+      <div></div>
+      <div class="links-container" v-for="(data, index) in routes" :key="index">
+        <div class="image-container">
+          <img :src="imgUrl(data.image)" class="icons" />
+        </div>
+        <router-link class="link" :to="{ name: data.routeUrl }">{{
+          data.routeName
+        }}</router-link>
+      </div>
+      <div id="logout" class="links-container">
+        <div class="image-container">
+          <img src="../assets/logout.svg" class="icons" />
+        </div>
+        <router-link class="link" to="/logout">Logout</router-link>
+      </div>
     </div>
   </div>
   <!-- </div> -->
