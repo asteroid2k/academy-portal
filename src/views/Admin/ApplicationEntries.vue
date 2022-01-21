@@ -16,11 +16,14 @@ export default {
       applications,
       isOpen: false,
       pId: 0,
+      batch: "Batch 1",
     };
   },
   computed: {
-    previewEntry() {
-      return applications[this.pId];
+    filteredEntries() {
+      return this.applications.filter(
+        (entry) => entry.batch.toLowerCase() === this.batch.toLowerCase()
+      );
     },
   },
 
@@ -45,20 +48,21 @@ export default {
   </section>
   <section>
     <div class="flex flex-col mb-10">
-      <div class="flex items-center">
+      <div class="flex">
         <h1 class="font-light text-[44px]">Entries -&nbsp;</h1>
         <div>
           <select
+            v-model="batch"
             name="batch"
             id=""
-            class="appearance-none h-[50px] text-[40px] border-transparent"
+            class="appearance-none font-light text-[44px] leading-9 w-[230px] h-[80px] py-1 border-transparent focus:border-0 focus:outline-0 focus:ring-0"
           >
-            <option class="text-[35px]" value="Batch 1">Batch 1</option>
-            <option class="text-[35px]" value="Batch 2">Batch 2</option>
+            <option class="font-light text-xl" value="Batch 2">Batch 2</option>
+            <option class="font-light text-xl" value="Batch 1">Batch 1</option>
           </select>
         </div>
       </div>
-      <p class="italic text-[13px] -mt-2">
+      <p class="italic text-[13px] -mt-1">
         Comprises of all that applied for batch 2
       </p>
     </div>
@@ -107,7 +111,7 @@ export default {
                 address,
               },
               index
-            ) in applications"
+            ) in filteredEntries"
             :key="index"
             :data-entry="index"
             class="text-text-300 hover:shadow-md group transition"
