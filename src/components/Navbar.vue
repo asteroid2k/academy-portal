@@ -10,7 +10,7 @@
     <router-link class="link" to="/admin-dashboard"
       >Admin Dashboard</router-link
     >
-    <router-link class="link" to="/admin-login">Admin Login</router-link>
+    <router-link class="link" to="/admin/signin">Admin Login</router-link>
   </div>
 </template>
 

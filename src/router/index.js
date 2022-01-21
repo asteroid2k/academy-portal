@@ -19,7 +19,6 @@ const routes = [
     name: "Signup",
     component: () => import("../views/Applicant/Signup.vue"),
   },
-
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -60,7 +59,6 @@ const routes = [
       },
     ],
   },
-
   {
     path: "/admin-dashboard",
     name: "AdminDashboard",
@@ -87,22 +85,13 @@ const routes = [
         component: () => import("../views/Admin/AssessmentHistory.vue"),
       },
       {
-        path: "/admin-dashboard/application-entries",
+        path: "/admin-dashboard/application",
         name: "ApplicationEntries",
         component: () => import("../views/Admin/ApplicationEntries.vue"),
       },
     ],
   },
-  {
-    path: "/admin-login",
-    name: "AdminLogin",
-    component: () => import("../views/Admin/AdminLogin.vue"),
-  },
-  {
-    path: "/admin-login",
-    name: "AdminLogin",
-    component: () => import("../views/Admin/AdminLogin.vue"),
-  },
+
   {
     path: "/logout",
     name: "Logout",
