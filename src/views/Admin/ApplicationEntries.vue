@@ -69,13 +69,20 @@ export default {
     <div>
       <!-- table -->
       <table class="w-full table-auto border-separate">
-        <thead class="bg-text-400 text-white text-sm">
+        <thead id="sticky-head" class="bg-text-400 text-white text-sm">
           <tr class="text-center">
             <th scope="col" class="py-4 border-text-400">Name</th>
             <th scope="col" class="py-4 border-text-400">Email</th>
             <th
               scope="col"
-              class="flex items-center justify-center py-4 border-text-400 gap-2"
+              class="
+                flex
+                items-center
+                justify-center
+                py-4
+                border-text-400
+                gap-2
+              "
             >
               <span>DOB - Age</span>
               <span><img src="../../assets/ascdesc.svg" alt="" /></span>
@@ -117,7 +124,14 @@ export default {
             class="text-text-300 hover:shadow-md group transition"
           >
             <td
-              class="py-6 px-5 rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
+              class="
+                py-6
+                px-5
+                rounded-lg
+                border-l-8 border-l-transparent
+                group-hover:border-l-primary
+                transition
+              "
             >
               {{ firstName + " " + lastName }}
             </td>
@@ -137,7 +151,13 @@ export default {
             >
               <ExpandIcon
                 @click="previewApplication(index)"
-                class="text-text-400 w-4 stroke-2 group-hover:text-primary cursor-pointer"
+                class="
+                  text-text-400
+                  w-4
+                  stroke-2
+                  group-hover:text-primary
+                  cursor-pointer
+                "
               />
             </td>
           </tr>
@@ -149,5 +169,10 @@ export default {
 <style scoped>
 table {
   border-spacing: 0;
+}
+
+#sticky-head {
+  position: sticky;
+  top: 0px;
 }
 </style>
