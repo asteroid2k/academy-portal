@@ -5,6 +5,7 @@ import { notyf } from "../../helpers";
 
 export default {
   name: "Signin",
+  props: { instance: Function },
   components: {
     Form,
     Field,
@@ -80,7 +81,16 @@ export default {
         </div>
         <button
           type="submit"
-          class="k-button w-full h-[50px] bg-white text-primary rounded text-base font-bold"
+          class="
+            k-button
+            w-full
+            h-[50px]
+            bg-white
+            text-primary
+            rounded
+            text-base
+            font-bold
+          "
         >
           Sign In
         </button>

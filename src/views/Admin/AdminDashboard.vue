@@ -1,9 +1,10 @@
 <script>
 import Sidebar from "../../components/Sidebar.vue";
+import History from "../../components/History.vue";
 
 export default {
   name: "AdminDashboard",
-  components: { Sidebar },
+  components: { Sidebar, History },
   data() {
     return {
       routes: [
@@ -27,11 +28,11 @@ export default {
           image: "assessment-icon.svg",
           routeUrl: "CreateAssessment",
         },
-        // {
-        //   routeName: "Assessment History",
-        //   image: "../../../src/assets/history.png",
-        //   routeUrl: "/assessment-history",
-        // },
+        {
+          routeName: "Assessment History",
+          image: "../../../src/assets/history.svg",
+          routeUrl: "AssessmentHistory",
+        },
         // {
         //   routeName: "Results",
         //   image: "../../../src/assets/results.png",

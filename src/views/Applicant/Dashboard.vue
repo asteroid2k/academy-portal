@@ -9,13 +9,13 @@ export default {
       routes: [
         {
           routeName: "Dashboard",
-          image: "../../../src/assets/dashboard-icon.png",
-          routeUrl: "/dashboard",
+          image: "../../../src/assets/dashboard.svg",
+          routeUrl: "UserDashboard",
         },
         {
           routeName: "Assessment",
-          image: "../../../src/assets/assessment-icon.png",
-          routeUrl: "/assessment",
+          image: "../../../src/assets/assessment.svg",
+          routeUrl: "Assessment",
         },
       ],
     };
@@ -23,5 +23,15 @@ export default {
 };
 </script>
 <template>
-  <Sidebar v-bind:routes="routes" />
+  <div class="entire-page">
+    <div><Sidebar v-bind:routes="routes" /></div>
+    <div><router-view></router-view></div>
+  </div>
 </template>
+
+<style scoped>
+.entire-page {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+</style>
