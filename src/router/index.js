@@ -89,9 +89,13 @@ const routes = [
         name: "ApplicationEntries",
         component: () => import("../views/Admin/ApplicationEntries.vue"),
       },
+      {
+        path: "/admin-dashboard/results",
+        name: "Results",
+        component: () => import("../views/Admin/Results.vue"),
+      },
     ],
   },
-
   {
     path: "/logout",
     name: "Logout",
