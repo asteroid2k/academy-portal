@@ -2,32 +2,59 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import Top from "../../components/Top.vue";
 import { validators } from "../../helpers";
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 export default {
   name: "CreateAssessment",
-  components: { Top, Form, Field, ErrorMessage },
+  components: {
+    Top,
+    Form,
+    Field,
+    ErrorMessage,
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+  },
   data() {
     return {
       current: 1,
       questions: [],
       answers: [],
-      question: { text: "", optA: "", optB: "", optC: "", optD: "" },
-      answer: { num: 1, value: "" },
+      answer: "",
+      test: "",
     };
   },
   computed: {
     currentQuestion() {
-      return questions[this.current - 1];
+      if (!this.questions[this.current - 1]) {
+        return { text: "", optA: "", optB: "", optC: "", optD: "" };
+      }
+      return this.questions[this.current - 1];
+    },
+    currentAnswer() {
+      const ans = this.answers[this.current - 1];
+      if (!ans) {
+        return "";
+      }
+      this.answer = ans.value;
+      return ans.value;
     },
   },
+
   methods: {
     addQuestion() {
-      console.log(this.question);
-      this.questions.push(this.question);
-      this.answer.num = this.current;
-      this.answers.push(this.answer);
-      this.answer = { num: this.current, value: "" };
-      this.question = { text: "", optA: "", optB: "", optC: "", optD: "" };
-      this.current++;
+      this.questions[this.current - 1] = this.currentQuestion;
+      this.answers[this.current - 1] = {
+        num: this.current,
+        value: this.answer,
+      };
+      this.answer = "";
+      this.next();
+    },
+    previous() {
+      if (this.current >= 1) this.current--;
+    },
+    next() {
+      if (this.current <= 30) this.current++;
     },
   },
 };
@@ -50,7 +77,7 @@ export default {
         <div class="input-group flex flex-col gap-[5px]">
           <label class="text-sm" for="question">Questions</label>
           <textarea
-            v-model="question.text"
+            v-model="currentQuestion.text"
             name="question"
             id="question"
             class="border-border-300 h-36 k-input"
@@ -64,11 +91,11 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'A' ? 'bg-green-400/50' : ''
+                currentAnswer.value === 'A' ? 'bg-green-400/50' : ''
               }`"
               name="opta"
               id="opta"
-              v-model="question.optA"
+              v-model="currentQuestion.optA"
             />
             <ErrorMessage name="opta" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -77,11 +104,11 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'B' ? 'bg-green-400/50' : ''
+                currentAnswer.value === 'B' ? 'bg-green-400/50' : ''
               }`"
               name="optb"
               id="optb"
-              v-model="question.optB"
+              v-model="currentQuestion.optB"
             />
             <ErrorMessage name="optb" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -90,11 +117,11 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'C' ? 'bg-green-400/50' : ''
+                currentAnswer.value === 'C' ? 'bg-green-400/50' : ''
               }`"
               name="optc"
               id="optc"
-              v-model="question.optC"
+              v-model="currentQuestion.optC"
             />
             <ErrorMessage name="optc" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -103,85 +130,62 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'D' ? 'bg-green-400/50' : ''
+                currentAnswer.value === 'D' ? 'bg-green-400/50' : ''
               }`"
               name="optd"
               id="optd"
-              v-model="question.optD"
+              v-model="currentQuestion.optD"
             />
             <ErrorMessage name="optd" class="text-red-600 text-xs pt-1 px-2" />
           </div>
         </div>
+        <!-- Right option select -->
         <div class="correct w-fit mx-auto">
-          <p class="text-lg font-bold text-center mb-1">Right Option</p>
-          <div class="flex gap-4">
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansa"
-                v-model="answer.value"
-                value="A"
-              />
-              <label class="font-bold text-lg" for="ansa">A</label>
+          <RadioGroup v-model="answer" class="flex flex-col gap-2 items-center">
+            <RadioGroupLabel class="text-lg font-bold text-center"
+              >Right Option</RadioGroupLabel
+            >
+            <div class="flex gap-8">
+              <RadioGroupOption
+                v-for="opt in ['A', 'B', 'C', 'D']"
+                :key="opt"
+                v-slot="{ checked }"
+                :value="opt"
+              >
+                <span
+                  :class="`${
+                    checked
+                      ? 'bg-primary text-white ring-4 ring-primary/50'
+                      : ''
+                  } 
+                  accent-primary border-2 border-primary/80 rounded py-1 px-4 text-base font-semibold cursor-pointer hover:bg-primary/30`"
+                  >{{ opt }}</span
+                >
+              </RadioGroupOption>
             </div>
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansb"
-                v-model="answer.value"
-                value="B"
-              />
-              <label class="font-bold text-lg" for="ansb">B</label>
-            </div>
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansc"
-                v-model="answer.value"
-                value="C"
-              />
-              <label class="font-bold text-lg" for="ansc">C</label>
-            </div>
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansd"
-                v-model="answer.value"
-                value="D"
-              />
-              <label class="font-bold text-lg" for="ansd">D</label>
-            </div>
-          </div>
+          </RadioGroup>
         </div>
       </form>
       <!-- BUTTONS -->
       <div class="flex justify-between mx-[80px] mt-[50px]">
         <button
-          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded"
-          :disabled="this.questions.length > 0"
-          @click="this.current--"
+          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded disabled:cursor-not-allowed disabled:opacity-40"
+          :disabled="current <= 1"
+          @click="previous"
         >
           Previous
         </button>
         <button
-          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded"
+          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded disabled:cursor-not-allowed disabled:opacity-40"
           @click="addQuestion"
-          :disabled="this.questions.length <= 30"
+          :disabled="current >= 30"
         >
           Next
         </button>
       </div>
       <button
         class="block font-bold rounded w-[205px] h-[40px] mt-[50px] mx-auto bg-primary text-white disabled:cursor-not-allowed disabled:opacity-40"
-        :disabled="questions.length !== 30"
+        :disabled="current < 30"
       >
         Finish
       </button>
