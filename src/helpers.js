@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Notyf } from "notyf";
 import { date, string, number } from "yup";
 
@@ -106,6 +105,7 @@ export const applications = [
     age: 23,
     email: "daverosetholley@gmail.com",
     course: "Computer Science",
+    batch: "Batch 1",
   },
   {
     firstName: "Papa Yaw",
@@ -117,6 +117,7 @@ export const applications = [
     email: "pyaaddo@gmail.com",
     age: 25,
     course: "Drugs",
+    batch: "Batch 2",
   },
   {
     firstName: "Mark",
@@ -128,6 +129,7 @@ export const applications = [
     age: 24,
     email: "maampeaw@gmail.com",
     course: "Agriculture",
+    batch: "Batch 1",
   },
   {
     firstName: "David",
@@ -139,5 +141,6 @@ export const applications = [
     age: 25,
     email: "dtglover@gmail.com",
     course: "Physics",
+    batch: "Batch 2",
   },
 ];
