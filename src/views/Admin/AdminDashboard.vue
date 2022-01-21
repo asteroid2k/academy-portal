@@ -38,11 +38,11 @@ export default {
           image: "../../../src/assets/results.svg",
           routeUrl: "Results",
         },
-        //{
-        //  routeName: "Settings",
-        //   image: "../../../src/assets/Setting.png",
-        //   routeUrl: "/settings",
-        // },
+        {
+          routeName: "Settings",
+          image: "../../../src/assets/Setting.svg",
+          routeUrl: "Settings",
+        },
       ],
     };
   },
@@ -51,7 +51,7 @@ export default {
 <template>
   <section class="main">
     <section class="w-fit"><Sidebar :routes="routes" /></section>
-    <section class="mx-[60px] my-12"><router-view></router-view></section>
+    <section class="mx-[50px] my-12"><router-view></router-view></section>
   </section>
 </template>
 

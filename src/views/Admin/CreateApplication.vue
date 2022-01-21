@@ -13,7 +13,14 @@ export default {
     <Form>
       <div class="grid grid-cols-2 gap-x-[60px] gap-y-7">
         <div
-          class="h-[108px] mt-5 border-[1.5px] border-dashed border-border-300 grid place-items-center rounded-sm"
+          class="
+            h-[108px]
+            mt-5
+            border-[1.5px] border-dashed border-border-300
+            grid
+            place-items-center
+            rounded-sm
+          "
         >
           <label for="image">+ Choose File</label>
           <input type="file" name="image" class="sr-only" id="image" />
@@ -60,7 +67,17 @@ export default {
         ></textarea>
       </div>
       <button
-        class="block rounded mt-11 h-12 max-w-[380px] bg-primary text-white w-full mx-auto"
+        class="
+          block
+          rounded
+          mt-11
+          h-12
+          max-w-[380px]
+          bg-primary
+          text-white
+          w-full
+          mx-auto
+        "
       >
         Submit
       </button>
