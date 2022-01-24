@@ -20,7 +20,6 @@ export default {
       questions: [],
       answers: [],
       answer: "",
-      test: "",
     };
   },
   computed: {
@@ -91,7 +90,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                currentAnswer.value === 'A' ? 'bg-green-400/50' : ''
+                answer === 'A' ? 'bg-green-400/50' : ''
               }`"
               name="opta"
               id="opta"
@@ -104,7 +103,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                currentAnswer.value === 'B' ? 'bg-green-400/50' : ''
+                answer === 'B' ? 'bg-green-400/50' : ''
               }`"
               name="optb"
               id="optb"
@@ -117,7 +116,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                currentAnswer.value === 'C' ? 'bg-green-400/50' : ''
+                answer === 'C' ? 'bg-green-400/50' : ''
               }`"
               name="optc"
               id="optc"
@@ -130,7 +129,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                currentAnswer.value === 'D' ? 'bg-green-400/50' : ''
+                answer === 'D' ? 'bg-green-400/50' : ''
               }`"
               name="optd"
               id="optd"
@@ -141,7 +140,7 @@ export default {
         </div>
         <!-- Right option select -->
         <div class="correct w-fit mx-auto">
-          <RadioGroup v-model="answer" class="flex flex-col gap-2 items-center">
+          <RadioGroup v-model="answer" class="flex flex-col gap-3 items-center">
             <RadioGroupLabel class="text-lg font-bold text-center"
               >Right Option</RadioGroupLabel
             >

@@ -44,7 +44,7 @@ export default {
           <p class="assess-description">
             Create test question for an incoming academy students
           </p>
-          <router-link to="/assessment"
+          <router-link :to="{ name: 'CreateAssessment' }"
             ><button class="assessment">Create Assessment</button></router-link
           >
         </div>
