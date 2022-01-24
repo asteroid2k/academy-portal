@@ -23,6 +23,21 @@ export default {
 
 <template>
   <router-view :instance="instance"></router-view>
-  <Navbar />
 </template>
 
+<style>
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 17px;
+}
+::-webkit-scrollbar-thumb {
+  background: #031131;
+  opacity: 0.7;
+  border-radius: 17px;
+  border: 8px solid #ffffff;
+  /* change border color to blue to match the background */
+}
+</style>

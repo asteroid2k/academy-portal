@@ -20,6 +20,42 @@ export default {
         cgpa: "5.0",
         testScore: "15",
       },
+      {
+        name: "Ify Chinke",
+        email: "ify@enyata.com",
+        dob: "12/09/19 - 22",
+        address: "3 Sabo Ave, Yaba, Lagos",
+        university: "University of Nigeria",
+        cgpa: "5.0",
+        testScore: "15",
+      },
+      {
+        name: "Ify Chinke",
+        email: "ify@enyata.com",
+        dob: "12/09/19 - 22",
+        address: "3 Sabo Ave, Yaba, Lagos",
+        university: "University of Nigeria",
+        cgpa: "5.0",
+        testScore: "15",
+      },
+      {
+        name: "Ify Chinke",
+        email: "ify@enyata.com",
+        dob: "12/09/19 - 22",
+        address: "3 Sabo Ave, Yaba, Lagos",
+        university: "University of Nigeria",
+        cgpa: "5.0",
+        testScore: "15",
+      },
+      {
+        name: "Ify Chinke",
+        email: "ify@enyata.com",
+        dob: "12/09/19 - 22",
+        address: "3 Sabo Ave, Yaba, Lagos",
+        university: "University of Nigeria",
+        cgpa: "5.0",
+        testScore: "15",
+      },
     ]);
 
     return {
@@ -131,12 +167,30 @@ td {
   padding: 40px 40px 0px;
 }
 .wrapper {
-  overflow-y: auto;
+  overflow: auto;
   height: 400px;
 }
 .table-head {
   position: sticky;
   top: 0px;
   z-index: 1;
+}
+@media screen and (max-width: 992px) {
+  #assessments {
+    width: 300%;
+  }
+  .wrapper {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  #assessments th,
+  td {
+    padding: 20px 15px;
+    text-align: center;
+  }
+  select {
+    padding: 0;
+  }
 }
 </style>

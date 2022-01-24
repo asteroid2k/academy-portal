@@ -50,8 +50,10 @@ export default {
 </script>
 <template>
   <section class="main">
-    <section class="w-fit"><Sidebar :routes="routes" /></section>
-    <section class="mx-[50px] my-12"><router-view></router-view></section>
+    <section id="sidebar" class="w-fit"><Sidebar :routes="routes" /></section>
+    <section id="view">
+      <router-view></router-view>
+    </section>
   </section>
 </template>
 
@@ -59,5 +61,21 @@ export default {
 .main {
   display: grid;
   grid-template-columns: auto 1fr;
+}
+#view {
+  margin: 40px;
+}
+@media screen and (max-width: 992px) {
+  #view {
+    height: 100%;
+    overflow: auto;
+    margin: 120px 30px 30px;
+  }
+
+  .main {
+    width: 100%;
+    display: block;
+    grid-template-columns: none;
+  }
 }
 </style>

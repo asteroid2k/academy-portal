@@ -34,7 +34,7 @@ export default {
           any time to edit your answers.
         </p>
       </div>
-      <div>
+      <div class="timer">
         <p class="text-sm">Timer</p>
         <p class="text-xs">
           <span class="min text-5xl font-light">00</span>min<span
@@ -141,4 +141,19 @@ export default {
     </section>
   </div>
 </template>
+
+<style scoped>
+@media screen and (max-width: 992px) {
+  .main {
+    margin: 0;
+  }
+  .head {
+    flex-direction: column;
+  }
+
+  .head p {
+    margin: 10px;
+  }
+}
+</style>
 

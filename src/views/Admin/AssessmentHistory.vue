@@ -162,5 +162,23 @@ td {
   position: sticky;
   top: 0px;
   z-index: 1;
+  background: #2b3c4e;
+}
+
+@media screen and (max-width: 992px) {
+  #assessments {
+    width: 200%;
+  }
+  .table-frame {
+    padding: 0px;
+    font-size: 14px;
+  }
+  #assessments th,
+  td {
+    padding: 15px;
+    text-align: center;
+  }
+  .table-body {
+  }
 }
 </style>

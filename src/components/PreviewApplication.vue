@@ -26,8 +26,21 @@ export default {
       <DialogTitle class="sr-only">View Application Entry</DialogTitle>
       <!-- PREVIEW CARD   -->
       <section
-        class="preview relative bg-white max-w-[600px] ml-auto pl-[40px] py-[50px] h-screen overflow-y-auto"
+        class="
+          preview
+          relative
+          bg-white
+          max-w-[600px]
+          ml-auto
+          pl-[40px]
+          py-[50px]
+          h-screen
+          overflow-y-auto
+        "
       >
+        <div class="img-container">
+          <img src="../assets/close.svg" />
+        </div>
         <input type="text" class="sr-only" />
         <div class="mb-12">
           <img
@@ -139,4 +152,12 @@ export default {
   </Dialog>
 </template>
 
-<style></style>
+<style scoped>
+.img-container {
+  float: right;
+}
+
+.img-container img {
+  width: 20px;
+}
+</style>
