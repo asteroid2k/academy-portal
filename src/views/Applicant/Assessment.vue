@@ -59,7 +59,7 @@ export default {
           any time to edit your answers.
         </p>
       </div>
-      <div>
+      <div class="timer">
         <p class="text-sm">Timer</p>
         <p class="text-xs">
           <span class="min text-5xl font-light">00</span>min<span

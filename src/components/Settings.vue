@@ -92,4 +92,14 @@ export default {};
   font-size: 12px;
   line-height: 14px;
 }
+
+@media screen and (max-width: 992px) {
+  .view {
+    width: 100%;
+    margin: 50px 0px 75px;
+  }
+  .timer {
+    width: 75%;
+  }
+}
 </style>

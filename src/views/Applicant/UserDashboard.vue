@@ -17,18 +17,22 @@ export default {
       successful
     </p>
     <div class="stats">
-      <div class="app-date">
+      <div class="app-date" id="box-1">
         <p class="app-head">Date of Application</p>
         <p class="date">09.09.19</p>
         <div class="line"></div>
         <p class="app-subhead">4 days since applied</p>
       </div>
-      <div class="app-date">
+      <div class="app-date" id="box-2">
         <p class="app-head">Application Status</p>
         <p class="date">Pending</p>
         <div id="line2" class="line"></div>
         <p class="app-subhead">We will get back to you</p>
       </div>
+    </div>
+    <div class="indicator">
+      <a href="#box-1">•</a>
+      <a href="#box-2">•</a>
     </div>
     <div class="update-container">
       <div class="app-update">
@@ -102,6 +106,9 @@ export default {
   margin-top: 10px;
   color: #4f4f4f;
 }
+.indicator {
+  display: none;
+}
 .line {
   width: 148px;
   height: 4px;
@@ -146,5 +153,64 @@ export default {
 #centerdiv {
   text-align: center;
   margin: 100px auto 0px;
+}
+
+@media screen and (max-width: 992px) {
+  .main-frame {
+    margin: 0;
+  }
+  .app-date p {
+    color: #ffffff;
+  }
+  .app-date {
+    text-align: center;
+    background: #7557d3;
+    padding: 20px 0px;
+    border: none;
+  }
+  .line {
+    width: 300px;
+    border-radius: none;
+  }
+  .stats {
+    width: 100%;
+    justify-content: none;
+    background: #7557d3;
+    height: fit-content;
+    overflow: auto;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+    margin: 60px auto 0px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 20px;
+  }
+
+  .indicator {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0px;
+  }
+  .indicator a {
+    color: #7557d3;
+    opacity: 0.4;
+    font-size: 30px;
+    margin: 0px 10px;
+  }
+  .indicator a:focus,
+  .indicator a:hover {
+    color: #7557d3;
+    opacity: 1;
+  }
+  .update-container {
+    justify-content: space-around;
+    flex-direction: column-reverse;
+  }
+
+  .app-update {
+    width: 100%;
+    margin: 0px 0px 40px;
+  }
 }
 </style>

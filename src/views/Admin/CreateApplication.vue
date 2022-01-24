@@ -11,7 +11,7 @@ export default {
   <div class="flex flex-col">
     <div><Top heading="Create Application" /></div>
     <Form>
-      <div class="grid grid-cols-2 gap-x-[60px] gap-y-7">
+      <div id="input-fields" class="grid grid-cols-2">
         <div
           class="
             h-[108px]
@@ -85,4 +85,16 @@ export default {
   </div>
 </template>
 
-<style></style>
+<style>
+#input-fields {
+  row-gap: 1.75rem;
+  column-gap: 60px;
+}
+@media screen and (max-width: 992px) {
+  #input-fields {
+    row-gap: 1.5rem;
+    column-gap: 20px;
+  }
+}
+</style>
+

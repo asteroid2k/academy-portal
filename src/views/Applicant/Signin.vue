@@ -177,4 +177,9 @@ button {
   align-items: center;
   justify-content: space-between;
 }
+@media screen and (max-width: 992px) {
+  .login {
+    padding: 20px;
+  }
+}
 </style>
