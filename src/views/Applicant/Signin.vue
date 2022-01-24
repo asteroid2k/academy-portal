@@ -1,6 +1,6 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { object, string } from "yup";
+import { object } from "yup";
 import { notyf, validators } from "../../helpers";
 import { mapActions } from "vuex";
 
@@ -19,25 +19,43 @@ export default {
     });
     return {
       schema,
+      error: "",
     };
   },
   methods: {
     ...mapActions(["storeToken"]),
     async handleSubmit(values) {
+      this.error = "";
+
       try {
-        let resp = await this.instance.post("/auth/signin", values);
-        // console.log(resp);
-        const { data } = resp;
-        if (data) {
+        let response = await this.instance.post("/auth/signin", values);
+        if (response.data) {
+          const { data } = response;
           notyf.success(data.message);
           this.storeToken(data.token);
+          // redirect to dashboard
+          this.$router.push({ name: "Dashboard" });
         }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        if (errors) {
-          notyf.error(Object.values(errors)[0]);
-        } else if (message) {
-          notyf.error(message);
+      } catch (error) {
+        console.log(error.response);
+        // when error has response
+        if (error.response) {
+          const { data, status } = error.response;
+          if (data.message) {
+            notyf.error(data.message);
+            this.error = data.message;
+            return;
+          }
+          //validation errors
+          if (data.errors) {
+            notyf.error(Object.values(data.errors)[0]);
+            this.error = Object.values(data.errors)[0];
+            return;
+          }
+          // other errors
+          notyf.error("A problem occured");
+        } else {
+          notyf.error("A problem occured");
         }
       }
     },
@@ -58,6 +76,10 @@ export default {
       action=""
       :validation-schema="schema"
     >
+      <p class="text-sm text-center my-1 text-red-500 font-medium">
+        {{ error }}
+      </p>
+
       <div class="input-group">
         <label for="email">Email Address</label>
         <Field type="text" name="email" id="email" class="k-input" />
