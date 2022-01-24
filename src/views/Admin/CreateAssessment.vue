@@ -90,7 +90,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer === 'A' ? 'bg-green-400/50' : ''
+                answer === 'A' ? 'bg-green-400/80' : ''
               }`"
               name="opta"
               id="opta"
@@ -103,7 +103,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer === 'B' ? 'bg-green-400/50' : ''
+                answer === 'B' ? 'bg-green-400/80' : ''
               }`"
               name="optb"
               id="optb"
@@ -116,7 +116,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer === 'C' ? 'bg-green-400/50' : ''
+                answer === 'C' ? 'bg-green-400/80' : ''
               }`"
               name="optc"
               id="optc"
@@ -129,7 +129,7 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer === 'D' ? 'bg-green-400/50' : ''
+                answer === 'D' ? 'bg-green-400/80' : ''
               }`"
               name="optd"
               id="optd"
@@ -157,7 +157,7 @@ export default {
                       ? 'bg-primary text-white ring-4 ring-primary/50'
                       : ''
                   } 
-                  accent-primary border-2 border-primary/80 rounded py-1 px-4 text-base font-semibold cursor-pointer hover:bg-primary/30`"
+                  accent-primary border-2 border-primary/80 rounded py-1 px-4 text-base font-semibold cursor-pointer hover:bg-primary/60`"
                   >{{ opt }}</span
                 >
               </RadioGroupOption>

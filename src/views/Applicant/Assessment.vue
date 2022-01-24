@@ -9,16 +9,41 @@ export default {
       current: 1,
       confirmed: false,
       questions,
+      answers: [],
+      answer: "",
     };
   },
   computed: {
     question() {
       return questions[this.current - 1];
     },
+    currentAnswer() {
+      const stored = this.answers[this.current - 1];
+      if (stored.value) {
+        this.answer = stored.value;
+        return stored.value;
+      }
+      return "";
+    },
   },
   methods: {
     confirm() {
       this.confirmed = true;
+    },
+
+    addAnswer() {
+      this.answers[this.current - 1] = {
+        num: this.current,
+        value: this.answer,
+      };
+      this.answer = "";
+      this.next();
+    },
+    previous() {
+      if (this.current >= 1) this.current--;
+    },
+    next() {
+      if (this.current <= 30) this.current++;
     },
   },
 };
@@ -61,17 +86,7 @@ export default {
         </p>
       </div>
       <button
-        class="
-          mt-6
-          px-10
-          py-2
-          bg-primary
-          text-white
-          cursor-pointer
-          disabled:bg-neutral-500/80 disabled:cursor-not-allowed
-          font-bold
-          rounded
-        "
+        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
         :disabled="questions.length <= 0"
         @click="confirm"
       >
@@ -81,38 +96,51 @@ export default {
     <section v-if="confirmed" class="quiz-area">
       <!-- Question -->
       <div class="max-w-[600px] mx-auto w-fit shadow-sm">
-        <Question :question="question" :current="current" />
+        <section class="question flex flex-col">
+          <p class="text-sm font-medium italic text-center">
+            Question {{ current }}
+          </p>
+          <p class="text-2xl font-medium italic text-center mt-3">
+            {{ question.question }}
+          </p>
+          <div class="options flex flex-col gap-4 mt-10">
+            <div
+              v-for="opt in question.options"
+              :key="opt.opt"
+              class="answer flex gap-10 items-center"
+            >
+              <input
+                type="radio"
+                name="option"
+                :id="opt.opt"
+                class="rounded-none text-primary"
+                :value="opt.opt"
+                v-model="answer"
+              />
+              <label
+                for="option1"
+                :class="`italic font-medium text-base py-2 px-5 ${
+                  answer === opt.opt ? 'bg-green-400/80' : ''
+                }`"
+                ><span class="mr-1">{{ opt.opt }}.</span> {{ opt.value }}
+              </label>
+            </div>
+          </div>
+        </section>
       </div>
       <!-- Question nav buttons -->
       <div class="flex gap-4 justify-between max-w-[600px] mt-[80px] mx-auto">
         <button
-          @click="current--"
-          class="
-            w-[125px]
-            border border-black/20
-            h-10
-            font-bold
-            disabled:opacity-70
-            rounded
-            disabled:cursor-not-allowed
-          "
+          @click="previous"
+          class="w-[125px] border border-black/20 h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
           :disabled="current <= 1"
         >
           Prev
         </button>
 
         <button
-          @click="current++"
-          class="
-            w-[125px]
-            bg-primary
-            text-white
-            h-10
-            font-bold
-            disabled:opacity-70
-            rounded
-            disabled:cursor-not-allowed
-          "
+          @click="addAnswer"
+          class="w-[125px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
           :disabled="current >= questions.length"
         >
           Next
@@ -121,19 +149,7 @@ export default {
       <!-- Finish button -->
       <button
         @click="$router.push({ name: 'Success' })"
-        class="
-          block
-          mt-[75px]
-          w-[200px]
-          bg-primary
-          text-white
-          h-10
-          font-bold
-          disabled:opacity-70
-          rounded
-          disabled:cursor-not-allowed
-          mx-auto
-        "
+        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed mx-auto"
         :disabled="current !== questions.length"
       >
         Finish
@@ -142,3 +158,17 @@ export default {
   </div>
 </template>
 
+<style scoped>
+@media screen and (max-width: 992px) {
+  .main {
+    margin: 0;
+  }
+  .head {
+    flex-direction: column;
+  }
+
+  .head p {
+    margin: 10px;
+  }
+}
+</style>
