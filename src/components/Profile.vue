@@ -150,7 +150,7 @@ export default {};
   width: 100%;
   outline: none;
   border: none;
-  background: rgba(117, 87, 211, 0.4);
+  background: rgba(117, 87, 211, 0.04);
 }
 
 .short-box {
@@ -164,7 +164,7 @@ export default {};
   width: 100%;
   outline: none;
   border: none;
-  background: rgba(117, 87, 211, 0.4);
+  background: rgba(117, 87, 211, 0.04);
 }
 #save-button {
   background: #7557d3;
