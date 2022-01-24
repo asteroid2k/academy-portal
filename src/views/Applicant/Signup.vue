@@ -78,7 +78,6 @@ export default {
 .logo img {
   width: 110.1px;
   height: 20.84px;
-  margin-bottom: 24px;
 }
 .form-head {
   margin-top: 27px;
@@ -142,5 +141,13 @@ label {
   line-height: 17px;
   /* identical to box height */
   color: #4f4f4f;
+}
+@media screen and (max-width: 992px) {
+  .main-container {
+    margin: 80px 20px;
+  }
+  input {
+    width: 100%;
+  }
 }
 </style>

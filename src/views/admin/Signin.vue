@@ -106,4 +106,9 @@ export default {
   background-position: center center;
   background-color: var(--primary);
 }
+@media screen and (max-width: 992px) {
+  .main {
+    background-image: none;
+  }
+}
 </style>

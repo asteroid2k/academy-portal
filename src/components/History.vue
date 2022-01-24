@@ -78,4 +78,11 @@ export default {
   border-radius: 8px;
   border-left: 7px solid var(--primary);
 }
+@media screen and (max-width: 992px) {
+  .historys {
+    justify-content: space-evenly;
+    padding: 15px 0px;
+    font-size: 12px;
+  }
+}
 </style>

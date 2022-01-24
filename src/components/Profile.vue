@@ -67,14 +67,13 @@ export default {};
 </script>
 
 <style scoped>
-* {
-}
 .view {
   margin: 100px 0px 150px;
   width: 80%;
 }
 .header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0px 0px 15px;
   border-bottom: 1px solid #f2f2f2;
@@ -185,5 +184,19 @@ export default {};
 .button {
   width: 100%;
   text-align: center;
+}
+@media screen and (max-width: 992px) {
+  .upload-container {
+    width: 100%;
+  }
+  .header {
+  }
+  .view {
+    width: 100%;
+    margin: 50px 0px 75px;
+  }
+  .top-form {
+    font-size: 14px;
+  }
 }
 </style>
