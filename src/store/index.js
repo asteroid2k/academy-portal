@@ -10,6 +10,7 @@ const store = createStore({
   state() {
     return {
       token: "",
+      isAdmin: false,
     };
   },
   getters: {
@@ -21,10 +22,15 @@ const store = createStore({
     SET_TOKEN(state, payload) {
       state.token = payload;
     },
+    SET_ADMIN(state, payload) {
+      state.isAdmin = payload;
+    },
   },
   actions: {
     storeToken({ commit }, payload) {
-      commit("SET_TOKEN", payload);
+      // console.log(payload);
+      commit("SET_TOKEN", payload.token);
+      commit("SET_ADMIN", payload.isAdmin);
     },
   },
   modules: {},

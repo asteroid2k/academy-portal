@@ -3,6 +3,7 @@ import Sidebar from "../../components/Sidebar.vue";
 
 export default {
   name: "Dashboard",
+  props: { instance: Function },
   components: { Sidebar },
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
 <template>
   <div class="entire-page">
     <div><Sidebar v-bind:routes="routes" /></div>
-    <div id="view"><router-view></router-view></div>
+    <div id="view"><router-view :instance="instance"></router-view></div>
   </div>
 </template>
 

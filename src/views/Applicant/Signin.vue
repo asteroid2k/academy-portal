@@ -30,9 +30,9 @@ export default {
       try {
         let response = await this.instance.post("/auth/signin", values);
         if (response.data) {
-          const { data } = response;
-          notyf.success(data.message);
-          this.storeToken(data.token);
+          const { message, token, isAdmin } = response.data;
+          notyf.success(message);
+          this.storeToken({ token, isAdmin });
           // redirect to dashboard
           this.$router.push({ name: "Dashboard" });
         }

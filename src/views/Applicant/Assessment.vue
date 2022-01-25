@@ -1,9 +1,7 @@
 <script>
 import { questions } from "../../helpers.js";
-import Question from "../../components/Question.vue";
 export default {
   name: "Assessment",
-  components: { Question },
   data() {
     return {
       current: 1,
@@ -23,6 +21,7 @@ export default {
         this.answer = stored.value;
         return stored.value;
       }
+      this.answer = "";
       return "";
     },
   },
@@ -118,7 +117,7 @@ export default {
                 v-model="answer"
               />
               <label
-                for="option1"
+                :for="opt.opt"
                 :class="`italic font-medium text-base py-2 px-5 ${
                   answer === opt.opt ? 'bg-green-400/80' : ''
                 }`"
