@@ -4,6 +4,7 @@ import History from "../../components/History.vue";
 
 export default {
   name: "AdminDashboard",
+  props: { instance: Function },
   components: { Sidebar, History },
   data() {
     return {
@@ -52,7 +53,7 @@ export default {
   <section class="main">
     <section id="sidebar" class="w-fit"><Sidebar :routes="routes" /></section>
     <section id="view">
-      <router-view></router-view>
+      <router-view :instance="instance"></router-view>
     </section>
   </section>
 </template>
