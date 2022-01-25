@@ -73,7 +73,7 @@ export default {
 }
 
 .entire-page {
-  margin: 70px;
+  margin: 70px 70px 0px;
 }
 .navbar {
   display: flex;
