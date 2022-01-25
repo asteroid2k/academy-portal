@@ -27,17 +27,19 @@ export default {
 
 <style>
 ::-webkit-scrollbar {
-  width: 20px;
+  width: 26px;
 }
 ::-webkit-scrollbar-track {
-  background: #ffffff;
+  background-color: #cdcfd6;
   border-radius: 17px;
+  border: 10px solid transparent;
+  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb {
-  background: #031131;
-  opacity: 0.7;
+  background-color: rgba(3, 17, 49, 0.7);
   border-radius: 17px;
-  border: 8px solid #ffffff;
+  border: 10px solid transparent;
+  background-clip: content-box;
   /* change border color to blue to match the background */
 }
 </style>
