@@ -31,7 +31,7 @@ export default {
         if (data) {
           notyf.success(data.message);
           this.storeToken(data.token);
-          this.$router.push({ name: "Dashboard" });
+          this.$router.push({ name: "UserDashboard" });
         }
       } catch ({ response }) {
         const { errors, message } = response.data;

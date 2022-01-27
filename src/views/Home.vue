@@ -1,10 +1,44 @@
 <script>
+import { mapActions } from "vuex";
 import HomePageCards from "../components/HomePageCards.vue";
+import { notyf } from "../helpers";
+
 export default {
-  data() {
-    return {};
+  mounted() {
+    this.fetchBatch();
+    console.log("Button disabled");
   },
+  props: { instance: Function },
   components: { HomePageCards },
+
+  data() {
+    return {
+      isDisabled: true,
+    };
+  },
+  methods: {
+    ...mapActions(["storeBatch"]),
+    async fetchBatch() {
+      try {
+        let resp = await this.instance.get("/batch?ongoing=true");
+        console.log(resp);
+        const { data } = resp;
+        if (data) {
+          this.storeBatch(data.batches[0]);
+          if (data.batches[0]) {
+            this.isDisabled = false;
+          }
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors)[0]);
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -25,9 +59,11 @@ export default {
           <nav>
             <a>Home</a>
             <a><router-link to="/signin">Sign In</router-link></a>
-            <a class="reg-button"
-              ><router-link to="/signup">Register Now </router-link></a
-            >
+            <router-link to="/signup">
+              <button class="reg-button" :disabled="isDisabled">
+                Register Now
+              </button>
+            </router-link>
           </nav>
         </div>
       </div>
@@ -45,9 +81,9 @@ export default {
           Join enyata academy today and bring your long awaiting dream to
           reality.
         </p>
-        <button class="button">
-          <router-link to="/signup">Register now</router-link>
-        </button>
+        <router-link to="/signup">
+          <button class="button" :disabled="isDisabled">Register now</button>
+        </router-link>
       </div>
       <figure class="section1-image">
         <img src="../assets/side-image.png" />
@@ -147,6 +183,7 @@ nav a {
 }
 
 .button {
+  border: 1px solid var(--primary);
   background: var(--primary);
   padding: 12px 24px;
   color: var(--accent-color);
@@ -155,6 +192,12 @@ nav a {
   border: 1px solid var(--primary);
   background: var(--accent-color);
   color: var(--primary);
+  transition: all 0.5s ease-out;
+}
+.reg-button:hover {
+  background-color: var(--primary);
+  color: var(--accent-color);
+  transition: all 0.5s ease-in-out;
 }
 /*Section 2*/
 .s2-heading {
@@ -286,12 +329,7 @@ Animations
     width: 152px;
     margin: 10px auto;
   }
-  .reg-button:hover {
-    border: 1px solid var(--primary);
-    background-color: var(--accent-color);
-    color: var(--primary);
-    transition: all 0.5s ease-in-out;
-  }
+
   /*Section 1 */
   .section1 {
     margin: 50px 0px;

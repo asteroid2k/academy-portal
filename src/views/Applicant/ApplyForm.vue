@@ -1,16 +1,24 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { object } from "yup";
+import { object, string } from "yup";
 import { notyf, validators } from "../../helpers.js";
 import { mapGetters } from "vuex";
+
 export default {
   name: "ApplyForm",
-
+  //importing axios instance
   props: { instance: Function },
   components: {
     Form,
     Field,
     ErrorMessage,
+  },
+  //check for available batch
+  mounted() {
+    if (!this.batch) {
+      notyf.error("There is no ongoing application");
+      this.$router.push({ name: "Home" });
+    }
   },
   data() {
     const schema = object({
@@ -24,32 +32,30 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["token"]),
+    ...mapGetters(["batch"]),
   },
   methods: {
     async handleSubmit(values) {
       try {
         let resp = await this.instance.post(
-          `/application/apply/${this.$route.params.id}`,
+          `/application/apply/${this.batch._id}`,
           values
         );
-        if (resp.data) {
-          notyf.success(resp.data.message);
+
+        const { data } = resp;
+        if (data) {
+          notyf.success(data.message);
+          this.storeToken(data.token);
         }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        //unauthorized
-        if (response.staus === 401 || 403) {
-          return notyf.error("unauthorized");
-        }
-        console.log(response.status);
-        // handle validation errors
-        if (errors) {
-          return notyf.error(Object.values(errors)[0]);
-          // handle other errors
-        }
-        if (message) {
-          return notyf.error(message);
+      } catch (error) {
+        //if the error has a response it is from the backend
+        if (error.response) {
+          const { errors, message } = response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
         }
       }
     },
@@ -70,20 +76,43 @@ export default {
       action=""
       @submit="handleSubmit"
       :validation-schema="schema"
-      class="max-w-[960px] px-[70px] pt-[50px] pb-[40px] mx-auto shadow rounded-lg w-full"
+      class="
+        max-w-[960px]
+        px-[70px]
+        pt-[50px]
+        pb-[40px]
+        mx-auto
+        shadow
+        rounded-lg
+        w-full
+      "
       enctype="multipart/form-data"
     >
       <!-- file upload buttons -->
       <div class="file-uploads flex gap-8 justify-center mb-8">
         <div
-          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
+          class="
+            border-[1.5px] border-dashed border-border-300
+            w-[210px]
+            grid
+            place-items-center
+            h-[50px]
+            rounded-sm
+          "
         >
           <label for="cv">+ Upload CV</label>
           <Field type="file" name="cv" class="sr-only" id="cv" action="" />
           <ErrorMessage name="cv" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div
-          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
+          class="
+            border-[1.5px] border-dashed border-border-300
+            w-[210px]
+            grid
+            place-items-center
+            h-[50px]
+            rounded-sm
+          "
         >
           <label for="image">+ Upload Photo</label>
           <Field type="file" name="image" class="sr-only" id="image" />
@@ -176,7 +205,19 @@ export default {
         </div>
       </div>
       <button
-        class="mt-11 rounded font-bold text-base block max-w-[380px] w-full bg-primary text-white h-12 mx-auto"
+        class="
+          mt-11
+          rounded
+          font-bold
+          text-base
+          block
+          max-w-[380px]
+          w-full
+          bg-primary
+          text-white
+          h-12
+          mx-auto
+        "
         type="submit"
       >
         Submit

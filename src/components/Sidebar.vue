@@ -2,8 +2,10 @@
 export default {
   name: "Sidebar",
   props: {
+    instance: Function,
     routes: Array,
   },
+
   methods: {
     imgUrl(img) {
       return new URL(`../assets/${img}`, import.meta.url);

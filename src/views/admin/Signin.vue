@@ -31,7 +31,7 @@ export default {
         if (data) {
           notyf.success(data.message);
           this.storeToken(data.token);
-          this.$router.push({ name: "AdminDashboard" });
+          this.$router.push({ name: "Admin" });
         }
       } catch ({ response }) {
         const { errors, message } = response.data;

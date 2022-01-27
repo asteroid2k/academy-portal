@@ -52,7 +52,7 @@ const routes = [
       },
 
       {
-        path: "/apply/:id",
+        path: "/apply",
         name: "Apply",
         component: () => import("../views/Applicant/ApplyForm.vue"),
         //redirect to login if user is not signed in
