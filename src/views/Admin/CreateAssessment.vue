@@ -3,6 +3,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import Top from "../../components/Top.vue";
 import { notyf } from "../../helpers";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import { mapGetters } from "vuex";
 export default {
   name: "CreateAssessment",
   props: { instance: Function },
@@ -24,9 +25,18 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["batch"]),
     currentQuestion() {
       if (!this.questions[this.current - 1]) {
-        return { text: "", optA: "", optB: "", optC: "", optD: "" };
+        return {
+          text: "",
+          options: [
+            { opt: "A", value: "" },
+            { opt: "B", value: "" },
+            { opt: "C", value: "" },
+            { opt: "D", value: "" },
+          ],
+        };
       }
       return this.questions[this.current - 1];
     },
@@ -54,16 +64,20 @@ export default {
       if (this.current >= 1) this.current--;
     },
     next() {
-      if (this.current <= 30) this.current++;
+      if (this.current < 30) this.current++;
     },
 
     async handleSubmit() {
       this.addQuestion();
+      if (!this.batch.slug) {
+        notyf.error("No ongoing batch/application");
+        return;
+      }
       try {
         let response = await this.instance.post("/assessment", {
           questions: this.questions,
           answers: this.answers,
-          batch_id: "61f13b0087621039abb0d2dd",
+          batch_id: this.batch._id,
         });
         if (response.data) {
           const { message, batch } = response.data;
@@ -133,7 +147,7 @@ export default {
               }`"
               name="opta"
               id="opta"
-              v-model="currentQuestion.optA"
+              v-model="currentQuestion.options[0].value"
             />
             <ErrorMessage name="opta" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -146,7 +160,7 @@ export default {
               }`"
               name="optb"
               id="optb"
-              v-model="currentQuestion.optB"
+              v-model="currentQuestion.options[1].value"
             />
             <ErrorMessage name="optb" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -159,7 +173,7 @@ export default {
               }`"
               name="optc"
               id="optc"
-              v-model="currentQuestion.optC"
+              v-model="currentQuestion.options[2].value"
             />
             <ErrorMessage name="optc" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -172,7 +186,7 @@ export default {
               }`"
               name="optd"
               id="optd"
-              v-model="currentQuestion.optD"
+              v-model="currentQuestion.options[3].value"
             />
             <ErrorMessage name="optd" class="text-red-600 text-xs pt-1 px-2" />
           </div>
