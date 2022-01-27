@@ -20,15 +20,27 @@ export default {
     return {
       current: 1,
       questions: [],
+      question: {
+        text: "",
+        options: [
+          { opt: "A", value: "" },
+          { opt: "B", value: "" },
+          { opt: "C", value: "" },
+          { opt: "D", value: "" },
+        ],
+      },
       answers: [],
       answer: "",
     };
   },
-  computed: {
-    ...mapGetters(["batch"]),
-    currentQuestion() {
-      if (!this.questions[this.current - 1]) {
-        return {
+  watch: {
+    current() {
+      const storedQ = this.questions[this.current - 1];
+      const storedA = this.answers[this.current - 1];
+      if (storedQ) {
+        this.question = storedQ;
+      } else {
+        this.question = {
           text: "",
           options: [
             { opt: "A", value: "" },
@@ -38,21 +50,20 @@ export default {
           ],
         };
       }
-      return this.questions[this.current - 1];
-    },
-    currentAnswer() {
-      const ans = this.answers[this.current - 1];
-      if (!ans) {
-        return "";
+      if (storedA) {
+        this.answer = storedA.value;
+      } else {
+        this.answer = "";
       }
-      this.answer = ans.value;
-      return ans.value;
     },
+  },
+  computed: {
+    ...mapGetters(["batch"]),
   },
 
   methods: {
     addQuestion() {
-      this.questions[this.current - 1] = this.currentQuestion;
+      this.questions[this.current - 1] = this.question;
       this.answers[this.current - 1] = {
         num: this.current,
         value: this.answer,
@@ -129,7 +140,7 @@ export default {
         <div class="input-group flex flex-col gap-[5px]">
           <label class="text-sm" for="question">Questions</label>
           <textarea
-            v-model="currentQuestion.text"
+            v-model="question.text"
             name="question"
             id="question"
             class="border-border-300 h-36 k-input"
@@ -147,7 +158,7 @@ export default {
               }`"
               name="opta"
               id="opta"
-              v-model="currentQuestion.options[0].value"
+              v-model="question.options[0].value"
             />
             <ErrorMessage name="opta" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -160,7 +171,7 @@ export default {
               }`"
               name="optb"
               id="optb"
-              v-model="currentQuestion.options[1].value"
+              v-model="question.options[1].value"
             />
             <ErrorMessage name="optb" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -173,7 +184,7 @@ export default {
               }`"
               name="optc"
               id="optc"
-              v-model="currentQuestion.options[2].value"
+              v-model="question.options[2].value"
             />
             <ErrorMessage name="optc" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -186,7 +197,7 @@ export default {
               }`"
               name="optd"
               id="optd"
-              v-model="currentQuestion.options[3].value"
+              v-model="question.options[3].value"
             />
             <ErrorMessage name="optd" class="text-red-600 text-xs pt-1 px-2" />
           </div>

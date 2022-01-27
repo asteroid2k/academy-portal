@@ -1,38 +1,40 @@
 <script>
-import { questions } from "../../helpers.js";
 import { notyf } from "../../helpers";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Assessment",
+  async mounted() {
+    await this.fetchAssessment();
+  },
   props: { instance: Function },
   data() {
     return {
       current: 1,
       confirmed: false,
-      questions,
+      questions: [],
       answers: [],
       answer: "",
     };
   },
+  watch: {
+    current() {
+      const stored = this.answers[this.current - 1];
+      if (stored) {
+        this.answer = stored.value;
+      } else this.answer = "";
+    },
+  },
   computed: {
+    ...mapGetters(["batch"]),
     question() {
       return this.questions[this.current - 1];
-    },
-    currentAnswer() {
-      const stored = this.answers[this.current - 1];
-      if (stored.value) {
-        this.answer = stored.value;
-        return stored.value;
-      }
-      this.answer = "";
-      return "";
     },
   },
   methods: {
     confirm() {
       this.confirmed = true;
     },
-
     addAnswer() {
       this.answers[this.current - 1] = {
         num: this.current,
@@ -42,10 +44,46 @@ export default {
       this.next();
     },
     previous() {
-      if (this.current >= 1) this.current--;
+      if (this.current > 1) this.current--;
     },
     next() {
       if (this.current < this.questions.length) this.current++;
+    },
+    async fetchAssessment() {
+      try {
+        const response = await this.instance.get(
+          `/assessment/${this.batch._id}`
+        );
+        if (response.data) {
+          const { assessment } = response.data;
+          this.questions = assessment.questions;
+        }
+      } catch (error) {
+        if (error.response) {
+          const { status, statusText, data } = error.response;
+          if (status === 404) {
+            notyf.open({
+              type: "info",
+              message: "Assessment not available yet",
+            });
+            return;
+          }
+          if (status === 401 || status === 403) {
+            notyf.error(statusText);
+            this.$router.push({ name: "Signin" });
+            return;
+          }
+          if (data.errors) {
+            notyf.error(Object.values(data.errors)[0]);
+            return;
+          }
+          if (data.message) {
+            notyf.error(data.message);
+            return;
+          }
+        }
+        notyf.error("An error occured");
+      }
     },
     async handleSubmit() {
       this.addAnswer();
@@ -114,11 +152,11 @@ export default {
         You are about to take your assessment. <br />
         Your timer will start when you click the button
       </p>
-      <div v-else class="max-w-[350px] mx-auto my-[150px]">
+      <div v-else class="max-w-[350px] mx-auto">
         <img
           src="../../assets/hourglass.png"
           alt=""
-          class="w-[72] mx-auto mb-[20px]"
+          class="w-[72px] mx-auto mb-[20px]"
         />
         <p>
           We have 4 days left until the next assessment <br />
@@ -135,7 +173,7 @@ export default {
     </div>
     <section v-if="confirmed" class="quiz-area">
       <!-- Question -->
-      <div class="max-w-[600px] mx-auto w-fit shadow-sm">
+      <div class="max-w-[600px] mx-auto w-fit">
         <section class="question flex flex-col">
           <p class="text-sm font-medium italic text-center">
             Question {{ current }}
@@ -143,23 +181,23 @@ export default {
           <p class="text-2xl font-medium italic text-center mt-3">
             {{ question.text }}
           </p>
-          <div class="options flex flex-col gap-4 mt-10">
+          <div class="options grid grid-flow-row gap-7 mt-10">
             <div
               v-for="opt in question.options"
               :key="opt.opt"
-              class="answer flex gap-10 items-center"
+              class="flex gap-6 items-center hover:bg-green-500/10 pl-2"
             >
               <input
                 type="radio"
                 name="option"
                 :id="opt.opt"
-                class="rounded-none text-primary"
+                class="rounded-none text-primary cursor-pointer border"
                 :value="opt.opt"
                 v-model="answer"
               />
               <label
                 :for="opt.opt"
-                :class="`italic font-medium text-base py-2 px-5 ${
+                :class="`italic font-medium text-base py-2 px-5 w-full cursor-pointer rounded-sm ${
                   answer === opt.opt ? 'bg-green-400/80' : ''
                 }`"
                 ><span class="mr-1">{{ opt.opt }}.</span> {{ opt.value }}
