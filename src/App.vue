@@ -23,6 +23,7 @@ export default {
 
 <template>
   <router-view :instance="instance"></router-view>
+  <Navbar />
 </template>
 
 <style>

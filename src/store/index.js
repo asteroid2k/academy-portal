@@ -11,11 +11,15 @@ const store = createStore({
     return {
       token: "",
       isAdmin: false,
+      batch: {},
     };
   },
   getters: {
     token(state) {
       return state.token;
+    },
+    batch(state) {
+      return state.batch;
     },
   },
   mutations: {
@@ -25,12 +29,18 @@ const store = createStore({
     SET_ADMIN(state, payload) {
       state.isAdmin = payload;
     },
+    SET_BATCH(state, payload) {
+      state.batch = payload;
+    },
   },
   actions: {
     storeToken({ commit }, payload) {
       // console.log(payload);
       commit("SET_TOKEN", payload.token);
       commit("SET_ADMIN", payload.isAdmin);
+    },
+    storeBatch({ commit }, payload) {
+      commit("SET_BATCH", payload);
     },
   },
   modules: {},

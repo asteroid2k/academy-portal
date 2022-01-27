@@ -2,8 +2,10 @@
 export default {
   name: "Sidebar",
   props: {
+    instance: Function,
     routes: Array,
   },
+
   methods: {
     imgUrl(img) {
       return new URL(`../assets/${img}`, import.meta.url);
@@ -76,6 +78,7 @@ export default {
 }
 .sidebar {
   width: 290px;
+  height: 100%;
   z-index: 1;
   top: 0;
   background: #ffffff;
@@ -199,9 +202,6 @@ export default {
   }
   .user-display {
     padding: 50px 0px;
-  }
-  .wrapper {
-    height: fit-content;
   }
 }
 </style>

@@ -5,6 +5,8 @@ export default {
   name: "Dashboard",
   props: { instance: Function },
   components: { Sidebar },
+  props: { instance: Function },
+
   data() {
     return {
       routes: [

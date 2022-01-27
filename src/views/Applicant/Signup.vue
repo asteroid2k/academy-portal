@@ -1,6 +1,52 @@
 <script>
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { object, string } from "yup";
+import { notyf, validators } from "../../helpers";
+import { mapActions } from "vuex";
+
 export default {
-  data() {},
+  name: "Signup",
+  props: { instance: Function },
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
+  data() {
+    const schema = object({
+      email: validators.email,
+      password: validators.password,
+    });
+    return {
+      schema,
+    };
+  },
+  methods: {
+    ...mapActions(["storeToken"]),
+    async handleSubmit(values) {
+      if (values.password != values.conPassword) {
+        notyf.error("Passwords don't match");
+        return;
+      }
+      try {
+        let resp = await this.instance.post("/auth/signup", values);
+        // console.log(resp);
+        const { data } = resp;
+        if (data) {
+          notyf.success(data.message);
+          this.storeToken(data.token);
+          this.$router.push({ name: "Signin" });
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors)[0]);
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -15,16 +61,29 @@ export default {
     </div>
 
     <section class="form-section">
-      <form class="form">
+      <Form
+        @submit="handleSubmit"
+        action=""
+        :validation-schema="schema"
+        class="form"
+      >
         <div class="name">
           <div class="first-name">
             <div><label for="fname">First Name</label></div>
-            <input type="text" name="fname" />
+            <Field id="fname" type="text" name="firstName" />
+            <ErrorMessage
+              name="firstName"
+              class="text-red-600 text-xs pt-1 px-2"
+            />
           </div>
           <div class="last-name">
             <div class="last-name">
               <div><label for="lname">Last Name</label></div>
-              <input type="text" name="lname" />
+              <Field id="lname" type="text" name="lastName" />
+              <ErrorMessage
+                name="lastName"
+                class="text-red-600 text-xs pt-1 px-2"
+              />
             </div>
           </div>
         </div>
@@ -32,12 +91,20 @@ export default {
         <div class="name">
           <div class="email">
             <div><label for="mail">Email Address</label></div>
-            <input type="text" name="mail" />
+            <Field id="mail" type="text" name="email" />
+            <ErrorMessage
+              name="email"
+              class="flex text-red-600 text-xs pt-1 px-2"
+            />
           </div>
-          <div class="Phone">
+          <div class="phone">
             <div class="phone-number">
               <div><label for="phone">Phone Number</label></div>
-              <input type="tel" name="lname" />
+              <Field id="phone" type="tel" name="phone" />
+              <ErrorMessage
+                name="phone"
+                class="flex text-red-600 text-xs pt-1 px-2"
+              />
             </div>
           </div>
         </div>
@@ -45,23 +112,33 @@ export default {
         <div class="name">
           <div class="password">
             <div><label for="password">Password</label></div>
-            <input type="password" name="password" />
+            <Field id="password" type="password" name="password" />
+            <ErrorMessage
+              name="password"
+              class="flex text-red-600 text-xs pt-1 px-2"
+            />
           </div>
-          <div class="Phone">
+          <div class="phone">
             <div class="confirm-password">
-              <div><label for="con-password">Confirm Password</label></div>
-              <input type="password" name="con-password" />
+              <div><label for="conPassword">Confirm Password</label></div>
+              <Field type="password" name="conPassword" />
+              <ErrorMessage
+                name="conPassword"
+                class="text-red-600 text-xs pt-1 px-2"
+              />
             </div>
           </div>
         </div>
 
-        <div class="bt1"><button class="sign-up">Sign Up</button></div>
+        <div class="bt1">
+          <button type="submit" class="sign-up">Sign Up</button>
+        </div>
 
         <p class="end">
           Already have an account?
           <router-link to="/signin" class="signin"><u>Sign in?</u></router-link>
         </p>
-      </form>
+      </Form>
     </section>
   </div>
 </template>
@@ -148,6 +225,13 @@ label {
   }
   input {
     width: 100%;
+  }
+  .form-section {
+    flex-direction: column;
+  }
+  .name,
+  .phone {
+    flex-direction: column;
   }
 }
 </style>

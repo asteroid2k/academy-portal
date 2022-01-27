@@ -1,10 +1,11 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { object, string } from "yup";
-import { notyf } from "../../helpers";
+import { notyf, validators } from "../../helpers";
+import { mapActions } from "vuex";
 
 export default {
-  name: "Signin",
+  name: "AdminSignin",
   props: { instance: Function },
   components: {
     Form,
@@ -13,23 +14,24 @@ export default {
   },
   data() {
     const schema = object({
-      email: string()
-        .required("Email is required")
-        .email("Enter a valid Email"),
-      password: string().min(8).required("Password is required"),
+      email: validators.email,
+      password: validators.password,
     });
     return {
-      email: "",
-      password: "",
       schema,
     };
   },
   methods: {
+    ...mapActions(["storeToken"]),
     async handleSubmit(values) {
       try {
-        let resp = await instance.post("/auth/signin", values);
-        if (resp.data) {
-          notyf.success(resp.data.message);
+        let resp = await this.instance.post("/auth/admin/signin", values);
+        // console.log(resp);
+        const { data } = resp;
+        if (data) {
+          notyf.success(data.message);
+          this.storeToken(data.token);
+          this.$router.push({ name: "Admin" });
         }
       } catch ({ response }) {
         const { errors, message } = response.data;
@@ -53,7 +55,8 @@ export default {
       </div>
       <Form
         @submit="handleSubmit"
-        class="w-[400px] p-5 flex flex-col gap-6"
+        id="form"
+        class="flex flex-col gap-6"
         :validation-schema="schema"
       >
         <div class="w-full">
@@ -69,7 +72,7 @@ export default {
         <div class="w-full">
           <label for="password" class="mb-1 text-sm">Password</label>
           <Field
-            type="text"
+            type="password"
             name="password"
             id="password"
             class="border-2 border-white h-12 w-full rounded bg-transparent p-3"
@@ -106,9 +109,17 @@ export default {
   background-position: center center;
   background-color: var(--primary);
 }
+#form {
+  width: 400px;
+  padding: 20px;
+}
 @media screen and (max-width: 992px) {
   .main {
     background-image: none;
+  }
+
+  #form {
+    width: 100%;
   }
 }
 </style>
