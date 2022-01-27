@@ -1,5 +1,5 @@
 import { Notyf } from "notyf";
-import { date, string, number } from "yup";
+import { date, string, number, mixed } from "yup";
 
 export const notyf = new Notyf({
   duration: 3000,
@@ -11,7 +11,7 @@ export const notyf = new Notyf({
   types: [
     {
       type: "info",
-      background: "#7557D3",
+      background: "#F97316",
       icon: false,
     },
   ],
@@ -20,7 +20,7 @@ export const notyf = new Notyf({
 export const questions = [
   {
     number: 1,
-    question: "Hi Everyone, this is",
+    text: "Hi Everyone, this is",
     options: [
       {
         opt: "A",
@@ -42,7 +42,7 @@ export const questions = [
   },
   {
     number: 2,
-    question: "What is HTTPS",
+    text: "What is HTTPS",
     options: [
       {
         opt: "A",
@@ -64,7 +64,7 @@ export const questions = [
   },
   {
     number: 3,
-    question: "How many bits make up a byte",
+    text: "How many bits make up a byte",
     options: [
       {
         opt: "A",
@@ -92,6 +92,17 @@ export const validators = {
   name: string().min(2),
   gpa: number().required().positive(),
   dob: date().required("Birth date is required").max(new Date()),
+  image: mixed()
+    .test("fileSize", "The file is too large", (value) => {
+      if (!value) return true; // attachment is optional
+      return value[0].size <= 500000;
+    })
+    .test("filetype", "File must be jpg, jpeg or png", (value) => {
+      if (!value) return true;
+      return ["application/pdf", "image/jpeg", "image/png"].includes(
+        value[0].type
+      );
+    }),
 };
 
 export const applications = [

@@ -1,7 +1,10 @@
 <script>
 import { questions } from "../../helpers.js";
+import { notyf } from "../../helpers";
+
 export default {
   name: "Assessment",
+  props: { instance: Function },
   data() {
     return {
       current: 1,
@@ -13,7 +16,7 @@ export default {
   },
   computed: {
     question() {
-      return questions[this.current - 1];
+      return this.questions[this.current - 1];
     },
     currentAnswer() {
       const stored = this.answers[this.current - 1];
@@ -42,7 +45,45 @@ export default {
       if (this.current >= 1) this.current--;
     },
     next() {
-      if (this.current <= 30) this.current++;
+      if (this.current < this.questions.length) this.current++;
+    },
+    async handleSubmit() {
+      this.addAnswer();
+      try {
+        let response = await this.instance.post(
+          "/assessment/61f13b0087621039abb0d2dd",
+          {
+            answers: this.answers,
+          }
+        );
+        if (response.data) {
+          const { message, batch } = response.data;
+          notyf.success(message);
+        }
+      } catch (error) {
+        // when error has response
+        if (error.response) {
+          const { data, status, statusText } = error.response;
+          if (status === 401 || status === 403) {
+            notyf.error(statusText);
+            this.$router.push({ name: "AdminSignin" });
+            return;
+          }
+          if (data.message) {
+            notyf.error(data.message);
+            return;
+          }
+          //validation errors
+          if (data.errors) {
+            notyf.error(Object.values(data.errors)[0]);
+            return;
+          }
+          // other errors
+          notyf.error("A problem occured");
+        } else {
+          notyf.error("A problem occured");
+        }
+      }
     },
   },
 };
@@ -100,7 +141,7 @@ export default {
             Question {{ current }}
           </p>
           <p class="text-2xl font-medium italic text-center mt-3">
-            {{ question.question }}
+            {{ question.text }}
           </p>
           <div class="options flex flex-col gap-4 mt-10">
             <div
@@ -147,9 +188,9 @@ export default {
       </div>
       <!-- Finish button -->
       <button
-        @click="$router.push({ name: 'Success' })"
+        @click="handleSubmit"
         class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed mx-auto"
-        :disabled="current !== questions.length"
+        :disabled="current < questions.length"
       >
         Finish
       </button>
@@ -157,17 +198,4 @@ export default {
   </div>
 </template>
 
-<style scoped>
-@media screen and (max-width: 992px) {
-  .main {
-    margin: 0;
-  }
-  .head {
-    flex-direction: column;
-  }
-
-  .head p {
-    margin: 10px;
-  }
-}
-</style>
+<style scoped></style>
