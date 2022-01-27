@@ -1,10 +1,11 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import Top from "../../components/Top.vue";
-import { validators } from "../../helpers";
+import { notyf } from "../../helpers";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 export default {
   name: "CreateAssessment",
+  props: { instance: Function },
   components: {
     Top,
     Form,
@@ -55,6 +56,44 @@ export default {
     next() {
       if (this.current <= 30) this.current++;
     },
+
+    async handleSubmit() {
+      this.addQuestion();
+      try {
+        let response = await this.instance.post("/assessment", {
+          questions: this.questions,
+          answers: this.answers,
+          batch_id: "61f13b0087621039abb0d2dd",
+        });
+        if (response.data) {
+          const { message, batch } = response.data;
+          notyf.success(message);
+        }
+      } catch (error) {
+        // when error has response
+        if (error.response) {
+          const { data, status, statusText } = error.response;
+          if (status === 401 || status === 403) {
+            notyf.error(statusText);
+            this.$router.push({ name: "AdminSignin" });
+            return;
+          }
+          if (data.message) {
+            notyf.error(data.message);
+            return;
+          }
+          //validation errors
+          if (data.errors) {
+            notyf.error(Object.values(data.errors)[0]);
+            return;
+          }
+          // other errors
+          notyf.error("A problem occured");
+        } else {
+          notyf.error("A problem occured");
+        }
+      }
+    },
   },
 };
 </script>
@@ -64,7 +103,7 @@ export default {
     <div><Top heading="Create Assessment" /></div>
     <div>
       <p class="font-bold">{{ current }}/30</p>
-      <form class="flex flex-col gap-6" action="">
+      <Form class="flex flex-col gap-6">
         <div
           class="w-[50%] h-[108px] mt-5 border-[1.5px] border-dashed border-border-300 grid place-items-center rounded-sm"
         >
@@ -164,7 +203,7 @@ export default {
             </div>
           </RadioGroup>
         </div>
-      </form>
+      </Form>
       <!-- BUTTONS -->
       <div class="flex justify-between mx-[80px] mt-[50px]">
         <button
@@ -184,7 +223,7 @@ export default {
       </div>
       <button
         class="block font-bold rounded w-[205px] h-[40px] mt-[50px] mx-auto bg-primary text-white disabled:cursor-not-allowed disabled:opacity-40"
-        :disabled="current < 30"
+        @click="handleSubmit"
       >
         Finish
       </button>
