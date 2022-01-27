@@ -17,7 +17,8 @@
 <style scoped>
 .navbar {
   position: absolute;
-  top: 10px;
+  background-color: #00000034;
+  bottom: 5%;
   right: 0px;
   z-index: 1;
   display: flex;

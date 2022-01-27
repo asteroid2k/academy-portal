@@ -1,33 +1,123 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import Top from "../../components/Top.vue";
-import { validators } from "../../helpers";
+import { notyf } from "../../helpers";
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import { mapGetters } from "vuex";
 export default {
   name: "CreateAssessment",
-  components: { Top, Form, Field, ErrorMessage },
+  props: { instance: Function },
+  components: {
+    Top,
+    Form,
+    Field,
+    ErrorMessage,
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+  },
   data() {
     return {
       current: 1,
       questions: [],
+      question: {
+        text: "",
+        options: [
+          { opt: "A", value: "" },
+          { opt: "B", value: "" },
+          { opt: "C", value: "" },
+          { opt: "D", value: "" },
+        ],
+      },
       answers: [],
-      question: { text: "", optA: "", optB: "", optC: "", optD: "" },
-      answer: { num: 1, value: "" },
+      answer: "",
     };
   },
-  computed: {
-    currentQuestion() {
-      return questions[this.current - 1];
+  watch: {
+    current() {
+      const storedQ = this.questions[this.current - 1];
+      const storedA = this.answers[this.current - 1];
+      if (storedQ) {
+        this.question = storedQ;
+      } else {
+        this.question = {
+          text: "",
+          options: [
+            { opt: "A", value: "" },
+            { opt: "B", value: "" },
+            { opt: "C", value: "" },
+            { opt: "D", value: "" },
+          ],
+        };
+      }
+      if (storedA) {
+        this.answer = storedA.value;
+      } else {
+        this.answer = "";
+      }
     },
   },
+  computed: {
+    ...mapGetters(["batch"]),
+  },
+
   methods: {
     addQuestion() {
-      console.log(this.question);
-      this.questions.push(this.question);
-      this.answer.num = this.current;
-      this.answers.push(this.answer);
-      this.answer = { num: this.current, value: "" };
-      this.question = { text: "", optA: "", optB: "", optC: "", optD: "" };
-      this.current++;
+      this.questions[this.current - 1] = this.question;
+      this.answers[this.current - 1] = {
+        num: this.current,
+        value: this.answer,
+      };
+      this.answer = "";
+      this.next();
+    },
+    previous() {
+      if (this.current >= 1) this.current--;
+    },
+    next() {
+      if (this.current < 30) this.current++;
+    },
+
+    async handleSubmit() {
+      this.addQuestion();
+      if (!this.batch.slug) {
+        notyf.error("No ongoing batch/application");
+        return;
+      }
+      try {
+        let response = await this.instance.post("/assessment", {
+          questions: this.questions,
+          answers: this.answers,
+          batch_id: this.batch._id,
+        });
+        if (response.data) {
+          const { message, batch } = response.data;
+          notyf.success(message);
+        }
+      } catch (error) {
+        // when error has response
+        if (error.response) {
+          const { data, status, statusText } = error.response;
+          if (status === 401 || status === 403) {
+            notyf.error(statusText);
+            this.$router.push({ name: "AdminSignin" });
+            return;
+          }
+          if (data.message) {
+            notyf.error(data.message);
+            return;
+          }
+          //validation errors
+          if (data.errors) {
+            notyf.error(Object.values(data.errors)[0]);
+            return;
+          }
+          // other errors
+          notyf.error("A problem occured");
+        } else {
+          notyf.error("A problem occured");
+        }
+      }
     },
   },
 };
@@ -38,7 +128,7 @@ export default {
     <div><Top heading="Create Assessment" /></div>
     <div>
       <p class="font-bold">{{ current }}/30</p>
-      <form class="flex flex-col gap-6" action="">
+      <Form class="flex flex-col gap-6">
         <div
           class="w-[50%] h-[108px] mt-5 border-[1.5px] border-dashed border-border-300 grid place-items-center rounded-sm"
         >
@@ -64,11 +154,11 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'A' ? 'bg-green-400/50' : ''
+                answer === 'A' ? 'bg-green-400/80' : ''
               }`"
               name="opta"
               id="opta"
-              v-model="question.optA"
+              v-model="question.options[0].value"
             />
             <ErrorMessage name="opta" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -77,11 +167,11 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'B' ? 'bg-green-400/50' : ''
+                answer === 'B' ? 'bg-green-400/80' : ''
               }`"
               name="optb"
               id="optb"
-              v-model="question.optB"
+              v-model="question.options[1].value"
             />
             <ErrorMessage name="optb" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -90,11 +180,11 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'C' ? 'bg-green-400/50' : ''
+                answer === 'C' ? 'bg-green-400/80' : ''
               }`"
               name="optc"
               id="optc"
-              v-model="question.optC"
+              v-model="question.options[2].value"
             />
             <ErrorMessage name="optc" class="text-red-600 text-xs pt-1 px-2" />
           </div>
@@ -103,85 +193,62 @@ export default {
             <input
               type="text"
               :class="`border-border-300 h-10 k-input ${
-                answer.value === 'D' ? 'bg-green-400/50' : ''
+                answer === 'D' ? 'bg-green-400/80' : ''
               }`"
               name="optd"
               id="optd"
-              v-model="question.optD"
+              v-model="question.options[3].value"
             />
             <ErrorMessage name="optd" class="text-red-600 text-xs pt-1 px-2" />
           </div>
         </div>
+        <!-- Right option select -->
         <div class="correct w-fit mx-auto">
-          <p class="text-lg font-bold text-center mb-1">Right Option</p>
-          <div class="flex gap-4">
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansa"
-                v-model="answer.value"
-                value="A"
-              />
-              <label class="font-bold text-lg" for="ansa">A</label>
+          <RadioGroup v-model="answer" class="flex flex-col gap-3 items-center">
+            <RadioGroupLabel class="text-lg font-bold text-center"
+              >Right Option</RadioGroupLabel
+            >
+            <div class="flex gap-8">
+              <RadioGroupOption
+                v-for="opt in ['A', 'B', 'C', 'D']"
+                :key="opt"
+                v-slot="{ checked }"
+                :value="opt"
+              >
+                <span
+                  :class="`${
+                    checked
+                      ? 'bg-primary text-white ring-4 ring-primary/50'
+                      : ''
+                  } 
+                  accent-primary border-2 border-primary/80 rounded py-1 px-4 text-base font-semibold cursor-pointer hover:bg-primary/60`"
+                  >{{ opt }}</span
+                >
+              </RadioGroupOption>
             </div>
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansb"
-                v-model="answer.value"
-                value="B"
-              />
-              <label class="font-bold text-lg" for="ansb">B</label>
-            </div>
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansc"
-                v-model="answer.value"
-                value="C"
-              />
-              <label class="font-bold text-lg" for="ansc">C</label>
-            </div>
-            <div class="flex gap-1 items-center">
-              <input
-                type="radio"
-                name="answer"
-                class="accent-primary rounded-sm checked:bg-primary focus:bg-primary hover:bg-primary/50 w-6"
-                id="ansd"
-                v-model="answer.value"
-                value="D"
-              />
-              <label class="font-bold text-lg" for="ansd">D</label>
-            </div>
-          </div>
+          </RadioGroup>
         </div>
-      </form>
+      </Form>
       <!-- BUTTONS -->
       <div class="flex justify-between mx-[80px] mt-[50px]">
         <button
-          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded"
-          :disabled="this.questions.length > 0"
-          @click="this.current--"
+          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded disabled:cursor-not-allowed disabled:opacity-40"
+          :disabled="current <= 1"
+          @click="previous"
         >
           Previous
         </button>
         <button
-          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded"
+          class="font-bold bg-text-400 text-white w-[125px] h-[40px] rounded disabled:cursor-not-allowed disabled:opacity-40"
           @click="addQuestion"
-          :disabled="this.questions.length <= 30"
+          :disabled="current >= 30"
         >
           Next
         </button>
       </div>
       <button
         class="block font-bold rounded w-[205px] h-[40px] mt-[50px] mx-auto bg-primary text-white disabled:cursor-not-allowed disabled:opacity-40"
-        :disabled="questions.length !== 30"
+        @click="handleSubmit"
       >
         Finish
       </button>

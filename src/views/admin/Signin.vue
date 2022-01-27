@@ -26,11 +26,11 @@ export default {
     async handleSubmit(values) {
       try {
         let resp = await this.instance.post("/auth/admin/signin", values);
-        // console.log(resp);
-        const { data } = resp;
-        if (data) {
-          notyf.success(data.message);
-          this.storeToken(data.token);
+        console.log(resp);
+        if (resp.data) {
+          const { token, isAdmin, message } = resp.data;
+          notyf.success(message);
+          this.storeToken({ token, isAdmin });
           this.$router.push({ name: "Admin" });
         }
       } catch ({ response }) {
@@ -84,16 +84,7 @@ export default {
         </div>
         <button
           type="submit"
-          class="
-            k-button
-            w-full
-            h-[50px]
-            bg-white
-            text-primary
-            rounded
-            text-base
-            font-bold
-          "
+          class="k-button w-full h-[50px] bg-white text-primary rounded text-base font-bold"
         >
           Sign In
         </button>

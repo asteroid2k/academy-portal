@@ -3,6 +3,7 @@ import Sidebar from "../../components/Sidebar.vue";
 
 export default {
   name: "Dashboard",
+  props: { instance: Function },
   components: { Sidebar },
   props: { instance: Function },
 

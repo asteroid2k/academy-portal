@@ -43,7 +43,7 @@ export default {
     <PreviewApplication
       :isOpen="isOpen"
       :setIsOpen="setIsOpen"
-      :entry="applications[pId]"
+      :entry="filteredEntries[pId]"
     />
   </section>
   <section>
@@ -55,17 +55,7 @@ export default {
             v-model="batch"
             name="batch"
             id=""
-            class="
-              appearance-none
-              font-light
-              text-[44px]
-              leading-9
-              w-[230px]
-              h-[80px]
-              py-1
-              border-transparent
-              focus:border-0 focus:outline-0 focus:ring-0
-            "
+            class="appearance-none font-light text-[44px] leading-9 w-[230px] h-[80px] py-1 border-transparent focus:border-0 focus:outline-0 focus:ring-0"
           >
             <option class="font-light text-xl" value="Batch 2">Batch 2</option>
             <option class="font-light text-xl" value="Batch 1">Batch 1</option>
@@ -86,14 +76,7 @@ export default {
               <th scope="col" class="py-4 border-text-400">Email</th>
               <th
                 scope="col"
-                class="
-                  flex
-                  items-center
-                  justify-center
-                  py-4
-                  border-text-400
-                  gap-2
-                "
+                class="flex items-center justify-center py-4 border-text-400 gap-2"
               >
                 <span>DOB - Age</span>
                 <span><img src="../../assets/ascdesc.svg" alt="" /></span>
@@ -135,14 +118,7 @@ export default {
               class="text-text-300 hover:shadow-md group transition"
             >
               <td
-                class="
-                  py-6
-                  px-5
-                  rounded-lg
-                  border-l-8 border-l-transparent
-                  group-hover:border-l-primary
-                  transition
-                "
+                class="py-6 px-5 rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
               >
                 {{ firstName + " " + lastName }}
               </td>
@@ -162,13 +138,7 @@ export default {
               >
                 <ExpandIcon
                   @click="previewApplication(index)"
-                  class="
-                    text-text-400
-                    w-4
-                    stroke-2
-                    group-hover:text-primary
-                    cursor-pointer
-                  "
+                  class="text-text-400 w-4 stroke-2 group-hover:text-primary cursor-pointer"
                 />
               </td>
             </tr>

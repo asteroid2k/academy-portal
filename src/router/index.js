@@ -55,18 +55,6 @@ const routes = [
         path: "/apply",
         name: "Apply",
         component: () => import("../views/Applicant/ApplyForm.vue"),
-        //redirect to login if user is not signed in
-        beforeEnter: (to, from, next) => {
-          if (!store.state.token) {
-            notyf.open({
-              type: "info",
-              message: "You are not logged in",
-            });
-            next({ name: "Signin" });
-          } else {
-            next();
-          }
-        },
       },
     ],
   },
@@ -74,6 +62,20 @@ const routes = [
     path: "/admin-dashboard",
     name: "AdminDashboard",
     component: () => import("../views/Admin/AdminDashboard.vue"),
+    //redirect to login if user is not signed in
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token || !store.state.isAdmin) {
+        let msg = "You are not logged in";
+        if (!store.state.isAdmin) msg = "Forbidden";
+        notyf.open({
+          type: "info",
+          message: msg,
+        });
+        next({ name: "AdminSignin" });
+      } else {
+        next();
+      }
+    },
     children: [
       {
         path: "/admin-dashboard",

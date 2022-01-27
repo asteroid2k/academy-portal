@@ -31,17 +31,17 @@ export default {
         },
         {
           routeName: "Assessment History",
-          image: "../../../src/assets/history.svg",
+          image: "history.svg",
           routeUrl: "AssessmentHistory",
         },
         {
           routeName: "Results",
-          image: "../../../src/assets/results.svg",
+          image: "results.svg",
           routeUrl: "Results",
         },
         {
           routeName: "Settings",
-          image: "../../../src/assets/Setting.svg",
+          image: "Setting.svg",
           routeUrl: "Settings",
         },
       ],
