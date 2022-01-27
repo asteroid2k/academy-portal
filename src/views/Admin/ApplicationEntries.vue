@@ -73,7 +73,7 @@ export default {
         </div>
       </div>
       <p class="italic text-[13px] -mt-1">
-        Comprises of all that applied for batch 2
+        Comprises of all that applied for {{ batch }}
       </p>
     </div>
     <div>
@@ -186,6 +186,11 @@ table {
 #sticky-head {
   position: sticky;
   top: 0px;
+}
+
+.flex {
+  text-align: left;
+  align-items: baseline;
 }
 @media screen and (max-width: 992px) {
   .wrapper {

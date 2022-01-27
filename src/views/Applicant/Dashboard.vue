@@ -4,6 +4,8 @@ import Sidebar from "../../components/Sidebar.vue";
 export default {
   name: "Dashboard",
   components: { Sidebar },
+  props: { instance: Function },
+
   data() {
     return {
       routes: [
@@ -25,7 +27,7 @@ export default {
 <template>
   <div class="entire-page">
     <div><Sidebar v-bind:routes="routes" /></div>
-    <div id="view"><router-view></router-view></div>
+    <div id="view"><router-view :instance="instance"></router-view></div>
   </div>
 </template>
 

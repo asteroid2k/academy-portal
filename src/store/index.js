@@ -10,21 +10,31 @@ const store = createStore({
   state() {
     return {
       token: "",
+      batch: {},
     };
   },
   getters: {
     token(state) {
       return state.token;
     },
+    batch(state) {
+      return state.batch;
+    },
   },
   mutations: {
     SET_TOKEN(state, payload) {
       state.token = payload;
     },
+    SET_BATCH(state, payload) {
+      state.batch = payload;
+    },
   },
   actions: {
     storeToken({ commit }, payload) {
       commit("SET_TOKEN", payload);
+    },
+    storeBatch({ commit }, payload) {
+      commit("SET_BATCH", payload);
     },
   },
   modules: {},

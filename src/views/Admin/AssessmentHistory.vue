@@ -125,18 +125,18 @@ export default {
 #assessments {
   border-collapse: collapse;
   position: relative;
+  text-align: center;
   width: 100%;
 }
 
 #assessments th {
-  padding: 13px 26px;
-  text-align: left;
+  padding: 13px 0px;
   color: white;
   background: #2b3c4e;
 }
 
 td {
-  padding: 20px 26px;
+  padding: 20px 0px;
 }
 .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
