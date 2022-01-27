@@ -53,14 +53,14 @@ const routes = [
     component: () => import("../views/Admin/AdminDashboard.vue"),
     //redirect to login if user is not signed in
     beforeEnter: (to, from, next) => {
-      if (!store.state.token) {
-        const msg = "You are not logged in";
+      if (!store.state.token || !store.state.isAdmin) {
+        let msg = "You are not logged in";
         if (!store.state.isAdmin) msg = "Forbidden";
         notyf.open({
           type: "info",
           message: msg,
         });
-        next({ name: "Signin" });
+        next({ name: "AdminSignin" });
       } else {
         next();
       }
