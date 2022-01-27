@@ -1,7 +1,7 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { object, string, date } from "yup";
-import { notyf } from "../../helpers";
+import { notyf, validators } from "../../helpers";
 import Top from "../../components/Top.vue";
 
 export default {
@@ -10,24 +10,35 @@ export default {
   components: { Top, Form, Field, ErrorMessage },
   data() {
     const schema = object({
-      closure_date: date().required().min(new Date()),
+      closure_date: date().required().min(new Date().toISOString()),
       slug: string().required().min(4),
       link: string().url(),
+      instructions: string().required("Provide instructions"),
+      image: validators.image,
     });
     return {
       schema,
       error: "",
+      file: "",
     };
   },
   methods: {
     async handleSubmit(values) {
+      const formData = new FormData();
+      for (const key in values) {
+        if (key === "image") {
+          continue;
+        }
+        formData.append(key, values[key]);
+      }
+      if (values.image) {
+        formData.append("image", values.image[0], values.image[0].name);
+      }
       try {
-        let response = await this.instance.post("/batch", values);
+        let response = await this.instance.post("/batch", formData);
         if (response.data) {
           const { data } = response;
           notyf.success(data.message);
-          // redirect to dashboard
-          this.$router.push({ name: "Dashboard" });
         }
       } catch (error) {
         // when error has response
@@ -54,6 +65,14 @@ export default {
         }
       }
     },
+    fileChange(e) {
+      const input = e.target;
+      if (input.files) {
+        let name = input.files[0].name;
+        this.file = name;
+        if (name.length > 30) this.file = name.substring(0, 14) + "...";
+      }
+    },
   },
 };
 </script>
@@ -66,8 +85,14 @@ export default {
         <div
           class="h-[108px] mt-5 border-[1.5px] border-dashed border-border-300 grid place-items-center rounded-sm"
         >
-          <label for="image">+ Choose File</label>
-          <input type="file" name="image" class="sr-only" id="image" />
+          <label for="image">{{ file || "+ Choose File" }}</label>
+          <Field
+            type="file"
+            name="image"
+            class="sr-only"
+            id="image"
+            @change="fileChange"
+          />
           <ErrorMessage name="image" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div class="input-group flex flex-col gap-[5px] mt-10">
@@ -108,12 +133,13 @@ export default {
       </div>
       <div class="input-group flex flex-col w-full mt-[30px] gap-1">
         <label class="text-sm" for="instructions">Instructions</label>
-        <textarea
+        <Field
+          as="textarea"
           name="instructions"
           id="instructions"
           class="border-border-300 h-36 k-input"
           required
-        ></textarea>
+        ></Field>
       </div>
       <button
         type="submit"
