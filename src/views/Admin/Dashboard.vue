@@ -5,40 +5,56 @@ import { notyf } from "../../helpers";
 import History from "../../components/History.vue";
 
 export default {
-  mounted() {
-    this.fetchBatch();
+  async mounted() {
+    await this.fetchBatch();
+    await this.fetchDetails();
   },
   name: "Admin",
   props: { instance: Function },
   components: { History },
   computed: {
-    ...mapGetters(["batch"]),
+    ...mapGetters(["batches"]),
 
     filterOpenBatch: function () {
-      this.batch.sort((a, b) => {
+      if (!this.batches.length) return "";
+      this.batches.sort((a, b) => {
         return new Date(a.closure_date) - new Date(b.closure_date);
       });
-      return this.batch.slice(this.batch.length - 1);
+      return this.batches.slice(this.batches.length - 1);
     },
 
     sumAllApplications: function () {
-      const sumAll = this.batch
+      if (!this.batches.length) return "";
+
+      const sumAll = this.batches
         .map((item) => item.app_count)
         .reduce((prev, curr) => prev + curr, 0);
-      console.log(sumAll);
-
       return sumAll;
     },
   },
   methods: {
-    ...mapActions(["storeBatch"]),
+    ...mapActions(["storeBatches", "storeUser"]),
     async fetchBatch() {
       try {
         let resp = await this.instance.get("/batch");
-        console.log(resp);
         const { data } = resp;
         if (data) {
-          this.storeBatch(data.batches);
+          this.storeBatches(data.batches);
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors));
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+    async fetchDetails() {
+      try {
+        let resp = await this.instance.get("/user");
+        if (resp.data) {
+          this.storeUser(resp.data.user);
         }
       } catch ({ response }) {
         const { errors, message } = response.data;
@@ -75,7 +91,7 @@ export default {
       </div>
       <div class="box" id="box-3">
         <p class="app-head">Academy’s</p>
-        <p class="app-stats">{{ batch.length }}</p>
+        <p class="app-stats">{{ batches.length }}</p>
         <div id="line3" class="line"></div>
         <p class="app-subhead">So far</p>
       </div>

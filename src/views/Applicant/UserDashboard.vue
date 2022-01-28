@@ -1,23 +1,38 @@
 <script>
-import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import Update from "../../components/Update.vue";
 import { notyf } from "../../helpers";
 import { formatDistanceToNow } from "date-fns";
 
 export default {
-  mounted() {
-    this.fetchUser();
+  async mounted() {
+    await this.fetchUser();
   },
   name: "User",
   props: { instance: Function },
   components: { Update },
   computed: {
     ...mapGetters(["user"]),
+    formatDate() {
+      if (!this.user.created_at) {
+        return "09.09.22";
+      }
+      return this.user.created_at
+        .substring(2, 10)
+        .split("-")
+        .reverse()
+        .join(".");
+    },
     formatDays() {
+      if (!this.user.created_at) {
+        return "09.09.22";
+      }
       return formatDistanceToNow(new Date(this.user.created_at));
     },
     approvedColor() {
+      if (!this.user.isApproved) {
+        return "09.09.22";
+      }
       return this.user.isApproved ? "approved" : "pending";
     },
   },
@@ -26,21 +41,22 @@ export default {
     async fetchUser() {
       try {
         let resp = await this.instance.get("/applications/user");
-
         if (resp.data) {
           const { data } = resp;
           console.log(data);
           this.storeUser(data.application);
           console.log(getDate());
         }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        if (errors) {
-          notyf.error(Object.values(errors)[0]);
-        } else if (message) {
-          notyf.error(message);
-          if (response.status === 404) {
-            this.$router.push({ name: "Apply" });
+      } catch (error) {
+        if (error.response) {
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+            if (response.status === 404) {
+              this.$router.push({ name: "Apply" });
+            }
           }
         }
       }
@@ -59,22 +75,20 @@ export default {
       <div class="app-date" id="box-1">
         <p class="app-head">Date of Application</p>
         <p class="date">
-          {{ user.created_at.substring(2, 10).split("-").reverse().join(".") }}
+          {{ formatDate }}
         </p>
         <div class="line"></div>
         <p class="app-subhead">{{ formatDays }} since applied</p>
       </div>
       <div class="app-date" id="box-2">
         <p class="app-head">Application Status</p>
-        <p :class="approved" class="date" v-if="user.isApproved">Approved</p>
-        <p :class="pending" class="date" v-else>Pending</p>
+        <p class="date" v-if="user.isApproved">Approved</p>
+        <p class="date" v-else>Pending</p>
         <div class="line" :class="approvedColor"></div>
-        <p :class="approved" class="app-subhead" v-if="user.isApproved">
+        <p class="app-subhead" v-if="user.isApproved">
           Congratulations, you have been approved
         </p>
-        <p :class="pending" class="app-subhead" v-else>
-          We will get back to you
-        </p>
+        <p class="app-subhead" v-else>We will get back to you</p>
       </div>
     </div>
     <div class="indicator">

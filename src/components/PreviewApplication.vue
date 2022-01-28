@@ -21,7 +21,9 @@ export default {
     image() {
       return (
         this.entry.image ||
-        `https://avatars.dicebear.com/api/avataaars/${this.entry.firstName}.svg`
+        `https://avatars.dicebear.com/api/initials/${
+          this.user.firstName + " " + this.user.lastName
+        }.svg`
       );
     },
     approvedColor() {

@@ -1,5 +1,4 @@
 <script>
-import { computed } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
 export default {
   name: "Sidebar",
@@ -9,6 +8,14 @@ export default {
   },
   computed: {
     ...mapGetters(["user"]),
+    image() {
+      return (
+        this.user.image ||
+        `https://avatars.dicebear.com/api/initials/${
+          this.user.firstName + " " + this.user.lastName
+        }.svg`
+      );
+    },
   },
   methods: {
     imgUrl(img) {
@@ -32,7 +39,13 @@ export default {
         <img src="../assets/nav-close.svg" />
       </button>
       <div class="user-display">
-        <div class="avatar"></div>
+        <div class="avatar">
+          <img
+            :src="image"
+            alt=""
+            class="w-[80px] aspect-square rounded-full"
+          />
+        </div>
         <p class="heading">{{ user.firstName }} {{ user.lastName }}</p>
         <p class="body">{{ user.email }}</p>
       </div>
@@ -95,8 +108,6 @@ export default {
   width: 80px;
   height: 80px;
   margin: auto;
-  background-color: #ffffff;
-  border-radius: 50%;
 }
 .user-display {
   background-color: var(--primary);

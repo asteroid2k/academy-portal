@@ -12,6 +12,7 @@ const store = createStore({
       token: "",
       isAdmin: false,
       batch: {},
+      batches: [],
       info: {},
       user: {},
     };
@@ -21,6 +22,9 @@ const store = createStore({
       return state.token;
     },
     batch(state) {
+      return state.batch;
+    },
+    batches(state) {
       return state.batch;
     },
     user(state) {
@@ -35,6 +39,9 @@ const store = createStore({
       state.isAdmin = payload;
     },
     SET_BATCH(state, payload) {
+      state.batch = payload;
+    },
+    SET_BATCHES(state, payload) {
       state.batch = payload;
     },
     SET_INFO(state, payload) {
@@ -52,6 +59,9 @@ const store = createStore({
     },
     storeBatch({ commit }, payload) {
       commit("SET_BATCH", payload);
+    },
+    storeBatches({ commit }, payload) {
+      commit("SET_BATCHES", payload);
     },
     storeInfo({ commit }, payload) {
       commit("SET_INFO", payload);
