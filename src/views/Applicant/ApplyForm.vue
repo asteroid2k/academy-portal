@@ -15,7 +15,7 @@ export default {
   },
   //check for available batch
   mounted() {
-    if (!this.batch) {
+    if (!("slug" in this.batch)) {
       notyf.error("There is no ongoing application");
       this.$router.push({ name: "Home" });
     }

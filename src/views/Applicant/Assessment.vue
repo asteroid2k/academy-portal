@@ -93,7 +93,7 @@ export default {
       this.addAnswer();
       try {
         let response = await this.instance.post(
-          "/assessment/61f13b0087621039abb0d2dd",
+          `/assessment/${this.batch._id}`,
           {
             answers: this.answers,
           }

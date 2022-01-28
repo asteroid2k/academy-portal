@@ -1,44 +1,22 @@
 <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import HomePageCards from "../components/HomePageCards.vue";
-import { notyf } from "../helpers";
 
 export default {
-  mounted() {
-    this.fetchBatch();
-    console.log("Button disabled");
-  },
+  mounted() {},
   props: { instance: Function },
   components: { HomePageCards },
 
   data() {
-    return {
-      isDisabled: true,
-    };
+    return {};
   },
-  methods: {
-    ...mapActions(["storeBatch"]),
-    async fetchBatch() {
-      try {
-        let resp = await this.instance.get("/batch?ongoing=true");
-        console.log(resp);
-        const { data } = resp;
-        if (data) {
-          this.storeBatch(data.batches[0]);
-          if (data.batches[0]) {
-            this.isDisabled = false;
-          }
-        }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        if (errors) {
-          notyf.error(Object.values(errors)[0]);
-        } else if (message) {
-          notyf.error(message);
-        }
-      }
+  computed: {
+    ...mapGetters(["batch"]),
+    isDisabled() {
+      return !("slug" in this.batch);
     },
   },
+  methods: {},
 };
 </script>
 
@@ -60,7 +38,10 @@ export default {
             <a>Home</a>
             <a><router-link to="/signin">Sign In</router-link></a>
             <router-link to="/signup">
-              <button class="reg-button" :disabled="isDisabled">
+              <button
+                class="reg-button disabled:cursor-not-allowed disabled:opacity-60"
+                :disabled="isDisabled"
+              >
                 Register Now
               </button>
             </router-link>
@@ -82,7 +63,12 @@ export default {
           reality.
         </p>
         <router-link to="/signup">
-          <button class="button" :disabled="isDisabled">Register now</button>
+          <button
+            class="button disabled:cursor-not-allowed disabled:opacity-60"
+            :disabled="isDisabled"
+          >
+            Register now
+          </button>
         </router-link>
       </div>
       <figure class="section1-image">
