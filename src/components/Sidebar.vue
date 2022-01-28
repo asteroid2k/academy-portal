@@ -1,11 +1,15 @@
 <script>
+import { computed } from "@vue/runtime-core";
+import { mapGetters } from "vuex";
 export default {
   name: "Sidebar",
   props: {
     instance: Function,
     routes: Array,
   },
-
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
     imgUrl(img) {
       return new URL(`../assets/${img}`, import.meta.url);
@@ -28,11 +32,9 @@ export default {
         <img src="../assets/nav-close.svg" />
       </button>
       <div class="user-display">
-        <figure class="avatar">
-          <img src="../assets/avatar1.png" />
-        </figure>
-        <p class="heading">Jane Doe</p>
-        <p class="body">doe@enyata.com</p>
+        <div class="avatar"></div>
+        <p class="heading">{{ user.firstName }} {{ user.lastName }}</p>
+        <p class="body">{{ user.email }}</p>
       </div>
       <div class="wrapper">
         <div v-for="(data, index) in routes" :key="index">
@@ -93,6 +95,8 @@ export default {
   width: 80px;
   height: 80px;
   margin: auto;
+  background-color: #ffffff;
+  border-radius: 50%;
 }
 .user-display {
   background-color: var(--primary);

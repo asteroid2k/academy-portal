@@ -1,13 +1,3 @@
-<template>
-  <div class="container">
-    <div class="historys" v-for="history in historys" :key="history.id">
-      <p>{{ history.batchNo }}</p>
-      <p>{{ history.noOfStudents }}</p>
-      <p>{{ history.appDate }}</p>
-    </div>
-  </div>
-</template>
-
 <script>
 import { ref } from "vue";
 
@@ -54,6 +44,18 @@ export default {
   },
 };
 </script>
+
+
+<template>
+  <div class="container">
+    <div class="historys" v-for="history in historys" :key="history.id">
+      <p>{{ history.batchNo }}</p>
+      <p>{{ history.noOfStudents }}</p>
+      <p>{{ history.appDate }}</p>
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 .container {
