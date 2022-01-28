@@ -13,6 +13,7 @@ const store = createStore({
       isAdmin: false,
       batch: {},
       info: {},
+      user: {},
     };
   },
   getters: {
@@ -21,6 +22,9 @@ const store = createStore({
     },
     batch(state) {
       return state.batch;
+    },
+    user(state) {
+      return state.user;
     },
   },
   mutations: {
@@ -36,6 +40,9 @@ const store = createStore({
     SET_INFO(state, payload) {
       state.info = payload;
     },
+    SET_USER(state, payload) {
+      state.user = payload;
+    },
   },
   actions: {
     storeToken({ commit }, payload) {
@@ -48,6 +55,9 @@ const store = createStore({
     },
     storeInfo({ commit }, payload) {
       commit("SET_INFO", payload);
+    },
+    storeUser({ commit }, payload) {
+      commit("SET_USER", payload);
     },
   },
   modules: {},

@@ -20,6 +20,23 @@ const routes = [
     component: () => import("../views/Applicant/Signup.vue"),
   },
   {
+    path: "/apply",
+    name: "Apply",
+    component: () => import("../views/Applicant/ApplyForm.vue"),
+    //redirect to login if user is not signed in
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token) {
+        notyf.open({
+          type: "info",
+          message: "You are not logged in",
+        });
+        next({ name: "Signin" });
+      } else {
+        next();
+      }
+    },
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     component: () => import("../views/Applicant/Dashboard.vue"),
@@ -49,12 +66,6 @@ const routes = [
         path: "/sucess",
         name: "Success",
         component: () => import("../components/Success.vue"),
-      },
-
-      {
-        path: "/apply",
-        name: "Apply",
-        component: () => import("../views/Applicant/ApplyForm.vue"),
       },
     ],
   },

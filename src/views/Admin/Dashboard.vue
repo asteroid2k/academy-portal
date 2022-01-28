@@ -1,11 +1,55 @@
 <script>
-import { mapGetters } from "vuex";
 import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
+import { notyf } from "../../helpers";
 import History from "../../components/History.vue";
 
 export default {
+  mounted() {
+    this.fetchBatch();
+  },
   name: "Admin",
+  props: { instance: Function },
   components: { History },
+  computed: {
+    ...mapGetters(["batch"]),
+
+    filterOpenBatch: function () {
+      this.batch.sort((a, b) => {
+        return new Date(a.closure_date) - new Date(b.closure_date);
+      });
+      return this.batch.slice(this.batch.length - 1);
+    },
+
+    sumAllApplications: function () {
+      const sumAll = this.batch
+        .map((item) => item.app_count)
+        .reduce((prev, curr) => prev + curr, 0);
+      console.log(sumAll);
+
+      return sumAll;
+    },
+  },
+  methods: {
+    ...mapActions(["storeBatch"]),
+    async fetchBatch() {
+      try {
+        let resp = await this.instance.get("/batch");
+        console.log(resp);
+        const { data } = resp;
+        if (data) {
+          this.storeBatch(data.batches);
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors));
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -16,19 +60,22 @@ export default {
     <div class="stats">
       <div class="box" id="box-1">
         <p class="app-head">Current Applications</p>
-        <p class="app-stats">233</p>
-        <div class="line"></div>
-        <p class="app-subhead">Academy 2.0</p>
+        <div v-for="element in filterOpenBatch" :key="element.id">
+          <p class="app-stats">{{ element.app_count }}</p>
+          <div class="line"></div>
+          <p class="app-subhead" v-if="!element.isClosed">{{ element.name }}</p>
+          <p class="app-subhead" v-else>Application Closed</p>
+        </div>
       </div>
       <div class="box" id="box-2">
         <p class="app-head">Total Applications</p>
-        <p class="app-stats">4253</p>
+        <p class="app-stats">{{ sumAllApplications }}</p>
         <div id="line2" class="line"></div>
         <p class="app-subhead">All entries do far</p>
       </div>
       <div class="box" id="box-3">
         <p class="app-head">Academy’s</p>
-        <p class="app-stats">4</p>
+        <p class="app-stats">{{ batch.length }}</p>
         <div id="line3" class="line"></div>
         <p class="app-subhead">So far</p>
       </div>
