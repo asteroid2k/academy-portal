@@ -22,7 +22,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["storeToken"]),
+    ...mapActions(["storeToken", "storeInfo"]),
     async handleSubmit(values) {
       if (values.password != values.conPassword) {
         notyf.error("Passwords don't match");
@@ -30,19 +30,20 @@ export default {
       }
       try {
         let resp = await this.instance.post("/auth/signup", values);
-        // console.log(resp);
-        const { data } = resp;
-        if (data) {
-          notyf.success(data.message);
-          this.storeToken(data.token);
+        if (resp.data) {
+          notyf.success(resp.data.message);
+          const { firstName, lastName, email } = values;
+          this.storeInfo({ firstName, lastName, email });
           this.$router.push({ name: "Signin" });
         }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        if (errors) {
-          notyf.error(Object.values(errors)[0]);
-        } else if (message) {
-          notyf.error(message);
+      } catch (error) {
+        if (error.response) {
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
         }
       }
     },

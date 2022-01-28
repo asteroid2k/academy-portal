@@ -12,9 +12,35 @@ export default {
     isOpen: Boolean,
     setIsOpen: Function,
     entry: Object,
+    updateStatus: Function,
   },
   data() {
     return {};
+  },
+  computed: {
+    image() {
+      return (
+        this.entry.image ||
+        `https://avatars.dicebear.com/api/initials/${
+          this.user.firstName + " " + this.user.lastName
+        }.svg`
+      );
+    },
+    approvedColor() {
+      let color = "text-orange-600";
+      switch (this.entry.isApproved) {
+        case "declined":
+          color = "text-red-600";
+          break;
+        case "approved":
+          color = "text-green-600";
+          break;
+
+        default:
+          break;
+      }
+      return color;
+    },
   },
 };
 </script>
@@ -26,28 +52,20 @@ export default {
       <DialogTitle class="sr-only">View Application Entry</DialogTitle>
       <!-- PREVIEW CARD   -->
       <section
-        class="
-          preview
-          relative
-          bg-white
-          max-w-[600px]
-          ml-auto
-          pl-[40px]
-          py-[50px]
-          h-screen
-          overflow-y-auto
-        "
+        class="preview relative bg-white max-w-[600px] ml-auto pl-[40px] py-[50px] h-screen overflow-y-auto"
       >
+        <h2
+          class="text-lg font-bold my-1 uppercase py-2 px-3 border border-gray-100 w-fit shadow-sm rounded-lg"
+          :class="approvedColor"
+        >
+          {{ entry.isApproved }}
+        </h2>
         <div class="img-container">
           <img src="../assets/close.svg" />
         </div>
         <input type="text" class="sr-only" />
         <div class="mb-12">
-          <img
-            class="w-[150px] aspect-square"
-            :src="`https://avatars.dicebear.com/api/avataaars/${entry.firstName}.svg`"
-            alt=""
-          />
+          <img class="w-[150px] aspect-square" :src="image" alt="" />
         </div>
         <p class="font-bold text-text-200 mb-3">Personal Details</p>
         <hr class="block w-[90%] mx-auto bg-[#f2f2f2] mb-8" />
@@ -130,18 +148,22 @@ export default {
             <p class="text-sm text-text-100 mb-4">CV</p>
             <div class="flex gap-2">
               <span><img src="../assets/pdf.svg" alt="" /></span>
-              <span class="text-text-300 max-w-[230px]"
-                >{{ entry.firstName }}CV.pdf</span
+              <a
+                class="text-text-300 max-w-[230px] hover:text-primary underline hover:decoration-primary"
+                :href="entry.cv"
+                >{{ entry.firstName }}CV.pdf</a
               >
             </div>
           </div>
         </div>
         <div class="flex mt-12 gap-6 justify-center">
           <button
+            @click="updateStatus({ id: entry._id, status: 'approved' })"
             class="w-[125px] h-12 bg-primary text-white font-medium rounded"
           >
             Approve</button
           ><button
+            @click="updateStatus({ id: entry._id, status: 'declined' })"
             class="w-[125px] h-12 font-medium rounded border border-[#cecece]"
           >
             Decline

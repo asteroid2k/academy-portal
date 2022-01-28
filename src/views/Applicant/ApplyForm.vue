@@ -1,8 +1,8 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { object, string } from "yup";
+import { object } from "yup";
 import { notyf, validators } from "../../helpers.js";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "ApplyForm",
@@ -29,33 +29,62 @@ export default {
     });
     return {
       schema,
+      files: { cv: "", image: "" },
+      prePop: { firstName: "", lastName: "", email: "" },
     };
   },
   computed: {
+    ...mapState(["info"]),
     ...mapGetters(["batch"]),
   },
   methods: {
+    fileChange(e) {
+      const input = e.target;
+      if (input.files) {
+        let name = input.files[0].name;
+        this.files[e.target.name] = name;
+        if (name.length > 30)
+          this.files[e.target.name] = name.substring(0, 14) + "...";
+      }
+    },
     async handleSubmit(values) {
-      try {
-        let resp = await this.instance.post(
-          `/application/apply/${this.batch._id}`,
-          values
-        );
+      const formData = new FormData();
+      for (const key in values) {
+        if (key === "image" || key === "cv") {
+          continue;
+        }
+        formData.append(key, values[key]);
+      }
+      if (values.image) {
+        formData.append("image", values.image[0], values.image[0].name);
+      }
+      if (values.cv) {
+        formData.append("cv", values.cv[0], values.cv[0].name);
+      }
 
-        const { data } = resp;
-        if (data) {
-          notyf.success(data.message);
-          this.storeToken(data.token);
+      try {
+        let response = await this.instance.post(
+          `/applications/apply/${this.batch._id}`,
+          formData
+        );
+        if (response.data) {
+          const { message } = response.data;
+          notyf.success(message);
         }
       } catch (error) {
         //if the error has a response it is from the backend
         if (error.response) {
-          const { errors, message } = response.data;
-          if (errors) {
-            notyf.error(Object.values(errors)[0]);
-          } else if (message) {
-            notyf.error(message);
+          if (error.response.data) {
+            const { errors, message } = error.response.data;
+            if (errors) {
+              notyf.error(Object.values(errors)[0]);
+            } else if (message) {
+              notyf.error(message);
+            }
           }
+        } else {
+          console.log(error);
+          notyf.error("An error occured");
         }
       }
     },
@@ -76,46 +105,35 @@ export default {
       action=""
       @submit="handleSubmit"
       :validation-schema="schema"
-      class="
-        max-w-[960px]
-        px-[70px]
-        pt-[50px]
-        pb-[40px]
-        mx-auto
-        shadow
-        rounded-lg
-        w-full
-      "
+      class="max-w-[960px] px-[70px] pt-[50px] pb-[40px] mx-auto shadow rounded-lg w-full"
       enctype="multipart/form-data"
     >
       <!-- file upload buttons -->
       <div class="file-uploads flex gap-8 justify-center mb-8">
         <div
-          class="
-            border-[1.5px] border-dashed border-border-300
-            w-[210px]
-            grid
-            place-items-center
-            h-[50px]
-            rounded-sm
-          "
+          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
         >
-          <label for="cv">+ Upload CV</label>
-          <Field type="file" name="cv" class="sr-only" id="cv" action="" />
+          <label for="cv">{{ files.cv || "+ Upload CV" }}</label>
+          <Field
+            type="file"
+            name="cv"
+            class="sr-only"
+            id="cv"
+            @change="fileChange"
+          />
           <ErrorMessage name="cv" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div
-          class="
-            border-[1.5px] border-dashed border-border-300
-            w-[210px]
-            grid
-            place-items-center
-            h-[50px]
-            rounded-sm
-          "
+          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
         >
-          <label for="image">+ Upload Photo</label>
-          <Field type="file" name="image" class="sr-only" id="image" />
+          <label for="image">{{ files.image || "+ Upload Photo" }}</label>
+          <Field
+            type="file"
+            name="image"
+            class="sr-only"
+            id="image"
+            @change="fileChange"
+          />
           <ErrorMessage name="image" class="text-red-600 text-xs pt-1 px-2" />
         </div>
       </div>
@@ -126,6 +144,7 @@ export default {
             type="text"
             class="border-border-300 h-12 k-input"
             name="firstName"
+            :value="info.firstName"
           />
           <ErrorMessage
             name="firstName"
@@ -138,6 +157,7 @@ export default {
             type="text"
             class="border-border-300 h-12 k-input"
             name="lastName"
+            :value="info.lastName"
           />
           <ErrorMessage
             name="lastName"
@@ -150,6 +170,7 @@ export default {
             type="email"
             class="border-border-300 h-12 k-input"
             name="email"
+            :value="info.email"
           />
           <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
         </div>
@@ -205,19 +226,7 @@ export default {
         </div>
       </div>
       <button
-        class="
-          mt-11
-          rounded
-          font-bold
-          text-base
-          block
-          max-w-[380px]
-          w-full
-          bg-primary
-          text-white
-          h-12
-          mx-auto
-        "
+        class="mt-11 rounded font-bold text-base block max-w-[380px] w-full bg-primary text-white h-12 mx-auto"
         type="submit"
       >
         Submit

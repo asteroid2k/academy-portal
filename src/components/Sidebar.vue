@@ -1,11 +1,22 @@
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Sidebar",
   props: {
     instance: Function,
     routes: Array,
   },
-
+  computed: {
+    ...mapGetters(["user"]),
+    image() {
+      return (
+        this.user.image ||
+        `https://avatars.dicebear.com/api/initials/${
+          this.user.firstName + " " + this.user.lastName
+        }.svg`
+      );
+    },
+  },
   methods: {
     imgUrl(img) {
       return new URL(`../assets/${img}`, import.meta.url);
@@ -28,11 +39,15 @@ export default {
         <img src="../assets/nav-close.svg" />
       </button>
       <div class="user-display">
-        <figure class="avatar">
-          <img src="../assets/avatar1.png" />
-        </figure>
-        <p class="heading">Jane Doe</p>
-        <p class="body">doe@enyata.com</p>
+        <div class="avatar">
+          <img
+            :src="image"
+            alt=""
+            class="w-[80px] aspect-square rounded-full"
+          />
+        </div>
+        <p class="heading">{{ user.firstName }} {{ user.lastName }}</p>
+        <p class="body">{{ user.email }}</p>
       </div>
       <div class="wrapper">
         <div v-for="(data, index) in routes" :key="index">

@@ -34,7 +34,7 @@ export default {
           notyf.success(message);
           this.storeToken({ token, isAdmin });
           // redirect to dashboard
-          this.$router.push({ name: "Dashboard" });
+          this.$router.push({ name: "UserDashboard" });
         }
       } catch (error) {
         console.log(error.response);

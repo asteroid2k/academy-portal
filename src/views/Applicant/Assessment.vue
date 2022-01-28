@@ -50,6 +50,10 @@ export default {
       if (this.current < this.questions.length) this.current++;
     },
     async fetchAssessment() {
+      if (!this.batch._id) {
+        notyf.open({ type: "purp", message: "No ongoing batch" });
+        return;
+      }
       try {
         const response = await this.instance.get(
           `/assessment/${this.batch._id}`
