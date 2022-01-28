@@ -71,7 +71,7 @@ export default {
         <div class="name">
           <div class="first-name">
             <div><label for="fname">First Name</label></div>
-            <Field id="fname" type="text" name="firstName" />
+            <Field class="k-input" id="fname" type="text" name="firstName" />
             <ErrorMessage
               name="firstName"
               class="text-red-600 text-xs pt-1 px-2"
@@ -80,7 +80,7 @@ export default {
           <div class="last-name">
             <div class="last-name">
               <div><label for="lname">Last Name</label></div>
-              <Field id="lname" type="text" name="lastName" />
+              <Field class="k-input" id="lname" type="text" name="lastName" />
               <ErrorMessage
                 name="lastName"
                 class="text-red-600 text-xs pt-1 px-2"
@@ -92,7 +92,7 @@ export default {
         <div class="name">
           <div class="email">
             <div><label for="mail">Email Address</label></div>
-            <Field id="mail" type="text" name="email" />
+            <Field class="k-input" id="mail" type="text" name="email" />
             <ErrorMessage
               name="email"
               class="flex text-red-600 text-xs pt-1 px-2"
@@ -101,7 +101,7 @@ export default {
           <div class="phone">
             <div class="phone-number">
               <div><label for="phone">Phone Number</label></div>
-              <Field id="phone" type="tel" name="phone" />
+              <Field class="k-input" id="phone" type="tel" name="phone" />
               <ErrorMessage
                 name="phone"
                 class="flex text-red-600 text-xs pt-1 px-2"
@@ -113,7 +113,12 @@ export default {
         <div class="name">
           <div class="password">
             <div><label for="password">Password</label></div>
-            <Field id="password" type="password" name="password" />
+            <Field
+              class="k-input"
+              id="password"
+              type="password"
+              name="password"
+            />
             <ErrorMessage
               name="password"
               class="flex text-red-600 text-xs pt-1 px-2"
@@ -122,7 +127,7 @@ export default {
           <div class="phone">
             <div class="confirm-password">
               <div><label for="conPassword">Confirm Password</label></div>
-              <Field type="password" name="conPassword" />
+              <Field class="k-input" type="password" name="conPassword" />
               <ErrorMessage
                 name="conPassword"
                 class="text-red-600 text-xs pt-1 px-2"
