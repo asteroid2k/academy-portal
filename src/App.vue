@@ -13,7 +13,7 @@ export default {
     instance() {
       return axios.create({
         baseURL: "http://localhost:3009/api",
-        timeout: 3000,
+        timeout: 10000,
         headers: { Authorization: `token ${this.token}` },
       });
     },
