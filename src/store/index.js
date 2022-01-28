@@ -12,6 +12,7 @@ const store = createStore({
       token: "",
       isAdmin: false,
       batch: {},
+      info: {},
     };
   },
   getters: {
@@ -32,6 +33,9 @@ const store = createStore({
     SET_BATCH(state, payload) {
       state.batch = payload;
     },
+    SET_INFO(state, payload) {
+      state.info = payload;
+    },
   },
   actions: {
     storeToken({ commit }, payload) {
@@ -41,6 +45,9 @@ const store = createStore({
     },
     storeBatch({ commit }, payload) {
       commit("SET_BATCH", payload);
+    },
+    storeInfo({ commit }, payload) {
+      commit("SET_INFO", payload);
     },
   },
   modules: {},

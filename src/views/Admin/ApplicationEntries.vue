@@ -1,11 +1,15 @@
 <script>
 import ExpandIcon from "../../assets/expand.svg?component";
 import Top from "../../components/Top.vue";
-import { applications } from "../../helpers.js";
 import PreviewApplication from "../../components/PreviewApplication.vue";
+import { notyf } from "../../helpers";
 
 export default {
   name: "ApplicationEntries",
+  async mounted() {
+    await this.fetchApplications();
+  },
+  props: { instance: Function },
   components: {
     Top,
     ExpandIcon,
@@ -13,16 +17,17 @@ export default {
   },
   data() {
     return {
-      applications,
+      applications: [],
+      batches: [],
       isOpen: false,
       pId: 0,
-      batch: "Batch 1",
+      batch: "",
     };
   },
   computed: {
     filteredEntries() {
       return this.applications.filter(
-        (entry) => entry.batch.toLowerCase() === this.batch.toLowerCase()
+        (entry) => entry.batch_slug.toLowerCase() === this.batch.toLowerCase()
       );
     },
   },
@@ -35,6 +40,68 @@ export default {
     setIsOpen(value) {
       this.isOpen = value;
     },
+    async updateStatus(payload) {
+      try {
+        let response = await this.instance.post(
+          "/applications/status",
+          payload
+        );
+        if (response.data) {
+          const { message } = response.data;
+          notyf.open({ type: "purp", message });
+        }
+      } catch (error) {
+        if (error.response) {
+          const { status, statusText } = error.response;
+          const { errors, message } = error.response.data;
+          if (status == 401 || status == 403) {
+            notyf.open({ type: "info", message: message || statusText });
+            this.$router.push({ name: "AdminSignin" });
+            return;
+          }
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
+        } else {
+          notyf.error("An error occured");
+        }
+      }
+    },
+    async fetchApplications() {
+      try {
+        let response = await this.instance.get("/applications");
+        if (response.data) {
+          const { batches, applications, count } = response.data;
+          if (count < 1) {
+            notyf.open({ type: "purp", message: "No applications yet" });
+          }
+          this.applications = applications;
+          this.batches = batches;
+          if (batches.length) {
+            this.batch = batches[0].slug;
+          }
+        }
+      } catch (error) {
+        if (error.response) {
+          const { status, statusText } = error.response;
+          const { errors, message } = error.response.data;
+          if (status == 401 || status == 403) {
+            notyf.open({ type: "info", message: message || statusText });
+            this.$router.push({ name: "AdminSignin" });
+            return;
+          }
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
+        } else {
+          notyf.error("An error occured");
+        }
+      }
+    },
   },
 };
 </script>
@@ -44,21 +111,28 @@ export default {
       :isOpen="isOpen"
       :setIsOpen="setIsOpen"
       :entry="filteredEntries[pId]"
+      :updateStatus="updateStatus"
     />
   </section>
-  <section>
+  <section class="relative">
     <div id="" class="flex flex-col mb-10">
       <div class="flex">
         <h1 class="font-light text-[44px]">Entries -&nbsp;</h1>
         <div>
           <select
+            v-show="batches.length"
             v-model="batch"
             name="batch"
             id=""
-            class="appearance-none font-light text-[44px] leading-9 w-[230px] h-[80px] py-1 border-transparent focus:border-0 focus:outline-0 focus:ring-0"
+            class="appearance-none font-light text-[40px] leading-9 w-[260px] h-[80px] py-1 border-transparent focus:border-0 focus:outline-0 focus:ring-0"
           >
-            <option class="font-light text-xl" value="Batch 2">Batch 2</option>
-            <option class="font-light text-xl" value="Batch 1">Batch 1</option>
+            <option
+              v-for="{ slug } in batches"
+              class="font-light text-xl"
+              :value="slug"
+            >
+              {{ slug }}
+            </option>
           </select>
         </div>
       </div>
@@ -138,7 +212,7 @@ export default {
               >
                 <ExpandIcon
                   @click="previewApplication(index)"
-                  class="text-text-400 w-4 stroke-2 group-hover:text-primary cursor-pointer"
+                  class="text-text-400 w-5 stroke-2 group-hover:text-primary cursor-pointer"
                 />
               </td>
             </tr>

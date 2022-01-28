@@ -117,7 +117,13 @@ const routes = [
   {
     path: "/logout",
     name: "Logout",
-    component: () => import("../views/Logout.vue"),
+    component: "Home",
+    beforeEnter(to, from, next) {
+      notyf.open({ type: "purp", message: "Logged out" });
+      store.dispatch("storeToken", { token: "", isAdmin: false });
+      store.dispatch("storeInfo", {});
+      next({ name: "Home" });
+    },
   },
   {
     path: "/forgot",
