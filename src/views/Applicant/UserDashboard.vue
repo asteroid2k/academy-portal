@@ -1,12 +1,67 @@
-
 <script>
-import { mapGetters } from "vuex";
-import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 import Update from "../../components/Update.vue";
+import { notyf } from "../../helpers";
+import { formatDistanceToNow } from "date-fns";
 
 export default {
+  async mounted() {
+    await this.fetchUser();
+  },
   name: "User",
+  props: { instance: Function },
   components: { Update },
+  computed: {
+    ...mapGetters(["user"]),
+    formatDate() {
+      if (!this.user.created_at) {
+        return "09.09.22";
+      }
+      return this.user.created_at
+        .substring(2, 10)
+        .split("-")
+        .reverse()
+        .join(".");
+    },
+    formatDays() {
+      if (!this.user.created_at) {
+        return "09.09.22";
+      }
+      return formatDistanceToNow(new Date(this.user.created_at));
+    },
+    approvedColor() {
+      if (!this.user.isApproved) {
+        return "09.09.22";
+      }
+      return this.user.isApproved ? "approved" : "pending";
+    },
+  },
+  methods: {
+    ...mapActions(["storeUser"]),
+    async fetchUser() {
+      try {
+        let resp = await this.instance.get("/applications/user");
+        if (resp.data) {
+          const { data } = resp;
+          console.log(data);
+          this.storeUser(data.application);
+          console.log(getDate());
+        }
+      } catch (error) {
+        if (error.response) {
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+            if (response.status === 404) {
+              this.$router.push({ name: "Apply" });
+            }
+          }
+        }
+      }
+    },
+  },
 };
 </script>
 <template>
@@ -17,18 +72,28 @@ export default {
       successful
     </p>
     <div class="stats">
-      <div class="app-date">
+      <div class="app-date" id="box-1">
         <p class="app-head">Date of Application</p>
-        <p class="date">09.09.19</p>
+        <p class="date">
+          {{ formatDate }}
+        </p>
         <div class="line"></div>
-        <p class="app-subhead">4 days since applied</p>
+        <p class="app-subhead">{{ formatDays }} since applied</p>
       </div>
-      <div class="app-date">
+      <div class="app-date" id="box-2">
         <p class="app-head">Application Status</p>
-        <p class="date">Pending</p>
-        <div id="line2" class="line"></div>
-        <p class="app-subhead">We will get back to you</p>
+        <p class="date" v-if="user.isApproved">Approved</p>
+        <p class="date" v-else>Pending</p>
+        <div class="line" :class="approvedColor"></div>
+        <p class="app-subhead" v-if="user.isApproved">
+          Congratulations, you have been approved
+        </p>
+        <p class="app-subhead" v-else>We will get back to you</p>
       </div>
+    </div>
+    <div class="indicator">
+      <a href="#box-1">•</a>
+      <a href="#box-2">•</a>
     </div>
     <div class="update-container">
       <div class="app-update">
@@ -75,7 +140,7 @@ export default {
 
 .stats {
   margin: 60px 0px;
-  width: 50%;
+  width: 55%;
   display: flex;
   justify-content: space-between;
 }
@@ -93,14 +158,17 @@ export default {
   font-size: 48px;
   margin: 10px 0px 20px;
   line-height: 58px;
-  color: #2b3c4e;
 }
+
 .app-subhead {
   font-weight: normal;
   font-size: 12px;
   line-height: 14px;
   margin-top: 10px;
   color: #4f4f4f;
+}
+.indicator {
+  display: none;
 }
 .line {
   width: 148px;
@@ -109,9 +177,14 @@ export default {
   border-radius: 4px;
 }
 
-#line2 {
+.approved {
+  background: green;
+}
+
+.pending {
   background: #f09000;
 }
+
 .update-container {
   display: flex;
   justify-content: space-between;
@@ -146,5 +219,64 @@ export default {
 #centerdiv {
   text-align: center;
   margin: 100px auto 0px;
+}
+
+@media screen and (max-width: 992px) {
+  .main-frame {
+    margin: 0;
+  }
+  .app-date p {
+    color: #ffffff;
+  }
+  .app-date {
+    text-align: center;
+    background: #7557d3;
+    padding: 20px 0px;
+    border: none;
+  }
+  .line {
+    width: 300px;
+    border-radius: none;
+  }
+  .stats {
+    width: 100%;
+    justify-content: none;
+    background: #7557d3;
+    height: fit-content;
+    overflow: auto;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+    margin: 60px auto 0px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 20px;
+  }
+
+  .indicator {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0px;
+  }
+  .indicator a {
+    color: #7557d3;
+    opacity: 0.4;
+    font-size: 30px;
+    margin: 0px 10px;
+  }
+  .indicator a:focus,
+  .indicator a:hover {
+    color: #7557d3;
+    opacity: 1;
+  }
+  .update-container {
+    justify-content: space-around;
+    flex-direction: column-reverse;
+  }
+
+  .app-update {
+    width: 100%;
+    margin: 0px 0px 40px;
+  }
 }
 </style>

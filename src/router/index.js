@@ -20,9 +20,37 @@ const routes = [
     component: () => import("../views/Applicant/Signup.vue"),
   },
   {
+    path: "/apply",
+    name: "Apply",
+    component: () => import("../views/Applicant/ApplyForm.vue"),
+    //redirect to login if user is not signed in
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token) {
+        notyf.open({
+          type: "info",
+          message: "You are not logged in",
+        });
+        next({ name: "Signin" });
+      } else {
+        next();
+      }
+    },
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     component: () => import("../views/Applicant/Dashboard.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token) {
+        notyf.open({
+          type: "info",
+          message: "You are not logged in",
+        });
+        next({ name: "Signin" });
+      } else {
+        next();
+      }
+    },
     children: [
       {
         path: "/dashboard",
@@ -39,30 +67,26 @@ const routes = [
         name: "Success",
         component: () => import("../components/Success.vue"),
       },
-
-      {
-        path: "/apply/:id",
-        name: "Apply",
-        component: () => import("../views/Applicant/ApplyForm.vue"),
-        //redirect to login if user is not signed in
-        beforeEnter: (to, from, next) => {
-          if (!store.state.token) {
-            notyf.open({
-              type: "info",
-              message: "You are not logged in",
-            });
-            next({ name: "Signin" });
-          } else {
-            next();
-          }
-        },
-      },
     ],
   },
   {
     path: "/admin-dashboard",
     name: "AdminDashboard",
     component: () => import("../views/Admin/AdminDashboard.vue"),
+    //redirect to login if user is not signed in
+    beforeEnter: (to, from, next) => {
+      if (!store.state.token || !store.state.isAdmin) {
+        let msg = "You are not logged in";
+        if (!store.state.isAdmin) msg = "Forbidden";
+        notyf.open({
+          type: "info",
+          message: msg,
+        });
+        next({ name: "AdminSignin" });
+      } else {
+        next();
+      }
+    },
     children: [
       {
         path: "/admin-dashboard",
@@ -94,12 +118,23 @@ const routes = [
         name: "Results",
         component: () => import("../views/Admin/Results.vue"),
       },
+      {
+        path: "/admin-dashboard/settings",
+        name: "Settings",
+        component: () => import("../views/Admin/ProfileSettings.vue"),
+      },
     ],
   },
   {
     path: "/logout",
     name: "Logout",
-    component: () => import("../views/Logout.vue"),
+    component: "Home",
+    beforeEnter(to, from, next) {
+      notyf.open({ type: "purp", message: "Logged out" });
+      store.dispatch("storeToken", { token: "", isAdmin: false });
+      store.dispatch("storeInfo", {});
+      next({ name: "Home" });
+    },
   },
   {
     path: "/forgot",
@@ -111,7 +146,7 @@ const routes = [
   {
     path: "/admin/signin",
     name: "AdminSignin",
-    component: () => import("../views/admin/Signin.vue"),
+    component: () => import("../views/Admin/Signin.vue"),
   },
   // NOT FOUND
   {

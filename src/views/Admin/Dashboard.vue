@@ -1,36 +1,86 @@
 <script>
-import { mapGetters } from "vuex";
 import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
+import { notyf } from "../../helpers";
 import History from "../../components/History.vue";
 
 export default {
+  async mounted() {
+    await this.fetchBatch();
+    await this.fetchDetails();
+  },
   name: "Admin",
+  props: { instance: Function },
   components: { History },
+  computed: {
+    ...mapGetters(["batches"]),
+
+    filterOpenBatch: function () {
+      if (!this.batches.length) return "";
+      this.batches.sort((a, b) => {
+        return new Date(a.closure_date) - new Date(b.closure_date);
+      });
+      return this.batches.slice(this.batches.length - 1);
+    },
+
+    sumAllApplications: function () {
+      if (!this.batches.length) return "";
+
+      const sumAll = this.batches
+        .map((item) => item.app_count)
+        .reduce((prev, curr) => prev + curr, 0);
+      return sumAll;
+    },
+  },
+  methods: {
+    ...mapActions(["storeBatches", "storeUser"]),
+    async fetchBatch() {
+      try {
+        let resp = await this.instance.get("/batch");
+        const { data } = resp;
+        if (data) {
+          this.storeBatches(data.batches);
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors));
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+    async fetchDetails() {
+      try {
+        let resp = await this.instance.get("/user");
+        if (resp.data) {
+          this.storeUser(resp.data.user);
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors));
+        } else if (message) {
+          notyf.error(message);
+        }
+      }
+    },
+  },
 };
 </script>
 
 <template>
-  <div class="entire-page">
-    <div class="main-frame">
-      <p class="heading">Dashboard</p>
-      <div class="stats">
-        <div>
-          <p class="app-head">Current Applications</p>
-          <p class="app-stats">233</p>
+  <div class="main-frame">
+    <p class="heading">Dashboard</p>
+
+    <div class="stats">
+      <div class="box" id="box-1">
+        <p class="app-head">Current Applications</p>
+        <div v-for="element in filterOpenBatch" :key="element.id">
+          <p class="app-stats">{{ element.app_count }}</p>
           <div class="line"></div>
-          <p class="app-subhead">Academy 2.0</p>
-        </div>
-        <div>
-          <p class="app-head">Total Applications</p>
-          <p class="app-stats">4253</p>
-          <div id="line2" class="line"></div>
-          <p class="app-subhead">All entries do far</p>
-        </div>
-        <div>
-          <p class="app-head">Academy’s</p>
-          <p class="app-stats">4</p>
-          <div id="line3" class="line"></div>
-          <p class="app-subhead">So far</p>
+          <p class="app-subhead" v-if="!element.isClosed">{{ element.name }}</p>
+          <p class="app-subhead" v-else>Application Closed</p>
         </div>
       </div>
       <div class="box" id="box-2">
@@ -41,7 +91,7 @@ export default {
       </div>
       <div class="box" id="box-3">
         <p class="app-head">Academy’s</p>
-        <p class="app-stats">{{ batch.length }}</p>
+        <p class="app-stats">{{ batches.length }}</p>
         <div id="line3" class="line"></div>
         <p class="app-subhead">So far</p>
       </div>
@@ -72,13 +122,14 @@ export default {
 
 <style scoped>
 * {
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
-
+.main-frame {
+}
 .heading {
   font-style: normal;
   font-weight: 300;
-  font-size: 43.5555px;
+  font-size: 44px;
   line-height: 52px;
   margin-bottom: 14px;
   letter-spacing: -0.02em;
@@ -156,11 +207,74 @@ export default {
 .assess-description {
   padding: 22px 0px;
 }
-
+.indicator {
+  display: none;
+}
 #create-assess {
   border: 1px solid #ececf9;
   text-align: center;
   width: 43%;
   padding: 25px 35px 100px;
+}
+@media screen and (max-width: 992px) {
+  .heading {
+    font-size: 40px;
+  }
+  .stats {
+    width: 100%;
+    justify-content: none;
+    background: #7557d3;
+    height: fit-content;
+    overflow: auto;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+    margin: 60px auto 0px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 20px;
+  }
+  .indicator {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0px;
+  }
+  .indicator a {
+    color: #7557d3;
+    opacity: 0.4;
+    font-size: 30px;
+    margin: 0px 10px;
+  }
+  .indicator a:focus,
+  .indicator a:hover {
+    color: #7557d3;
+    opacity: 1;
+  }
+  .box {
+    color: #ffffff;
+    text-align: center;
+    background: #7557d3;
+    padding: 20px 0px;
+    border: none;
+  }
+
+  .box p {
+    color: #ffffff;
+  }
+
+  .line {
+    width: 300px;
+    border-radius: none;
+  }
+  .update-container {
+    flex-direction: column-reverse;
+  }
+  .category-box {
+    width: 100%;
+    margin: 20px 0px;
+  }
+  #create-assess {
+    width: 100%;
+  }
 }
 </style>

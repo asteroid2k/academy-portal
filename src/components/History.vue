@@ -1,13 +1,3 @@
-<template>
-  <div class="container">
-    <div class="historys" v-for="history in historys" :key="history.id">
-      <p>{{ history.batchNo }}</p>
-      <p>{{ history.noOfStudents }}</p>
-      <p>{{ history.appDate }}</p>
-    </div>
-  </div>
-</template>
-
 <script>
 import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
@@ -21,6 +11,18 @@ export default {
   },
 };
 </script>
+
+
+<template>
+  <div class="container">
+    <div class="historys" v-for="history in historys" :key="history.id">
+      <p>{{ history.batchNo }}</p>
+      <p>{{ history.noOfStudents }}</p>
+      <p>{{ history.appDate }}</p>
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 .container {
@@ -44,5 +46,12 @@ export default {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
   border-radius: 8px;
   border-left: 7px solid var(--primary);
+}
+@media screen and (max-width: 992px) {
+  .historys {
+    justify-content: space-evenly;
+    padding: 15px 0px;
+    font-size: 12px;
+  }
 }
 </style>

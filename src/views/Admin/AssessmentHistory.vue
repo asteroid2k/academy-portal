@@ -125,18 +125,18 @@ export default {
 #assessments {
   border-collapse: collapse;
   position: relative;
+  text-align: center;
   width: 100%;
 }
 
 #assessments th {
-  padding: 13px 26px;
-  text-align: left;
+  padding: 13px 0px;
   color: white;
   background: #2b3c4e;
 }
 
 td {
-  padding: 20px 26px;
+  padding: 20px 0px;
 }
 .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
@@ -162,5 +162,23 @@ td {
   position: sticky;
   top: 0px;
   z-index: 1;
+  background: #2b3c4e;
+}
+
+@media screen and (max-width: 992px) {
+  #assessments {
+    width: 200%;
+  }
+  .table-frame {
+    padding: 0px;
+    font-size: 14px;
+  }
+  #assessments th,
+  td {
+    padding: 15px;
+    text-align: center;
+  }
+  .table-body {
+  }
 }
 </style>

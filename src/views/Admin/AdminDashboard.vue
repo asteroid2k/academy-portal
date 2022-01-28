@@ -4,6 +4,7 @@ import History from "../../components/History.vue";
 
 export default {
   name: "AdminDashboard",
+  props: { instance: Function },
   components: { Sidebar, History },
   data() {
     return {
@@ -30,19 +31,19 @@ export default {
         },
         {
           routeName: "Assessment History",
-          image: "../../../src/assets/history.svg",
+          image: "history.svg",
           routeUrl: "AssessmentHistory",
         },
         {
           routeName: "Results",
-          image: "../../../src/assets/results.svg",
+          image: "results.svg",
           routeUrl: "Results",
         },
-        //{
-        //  routeName: "Settings",
-        //   image: "../../../src/assets/Setting.png",
-        //   routeUrl: "/settings",
-        // },
+        {
+          routeName: "Settings",
+          image: "Setting.svg",
+          routeUrl: "Settings",
+        },
       ],
     };
   },
@@ -50,8 +51,10 @@ export default {
 </script>
 <template>
   <section class="main">
-    <section class="w-fit"><Sidebar :routes="routes" /></section>
-    <section class="mx-[60px] my-12"><router-view></router-view></section>
+    <section id="sidebar" class="w-fit"><Sidebar :routes="routes" /></section>
+    <section id="view">
+      <router-view :instance="instance"></router-view>
+    </section>
   </section>
 </template>
 
@@ -59,5 +62,21 @@ export default {
 .main {
   display: grid;
   grid-template-columns: auto 1fr;
+}
+#view {
+  margin: 40px;
+}
+@media screen and (max-width: 992px) {
+  #view {
+    height: 100%;
+    overflow: auto;
+    margin: 120px 30px 30px;
+  }
+
+  .main {
+    width: 100%;
+    display: block;
+    grid-template-columns: none;
+  }
 }
 </style>

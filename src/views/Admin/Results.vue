@@ -1,30 +1,20 @@
 <script>
-import { ref } from "vue";
+import { results } from "../../helpers.js";
 
 export default {
   name: "Results",
+  sortBy: "dob",
+  sortDirection: "asc",
   data() {
     return {
-      batchentry: "Batch 1",
+      results,
+      batch: "Batch 1",
     };
   },
-  setup() {
-    // make users. variable reactive with the ref() function
-    const users = ref([
-      {
-        name: "Ify Chinke",
-        email: "ify@enyata.com",
-        dob: "12/09/19 - 22",
-        address: "3 Sabo Ave, Yaba, Lagos",
-        university: "University of Nigeria",
-        cgpa: "5.0",
-        testScore: "15",
-      },
-    ]);
-
-    return {
-      users,
-    };
+  computed: {
+    filterUserByBatch: function () {
+      return this.results.filter((user) => !user.batch.indexOf(this.batch));
+    },
   },
 };
 </script>
@@ -32,26 +22,34 @@ export default {
   <div class="entire-page">
     <div class="main-frame">
       <label class="heading" for="entries">Results -</label>
-      <select class="heading" name="entries" id="batch" v-model="batchentry">
+      <select class="heading" name="entries" id="batch" v-model="batch">
         <option value="Batch 1">Batch 1</option>
         <option value="Batch 2">Batch 2</option>
         <option value="Batch 3">Batch 3</option>
       </select>
-      <p class="description">
-        Comprises of all that applied for {{ batchentry }}
-      </p>
+      <p class="description">Comprises of all that applied for {{ batch }}</p>
       <div class="wrapper">
         <table id="assessments">
           <tr class="table-head">
             <th>Name</th>
             <th>Email</th>
-            <th>DOB - Age</th>
+            <th class="filter">
+              <span>DOB - Age</span>
+              <img src="../../assets/ascdesc.svg" alt="" />
+            </th>
             <th>Address</th>
             <th>University</th>
-            <th>CGPA</th>
+            <th class="filter">
+              <span>CGPA</span>
+              <img src="../../assets/ascdesc.svg" alt="" />
+            </th>
             <th>Test Scores</th>
           </tr>
-          <tr v-for="user in users" :key="user.id" class="table-body">
+          <tr
+            v-for="user in filterUserByBatch"
+            :key="user.id"
+            class="table-body"
+          >
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.dob }}</td>
@@ -105,14 +103,15 @@ select:focus {
 }
 
 #assessments th {
-  padding: 13px 26px;
-  text-align: left;
+  padding: 13px 0px;
+  text-align: center;
   color: white;
   background: #2b3c4e;
 }
 
 td {
-  padding: 20px 26px;
+  padding: 20px 0px;
+  text-align: center;
 }
 .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
@@ -131,12 +130,35 @@ td {
   padding: 40px 40px 0px;
 }
 .wrapper {
-  overflow-y: auto;
+  overflow: auto;
   height: 400px;
 }
 .table-head {
   position: sticky;
   top: 0px;
   z-index: 1;
+}
+.filter {
+  display: flex;
+  justify-content: space-evenly;
+  background: #2b3c4e;
+}
+@media screen and (max-width: 992px) {
+  #assessments {
+    width: 300%;
+  }
+  .wrapper {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  #assessments th,
+  td {
+    padding: 20px 15px;
+    text-align: center;
+  }
+  select {
+    padding: 0;
+  }
 }
 </style>
