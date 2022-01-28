@@ -70,6 +70,7 @@ export default {
         if (response.data) {
           const { message } = response.data;
           notyf.success(message);
+          this.$router.push({ name: "UserDashboard" });
         }
       } catch (error) {
         //if the error has a response it is from the backend
@@ -105,13 +106,29 @@ export default {
       action=""
       @submit="handleSubmit"
       :validation-schema="schema"
-      class="max-w-[960px] px-[70px] pt-[50px] pb-[40px] mx-auto shadow rounded-lg w-full"
+      class="
+        max-w-[960px]
+        px-[70px]
+        pt-[50px]
+        pb-[40px]
+        mx-auto
+        shadow
+        rounded-lg
+        w-full
+      "
       enctype="multipart/form-data"
     >
       <!-- file upload buttons -->
       <div class="file-uploads flex gap-8 justify-center mb-8">
         <div
-          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
+          class="
+            border-[1.5px] border-dashed border-border-300
+            w-[210px]
+            grid
+            place-items-center
+            h-[50px]
+            rounded-sm
+          "
         >
           <label for="cv">{{ files.cv || "+ Upload CV" }}</label>
           <Field
@@ -124,7 +141,14 @@ export default {
           <ErrorMessage name="cv" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div
-          class="border-[1.5px] border-dashed border-border-300 w-[210px] grid place-items-center h-[50px] rounded-sm"
+          class="
+            border-[1.5px] border-dashed border-border-300
+            w-[210px]
+            grid
+            place-items-center
+            h-[50px]
+            rounded-sm
+          "
         >
           <label for="image">{{ files.image || "+ Upload Photo" }}</label>
           <Field
@@ -226,7 +250,19 @@ export default {
         </div>
       </div>
       <button
-        class="mt-11 rounded font-bold text-base block max-w-[380px] w-full bg-primary text-white h-12 mx-auto"
+        class="
+          mt-11
+          rounded
+          font-bold
+          text-base
+          block
+          max-w-[380px]
+          w-full
+          bg-primary
+          text-white
+          h-12
+          mx-auto
+        "
         type="submit"
       >
         Submit

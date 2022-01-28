@@ -120,14 +120,25 @@ export default {
         <h1 class="font-light text-[44px]">Entries -&nbsp;</h1>
         <div>
           <select
-            v-show="batches.length"
+            v-show="batches"
             v-model="batch"
             name="batch"
             id=""
-            class="appearance-none font-light text-[40px] leading-9 w-[260px] h-[80px] py-1 border-transparent focus:border-0 focus:outline-0 focus:ring-0"
+            class="
+              appearance-none
+              font-light
+              text-[40px]
+              leading-9
+              w-[260px]
+              h-[80px]
+              py-1
+              border-transparent
+              focus:border-0 focus:outline-0 focus:ring-0
+            "
           >
             <option
               v-for="{ slug } in batches"
+              :key="slug"
               class="font-light text-xl"
               :value="slug"
             >
@@ -150,7 +161,14 @@ export default {
               <th scope="col" class="py-4 border-text-400">Email</th>
               <th
                 scope="col"
-                class="flex items-center justify-center py-4 border-text-400 gap-2"
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  py-4
+                  border-text-400
+                  gap-2
+                "
               >
                 <span>DOB - Age</span>
                 <span><img src="../../assets/ascdesc.svg" alt="" /></span>
@@ -192,7 +210,14 @@ export default {
               class="text-text-300 hover:shadow-md group transition"
             >
               <td
-                class="py-6 px-5 rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
+                class="
+                  py-6
+                  px-5
+                  rounded-lg
+                  border-l-8 border-l-transparent
+                  group-hover:border-l-primary
+                  transition
+                "
               >
                 {{ firstName + " " + lastName }}
               </td>
@@ -212,7 +237,13 @@ export default {
               >
                 <ExpandIcon
                   @click="previewApplication(index)"
-                  class="text-text-400 w-5 stroke-2 group-hover:text-primary cursor-pointer"
+                  class="
+                    text-text-400
+                    w-5
+                    stroke-2
+                    group-hover:text-primary
+                    cursor-pointer
+                  "
                 />
               </td>
             </tr>

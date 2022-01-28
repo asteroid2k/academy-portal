@@ -33,7 +33,7 @@ export default {
       if (!this.user.isApproved) {
         return "09.09.22";
       }
-      return this.user.isApproved ? "approved" : "pending";
+      return this.user.isApproved;
     },
   },
   methods: {
@@ -49,14 +49,14 @@ export default {
         }
       } catch (error) {
         if (error.response) {
+          if (error.response.status === 404) {
+            this.$router.push({ name: "Apply" });
+          }
           const { errors, message } = error.response.data;
           if (errors) {
             notyf.error(Object.values(errors)[0]);
           } else if (message) {
             notyf.error(message);
-            if (response.status === 404) {
-              this.$router.push({ name: "Apply" });
-            }
           }
         }
       }
@@ -82,13 +82,20 @@ export default {
       </div>
       <div class="app-date" id="box-2">
         <p class="app-head">Application Status</p>
-        <p class="date" v-if="user.isApproved">Approved</p>
-        <p class="date" v-else>Pending</p>
+        <p class="date" v-if="user.isApproved == 'approved'">Approved</p>
+        <p class="date" v-else-if="user.isApproved == 'pending'">Pending</p>
+        <p class="date" v-else>Declined</p>
+
         <div class="line" :class="approvedColor"></div>
-        <p class="app-subhead" v-if="user.isApproved">
+        <p class="app-subhead" v-if="user.isApproved == 'approved'">
           Congratulations, you have been approved
         </p>
-        <p class="app-subhead" v-else>We will get back to you</p>
+        <p class="app-subhead" v-else-if="user.isApproved == 'pending'">
+          We will get back to you
+        </p>
+        <p class="app-subhead" v-else>
+          Sorry, your application has been declined
+        </p>
       </div>
     </div>
     <div class="indicator">
@@ -183,6 +190,10 @@ export default {
 
 .pending {
   background: #f09000;
+}
+
+.declined {
+  background: red;
 }
 
 .update-container {
