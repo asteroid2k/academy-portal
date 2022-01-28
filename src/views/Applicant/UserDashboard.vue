@@ -1,12 +1,51 @@
-
 <script>
-import { mapGetters } from "vuex";
 import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 import Update from "../../components/Update.vue";
+import { notyf } from "../../helpers";
+import { formatDistanceToNow } from "date-fns";
 
 export default {
+  mounted() {
+    this.fetchUser();
+  },
   name: "User",
+  props: { instance: Function },
   components: { Update },
+  computed: {
+    ...mapGetters(["user"]),
+    formatDays() {
+      return formatDistanceToNow(new Date(this.user.created_at));
+    },
+    approvedColor() {
+      return this.user.isApproved ? "approved" : "pending";
+    },
+  },
+  methods: {
+    ...mapActions(["storeUser"]),
+    async fetchUser() {
+      try {
+        let resp = await this.instance.get("/applications/user");
+
+        if (resp.data) {
+          const { data } = resp;
+          console.log(data);
+          this.storeUser(data.application);
+          console.log(getDate());
+        }
+      } catch ({ response }) {
+        const { errors, message } = response.data;
+        if (errors) {
+          notyf.error(Object.values(errors)[0]);
+        } else if (message) {
+          notyf.error(message);
+          if (response.status === 404) {
+            this.$router.push({ name: "Apply" });
+          }
+        }
+      }
+    },
+  },
 };
 </script>
 <template>
@@ -19,15 +58,23 @@ export default {
     <div class="stats">
       <div class="app-date" id="box-1">
         <p class="app-head">Date of Application</p>
-        <p class="date">09.09.19</p>
+        <p class="date">
+          {{ user.created_at.substring(2, 10).split("-").reverse().join(".") }}
+        </p>
         <div class="line"></div>
-        <p class="app-subhead">4 days since applied</p>
+        <p class="app-subhead">{{ formatDays }} since applied</p>
       </div>
       <div class="app-date" id="box-2">
         <p class="app-head">Application Status</p>
-        <p class="date">Pending</p>
-        <div id="line2" class="line"></div>
-        <p class="app-subhead">We will get back to you</p>
+        <p :class="approved" class="date" v-if="user.isApproved">Approved</p>
+        <p :class="pending" class="date" v-else>Pending</p>
+        <div class="line" :class="approvedColor"></div>
+        <p :class="approved" class="app-subhead" v-if="user.isApproved">
+          Congratulations, you have been approved
+        </p>
+        <p :class="pending" class="app-subhead" v-else>
+          We will get back to you
+        </p>
       </div>
     </div>
     <div class="indicator">
@@ -79,7 +126,7 @@ export default {
 
 .stats {
   margin: 60px 0px;
-  width: 50%;
+  width: 55%;
   display: flex;
   justify-content: space-between;
 }
@@ -97,8 +144,8 @@ export default {
   font-size: 48px;
   margin: 10px 0px 20px;
   line-height: 58px;
-  color: #2b3c4e;
 }
+
 .app-subhead {
   font-weight: normal;
   font-size: 12px;
@@ -116,9 +163,14 @@ export default {
   border-radius: 4px;
 }
 
-#line2 {
+.approved {
+  background: green;
+}
+
+.pending {
   background: #f09000;
 }
+
 .update-container {
   display: flex;
   justify-content: space-between;
