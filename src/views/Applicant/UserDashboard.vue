@@ -49,14 +49,16 @@ export default {
         }
       } catch (error) {
         if (error.response) {
+          if (error.response.status === 404) {
+            this.$router.push({ name: "Apply" });
+            notyf.open({ type: "purp", message: "Create an application" });
+            return;
+          }
           const { errors, message } = error.response.data;
           if (errors) {
             notyf.error(Object.values(errors)[0]);
           } else if (message) {
             notyf.error(message);
-            if (response.status === 404) {
-              this.$router.push({ name: "Apply" });
-            }
           }
         }
       }

@@ -37,16 +37,17 @@ export default {
     async fetchBatch() {
       try {
         let resp = await this.instance.get("/batch");
-        const { data } = resp;
-        if (data) {
+        if (resp.data) {
           this.storeBatches(data.batches);
         }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        if (errors) {
-          notyf.error(Object.values(errors));
-        } else if (message) {
-          notyf.error(message);
+      } catch (error) {
+        if (error.response) {
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors));
+          } else if (message) {
+            notyf.error(message);
+          }
         }
       }
     },
@@ -56,12 +57,14 @@ export default {
         if (resp.data) {
           this.storeUser(resp.data.user);
         }
-      } catch ({ response }) {
-        const { errors, message } = response.data;
-        if (errors) {
-          notyf.error(Object.values(errors));
-        } else if (message) {
-          notyf.error(message);
+      } catch (error) {
+        if (error.response) {
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors));
+          } else if (message) {
+            notyf.error(message);
+          }
         }
       }
     },

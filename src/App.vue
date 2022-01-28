@@ -1,9 +1,13 @@
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
 import Navbar from "./components/Navbar.vue";
+import { notyf } from "./helpers";
 
 export default {
+  async mounted() {
+    await this.fetchBatch();
+  },
   name: "App",
   components: {
     Navbar,
@@ -16,6 +20,29 @@ export default {
         timeout: 10000,
         headers: { Authorization: `token ${this.token}` },
       });
+    },
+  },
+  methods: {
+    ...mapActions(["storeBatch"]),
+    async fetchBatch() {
+      try {
+        let resp = await this.instance.get("/batch?ongoing=true");
+        if (resp.data) {
+          const { data } = resp;
+          if (data.batches[0]) {
+            this.storeBatch(data.batches[0]);
+          }
+        }
+      } catch (error) {
+        if (error.response) {
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
+        }
+      }
     },
   },
 };
