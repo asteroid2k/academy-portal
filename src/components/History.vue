@@ -9,48 +9,15 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
+import { notyf } from "../helpers";
 
 export default {
   name: "History",
-  setup() {
-    // make historys variable reactive with the ref() function
-    const historys = ref([
-      {
-        batchNo: "Academy Batch 1",
-        noOfStudents: "15 students",
-        appDate: "started 11/09/15",
-      },
-      {
-        batchNo: "Academy Batch 1",
-        noOfStudents: "15 students",
-        appDate: "started 11/09/15",
-      },
-      {
-        batchNo: "Academy Batch 1",
-        noOfStudents: "15 students",
-        appDate: "started 11/09/15",
-      },
-      {
-        batchNo: "Academy Batch 1",
-        noOfStudents: "15 students",
-        appDate: "started 11/09/15",
-      },
-      {
-        batchNo: "Academy Batch 1",
-        noOfStudents: "15 students",
-        appDate: "started 11/09/15",
-      },
-      {
-        batchNo: "Academy Batch 1",
-        noOfStudents: "15 students",
-        appDate: "started 11/09/15",
-      },
-    ]);
-
-    return {
-      historys,
-    };
+  props: { instance: Function },
+  computed: {
+    ...mapGetters(["batch"]),
   },
 };
 </script>

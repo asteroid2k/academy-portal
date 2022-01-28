@@ -33,21 +33,38 @@ export default {
           <p class="app-subhead">So far</p>
         </div>
       </div>
-      <div class="update-container">
-        <div class="category-box">
-          <p class="update-head">History</p>
-          <p class="app-subhead">Last Update 18:24, 22/02/19</p>
-          <History />
-        </div>
-        <div class="category-box" id="create-assess">
-          <p class="update-head">Create Assessment</p>
-          <p class="assess-description">
-            Create test question for an incoming academy students
-          </p>
-          <router-link to="/assessment"
-            ><button class="assessment">Create Assessment</button></router-link
-          >
-        </div>
+      <div class="box" id="box-2">
+        <p class="app-head">Total Applications</p>
+        <p class="app-stats">{{ sumAllApplications }}</p>
+        <div id="line2" class="line"></div>
+        <p class="app-subhead">All entries do far</p>
+      </div>
+      <div class="box" id="box-3">
+        <p class="app-head">Academy’s</p>
+        <p class="app-stats">{{ batch.length }}</p>
+        <div id="line3" class="line"></div>
+        <p class="app-subhead">So far</p>
+      </div>
+    </div>
+    <div class="indicator">
+      <a href="#box-1">•</a>
+      <a href="#box-2">•</a>
+      <a href="#box-3">•</a>
+    </div>
+    <div class="update-container">
+      <div class="category-box">
+        <p class="update-head">History</p>
+        <p class="app-subhead">Last Update 18:24, 22/02/19</p>
+        <History />
+      </div>
+      <div class="category-box" id="create-assess">
+        <p class="update-head">Create Assessment</p>
+        <p class="assess-description">
+          Create test question for an incoming academy students
+        </p>
+        <router-link to="/admin-dashboard/assessment"
+          ><button class="assessment">Create Assessment</button></router-link
+        >
       </div>
     </div>
   </div>
