@@ -2,68 +2,170 @@
   <div class="view">
     <div class="header">
       <p class="head">Profiles Setting</p>
-      <button class="edit-button">Edit</button>
+      <button class="edit-button" @click="disabled = !disabled">Edit</button>
     </div>
-    <div class="upload-container">
-      <img src="../assets/account.svg" />
-      <input class="upload-link" value="Upload new image" />
-      <p class="close-link"><img src="../assets/close.svg" />Remove</p>
-    </div>
-    <form class="form-view">
+    <Form class="form-view" :validation-schema="schema" @submit="handleSubmit">
+      <div class="upload-container">
+        <img src="../assets/account.svg" />
+        <label for="image" class="underline">Upload new image</label>
+        <Field
+          class="upload-link sr-only"
+          name="image"
+          type="file"
+          id="image"
+        />
+        <ErrorMessage name="image" class="text-red-600 text-xs pt-1 px-2" />
+
+        <p class="close-link"><img src="../assets/close.svg" />Remove</p>
+      </div>
       <div class="top-form">
         <div class="short-box">
           <label for="name">Name</label><br />
-          <input type="text" id="name" name="name" value="Cameron Williamson" />
+          <Field
+            :disabled="disabled"
+            class="input"
+            type="text"
+            id="name"
+            name="name"
+            :value="user.firstName + '' + user.lastName"
+          />
+          <ErrorMessage name="name" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div class="short-box">
           <label for="email">Email</label><br />
-          <input
+          <Field
+            :disabled="disabled"
+            class="input"
             type="email"
             id="email"
             name="email"
-            value="debra.holt@example.com"
+            :value="user.email"
           />
+          <ErrorMessage name="email" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div class="short-box">
-          <label for="phoneNumber">Phone number</label><br />
-          <input
+          <label for="phone">Phone number</label><br />
+          <Field
+            :disabled="disabled"
+            class="input"
             type="text"
-            id="phone-number"
-            name="phoneNumber"
-            value="(303) 555-0105"
+            id="phone"
+            name="phone"
+            :value="user.phone"
           />
+          <ErrorMessage name="phone" class="text-red-600 text-xs pt-1 px-2" />
         </div>
       </div>
       <div class="bottom-form">
         <div class="short-box">
           <label for="country">Country</label>
           <br />
-          <select id="country" name="country">
-            <option value="australia">Afghanistan</option>
-            <option value="canada">Sierra Leone</option>
-            <option value="usa">Ghana</option>
-          </select>
+          <Field
+            :disabled="disabled"
+            class="input"
+            name="country"
+            id="country"
+            :value="user.country"
+          />
+          <ErrorMessage name="country" class="text-red-600 text-xs pt-1 px-2" />
         </div>
         <div class="long-box">
           <label for="address">Address</label>
           <br />
-          <input
+          <Field
+            :disabled="disabled"
+            class="input"
             type="text"
             id="address"
             name="address"
-            value="3891 Ranchview Dr. Richardson, California 62639"
+            :value="user.address"
           />
+          <ErrorMessage name="address" class="text-red-600 text-xs pt-1 px-2" />
         </div>
       </div>
       <div class="button">
-        <input type="submit" id="save-button" value="Save" />
+        <button type="submit" id="save-button">Save</button>
       </div>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script>
-export default {};
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { mapGetters } from "vuex";
+import { object, string } from "yup";
+import { notyf, validators } from "../helpers";
+export default {
+  name: "Profile",
+  props: { instance: Function },
+  components: { Form, Field, ErrorMessage },
+  data() {
+    const schema = object({
+      name: validators.nameR,
+      email: validators.email,
+      country: string().required("Enter country"),
+      address: string().required("Enter address"),
+      phone: string().required("Enter phone").min(9),
+      image: validators.image,
+    });
+    return {
+      schema,
+      disabled: true,
+    };
+  },
+  computed: {
+    ...mapGetters(["user"]),
+  },
+  methods: {
+    async handleSubmit(values) {
+      if (this.disabled) {
+        notyf.open({ type: "purp", message: "Enabled edit" });
+        return;
+      }
+      const formData = new FormData();
+      for (const key in values) {
+        if (key === "image") {
+          continue;
+        }
+        formData.append(key, values[key]);
+      }
+      if (values.image) {
+        formData.append("image", values.image[0], values.image[0].name);
+      }
+      try {
+        let response = await this.instance.patch("/user", formData);
+        if (response.data) {
+          const { data } = response;
+          notyf.success(data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        // when error has response
+        if (error.response) {
+          const { data, status, statusText } = error.response;
+          if (status === 401 || status === 403) {
+            notyf.error(statusText);
+            this.$router.push({ name: "AdminSignin" });
+            return;
+          }
+          if (data.message) {
+            notyf.error(data.message);
+            return;
+          }
+          //validation errors
+          if (data.errors) {
+            notyf.error(Object.values(data.errors)[0]);
+            return;
+          }
+          // other errors
+          notyf.error("A problem occured");
+        } else {
+          notyf.error("A problem occured");
+        }
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -143,14 +245,19 @@ export default {};
   margin-bottom: 40px;
   justify-content: space-between;
 }
-#name,
-#email,
-#phone-number,
-#country {
-  width: 100%;
+.input {
   outline: none;
-  border: none;
+  border: 1px solid transparent;
   background: rgba(117, 87, 211, 0.04);
+  padding-block: 15px;
+  padding-left: 15px;
+}
+.input:enabled {
+  border: 1px solid var(--primary);
+  background-color: white;
+}
+.input:disabled {
+  cursor: not-allowed;
 }
 
 .short-box {
@@ -184,6 +291,9 @@ export default {};
 .button {
   width: 100%;
   text-align: center;
+}
+label {
+  color: rgba(51, 55, 88, 0.5);
 }
 @media screen and (max-width: 992px) {
   .upload-container {
