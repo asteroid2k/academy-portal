@@ -26,9 +26,15 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["batch"]),
+    ...mapGetters(["batch", "user"]),
     question() {
       return this.questions[this.current - 1];
+    },
+    approved() {
+      if (this.user && this.user.isApproved === "approved") {
+        return true;
+      }
+      return false;
     },
   },
   methods: {
@@ -152,10 +158,17 @@ export default {
         </p>
       </div>
     </div>
-    <div v-if="!confirmed" class="text-center">
-      <p v-if="questions.length > 0">
+    <div v-if="!confirmed" class="text-center mt-[160px]">
+      <p v-if="questions.length > 0 && approved">
         You are about to take your assessment. <br />
         Your timer will start when you click the button
+      </p>
+      <p
+        v-else-if="questions.length > 0 && !approved"
+        class="text-lg font-semibold"
+      >
+        Attention!<br />
+        Your application must be approved before you can take an assessment.
       </p>
       <div v-else class="max-w-[350px] mx-auto">
         <img
@@ -170,7 +183,7 @@ export default {
       </div>
       <button
         class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
-        :disabled="questions.length <= 0"
+        :disabled="questions.length <= 0 || !approved"
         @click="confirm"
       >
         Take Assessment
