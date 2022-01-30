@@ -1,7 +1,5 @@
 <script>
-import axios from "axios";
-import { mapActions, mapGetters } from "vuex";
-import { notyf } from "../helpers";
+import { mapGetters } from "vuex";
 
 export default {
   name: "History",
@@ -15,10 +13,13 @@ export default {
 
 <template>
   <div class="container">
-    <div class="historys" v-for="history in historys" :key="history.id">
-      <p>{{ history.batchNo }}</p>
-      <p>{{ history.noOfStudents }}</p>
-      <p>{{ history.appDate }}</p>
+    <div class="elements" v-for="element in batch" :key="element.id">
+      <p>{{ element.name }}</p>
+      <p>{{ element.app_count }} students</p>
+      <p>
+        started at
+        {{ element.started_at.substring(2, 10).split("-").reverse().join("/") }}
+      </p>
     </div>
   </div>
 </template>
@@ -30,11 +31,11 @@ export default {
   height: 225px;
   overflow-y: auto;
 }
-.historys {
+.elements {
   display: flex;
   text-align: center;
-  justify-content: space-between;
-  padding: 25px;
+  justify-content: space-evenly;
+  padding: 22px 0px;
   font-weight: normal;
   font-size: 16px;
   line-height: 22px;
@@ -42,13 +43,13 @@ export default {
   color: #4f4f4f;
 }
 
-.historys:hover {
+.elements:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
   border-radius: 8px;
   border-left: 7px solid var(--primary);
 }
 @media screen and (max-width: 992px) {
-  .historys {
+  .elements {
     justify-content: space-evenly;
     padding: 15px 0px;
     font-size: 12px;
