@@ -8,6 +8,9 @@ export default {
   async mounted() {
     await this.fetchAssessment();
   },
+  destroyed() {
+    clearInterval(this.intv);
+  },
   props: { instance: Function },
   components: {
     CubeTransparentIcon,
@@ -20,6 +23,11 @@ export default {
       answers: [],
       answer: "",
       isSubmitting: false,
+      intv: {},
+      duration: 0,
+      timer: 0,
+      endTime: 0,
+      isWarned: false,
     };
   },
   watch: {
@@ -43,8 +51,36 @@ export default {
     },
   },
   methods: {
+    startTimer() {
+      notyf.open({ type: "purp", message: "Timer Started. Goodluck" });
+      this.endTime = new Date(
+        new Date().getTime() + parseInt(this.duration - 28) * 60000
+      );
+      this.intv = setInterval(this.trackTimer, 1000);
+    },
+    trackTimer() {
+      this.timer = new Date(this.endTime - new Date());
+      if (this.timer.getMinutes() <= 5 && !this.isWarned) {
+        notyf.open({
+          type: "info",
+          message: "You have less than 5 minutes. Finish hard",
+        });
+        this.isWarned = true;
+      }
+      if (this.timer.getTime() <= 2000) {
+        notyf.error("Time Up");
+        clearInterval(this.intv);
+        notyf.open({
+          type: "info",
+          message: "Assessment will be submitted automatically",
+        });
+        this.timer = null;
+        this.handleSubmit();
+      }
+    },
     confirm() {
       this.confirmed = true;
+      this.startTimer();
     },
     addAnswer() {
       this.answers[this.current - 1] = {
@@ -70,8 +106,13 @@ export default {
           `/assessment/${this.batch._id}`
         );
         if (response.data) {
-          const { assessment } = response.data;
+          const { assessment, taken } = response.data;
+          if (taken) {
+            notyf.open({ type: "purp", message: "Assessment already taken" });
+            this.$router.push({ name: "UserDashboard" });
+          }
           this.questions = assessment.questions;
+          this.duration = assessment.time_allocated;
         }
       } catch (error) {
         if (error.response) {
@@ -102,7 +143,9 @@ export default {
     },
     async handleSubmit() {
       this.isSubmitting = true;
-      this.addAnswer();
+      if (this.answer) {
+        this.addAnswer();
+      }
       try {
         let response = await this.instance.post(
           `/assessment/${this.batch._id}`,
@@ -155,9 +198,12 @@ export default {
       <div class="timer">
         <p class="text-sm">Timer</p>
         <p class="text-xs">
-          <span class="min text-5xl font-light">00</span>min<span
-            class="sec text-5xl font-light"
-            >010</span
+          <span class="min text-5xl font-light">{{
+            (timer && timer.getMinutes()) || " 00"
+          }}</span
+          >min<span class="sec text-5xl font-light">{{
+            (timer && timer.getSeconds()) || "00"
+          }}</span
           >sec
         </p>
       </div>

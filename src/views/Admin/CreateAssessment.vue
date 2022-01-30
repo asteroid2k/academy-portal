@@ -79,7 +79,9 @@ export default {
     },
 
     async handleSubmit() {
-      this.addQuestion();
+      if (this.question) {
+        this.addQuestion();
+      }
       if (!this.batch.slug) {
         notyf.error("No ongoing batch/application");
         return;
