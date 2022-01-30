@@ -3,6 +3,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { object } from "yup";
 import { notyf, validators } from "../../helpers";
 import { mapActions } from "vuex";
+import { CubeTransparentIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "Signin",
@@ -11,6 +12,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    CubeTransparentIcon,
   },
   data() {
     const schema = object({
@@ -20,12 +22,14 @@ export default {
     return {
       schema,
       error: "",
+      isSubmitting: false,
     };
   },
   methods: {
     ...mapActions(["storeToken"]),
     async handleSubmit(values) {
       this.error = "";
+      this.isSubmitting = true;
 
       try {
         let response = await this.instance.post("/auth/signin", values);
@@ -37,27 +41,25 @@ export default {
           this.$router.push({ name: "UserDashboard" });
         }
       } catch (error) {
-        console.log(error.response);
         // when error has response
         if (error.response) {
           const { data, status } = error.response;
           if (data.message) {
             notyf.error(data.message);
             this.error = data.message;
-            return;
           }
           //validation errors
-          if (data.errors) {
+          else if (data.errors) {
             notyf.error(Object.values(data.errors)[0]);
             this.error = Object.values(data.errors)[0];
-            return;
           }
           // other errors
-          notyf.error("A problem occured");
+          else notyf.error("A problem occured");
         } else {
           notyf.error("A problem occured");
         }
       }
+      this.isSubmitting = false;
     },
   },
 };
@@ -91,7 +93,13 @@ export default {
         <ErrorMessage name="password" class="text-red-600 text-xs pt-1 px-2" />
       </div>
 
-      <button type="submit">Sign In</button>
+      <button type="submit" class="dis" :disabled="isSubmitting">
+        <span v-show="!isSubmitting">Sign In</span>
+        <span v-show="isSubmitting"
+          ><CubeTransparentIcon
+            class="w-6 aspect-square text-white mx-auto animate-spin"
+        /></span>
+      </button>
 
       <div class="login-footer">
         <p>

@@ -1,6 +1,7 @@
 <script>
 import { notyf } from "../../helpers";
 import { mapGetters } from "vuex";
+import { CubeTransparentIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "Assessment",
@@ -8,6 +9,9 @@ export default {
     await this.fetchAssessment();
   },
   props: { instance: Function },
+  components: {
+    CubeTransparentIcon,
+  },
   data() {
     return {
       current: 1,
@@ -15,6 +19,7 @@ export default {
       questions: [],
       answers: [],
       answer: "",
+      isSubmitting: false,
     };
   },
   watch: {
@@ -96,6 +101,7 @@ export default {
       }
     },
     async handleSubmit() {
+      this.isSubmitting = true;
       this.addAnswer();
       try {
         let response = await this.instance.post(
@@ -108,6 +114,7 @@ export default {
         if (response.data) {
           const { message, batch } = response.data;
           notyf.success(message);
+          this.$router.push({ name: "Success" });
         }
       } catch (error) {
         // when error has response
@@ -116,23 +123,20 @@ export default {
           if (status === 401 || status === 403) {
             notyf.error(statusText);
             this.$router.push({ name: "AdminSignin" });
-            return;
-          }
-          if (data.message) {
+          } else if (data.message) {
             notyf.error(data.message);
-            return;
           }
           //validation errors
-          if (data.errors) {
+          else if (data.errors) {
             notyf.error(Object.values(data.errors)[0]);
-            return;
           }
           // other errors
-          notyf.error("A problem occured");
+          else notyf.error("A problem occured");
         } else {
           notyf.error("A problem occured");
         }
       }
+      this.isSubmitting = false;
     },
   },
 };
@@ -182,7 +186,7 @@ export default {
         </p>
       </div>
       <button
-        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
+        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 dis font-bold rounded"
         :disabled="questions.length <= 0 || !approved"
         @click="confirm"
       >
@@ -228,7 +232,7 @@ export default {
       <div class="flex gap-4 justify-between max-w-[600px] mt-[80px] mx-auto">
         <button
           @click="previous"
-          class="w-[125px] border border-black/20 h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          class="w-[125px] border border-black/20 h-10 font-bold dis rounded"
           :disabled="current <= 1"
         >
           Prev
@@ -236,7 +240,7 @@ export default {
 
         <button
           @click="addAnswer"
-          class="w-[125px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          class="w-[125px] bg-primary text-white h-10 font-bold dis rounded"
           :disabled="current >= questions.length"
         >
           Next
@@ -245,10 +249,14 @@ export default {
       <!-- Finish button -->
       <button
         @click="handleSubmit"
-        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed mx-auto"
-        :disabled="current < questions.length"
+        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold rounded dis mx-auto"
+        :disabled="current < questions.length || isSubmitting"
       >
-        Finish
+        <span v-show="!isSubmitting">Finish</span>
+        <span v-show="isSubmitting"
+          ><CubeTransparentIcon
+            class="w-6 aspect-square text-white mx-auto animate-spin"
+        /></span>
       </button>
     </section>
   </div>

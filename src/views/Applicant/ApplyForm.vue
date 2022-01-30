@@ -3,6 +3,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { object } from "yup";
 import { notyf, validators } from "../../helpers.js";
 import { mapGetters, mapState } from "vuex";
+import { CubeTransparentIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "ApplyForm",
@@ -12,6 +13,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    CubeTransparentIcon,
   },
   //check for available batch
   mounted() {
@@ -31,6 +33,7 @@ export default {
       schema,
       files: { cv: "", image: "" },
       prePop: { firstName: "", lastName: "", email: "" },
+      isSubmitting: false,
     };
   },
   computed: {
@@ -38,6 +41,9 @@ export default {
     ...mapGetters(["batch"]),
   },
   methods: {
+    toggleSubmitting() {
+      this.isSubmitting = !this.isSubmitting;
+    },
     fileChange(e) {
       const input = e.target;
       if (input.files) {
@@ -48,6 +54,7 @@ export default {
       }
     },
     async handleSubmit(values) {
+      this.toggleSubmitting();
       const formData = new FormData();
       for (const key in values) {
         if (key === "image" || key === "cv") {
@@ -70,6 +77,7 @@ export default {
         if (response.data) {
           const { message } = response.data;
           notyf.success(message);
+          this.$router.push({ name: "UserDashboard" });
         }
       } catch (error) {
         //if the error has a response it is from the backend
@@ -78,15 +86,16 @@ export default {
             const { errors, message } = error.response.data;
             if (errors) {
               notyf.error(Object.values(errors)[0]);
-            } else if (message) {
+            }
+            if (message) {
               notyf.error(message);
             }
           }
         } else {
-          console.log(error);
           notyf.error("An error occured");
         }
       }
+      this.toggleSubmitting();
     },
   },
 };
@@ -226,10 +235,15 @@ export default {
         </div>
       </div>
       <button
-        class="mt-11 rounded font-bold text-base block max-w-[380px] w-full bg-primary text-white h-12 mx-auto"
+        class="mt-11 rounded font-bold text-base block max-w-[380px] w-full bg-primary text-white h-12 mx-auto dis"
         type="submit"
+        :disabled="isSubmitting"
       >
-        Submit
+        <span v-show="!isSubmitting">Submit</span>
+        <span v-show="isSubmitting"
+          ><CubeTransparentIcon
+            class="w-6 aspect-square text-white mx-auto animate-spin"
+        /></span>
       </button>
     </Form>
   </div>

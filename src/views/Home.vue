@@ -35,9 +35,13 @@ export default {
       <div class="nav">
         <div class="nav-wrapper">
           <nav>
-            <a>Home</a>
-            <a><router-link to="/signin">Sign In</router-link></a>
-            <router-link to="/signup">
+            <router-link class="hover:text-primary" :to="{ name: 'Home' }"
+              >Home</router-link
+            >
+            <router-link class="hover:text-primary" :to="{ name: 'Signin' }"
+              >Sign In</router-link
+            >
+            <router-link :to="{ name: 'Signup' }">
               <button
                 class="reg-button disabled:cursor-not-allowed disabled:opacity-60"
                 :disabled="isDisabled"

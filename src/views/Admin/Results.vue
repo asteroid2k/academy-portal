@@ -45,18 +45,25 @@ export default {
             </th>
             <th>Test Scores</th>
           </tr>
+          <tr>
+            <td class="py-[10px]"></td>
+          </tr>
           <tr
             v-for="user in filterUserByBatch"
             :key="user.id"
-            class="table-body"
+            class="table-body light-shadow group transition"
           >
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.dob }}</td>
-            <td>{{ user.address }}</td>
-            <td>{{ user.university }}</td>
-            <td>{{ user.cgpa }}</td>
-            <td>{{ user.testScore }}</td>
+            <td
+              class="rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition pl-3"
+            >
+              {{ user.name }}
+            </td>
+            <td class="td">{{ user.email }}</td>
+            <td class="td">{{ user.dob }}</td>
+            <td class="td">{{ user.address }}</td>
+            <td class="td">{{ user.university }}</td>
+            <td class="td">{{ user.cgpa }}</td>
+            <td class="td">{{ user.testScore }}</td>
           </tr>
         </table>
       </div>
@@ -96,7 +103,8 @@ select:focus {
   line-height: 19px;
 }
 #assessments {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   position: relative;
   width: 100%;
   font-size: 14px;
@@ -109,11 +117,11 @@ select:focus {
   background: #2b3c4e;
 }
 
-td {
+.td {
   padding: 20px 0px;
   text-align: center;
 }
-.table-body:hover {
+/* .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
     7px 0px 0px 0px var(--primary) inset;
   border-radius: 7px;
@@ -121,7 +129,7 @@ td {
 .table-body {
   position: relative;
   top: 28px;
-}
+} */
 .table-frame {
   height: 476px;
   background: #ffffff;

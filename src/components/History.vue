@@ -45,7 +45,6 @@ export default {
 };
 </script>
 
-
 <template>
   <div class="container">
     <div class="historys" v-for="history in historys" :key="history.id">
@@ -55,7 +54,6 @@ export default {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .container {
@@ -73,6 +71,7 @@ export default {
   line-height: 22px;
   text-align: center;
   color: #4f4f4f;
+  border-left: 7px solid transparent;
 }
 
 .historys:hover {

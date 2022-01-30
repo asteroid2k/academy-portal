@@ -91,12 +91,23 @@ export default {
               <th>Time Allocated</th>
               <th>Status</th>
             </tr>
-            <tr v-for="batch in batches" :key="batch.id" class="table-body">
-              <td>{{ batch.batch }}</td>
-              <td>{{ batch.dateComposed }}</td>
-              <td>{{ batch.noOfQuestions }}</td>
-              <td>{{ batch.timeAllocated }}</td>
-              <td>{{ batch.status }}</td>
+            <tr>
+              <td class="py-3"></td>
+            </tr>
+            <tr
+              v-for="batch in batches"
+              :key="batch.id"
+              class="table-body light-shadow group transition"
+            >
+              <td
+                class="td rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
+              >
+                {{ batch.batch }}
+              </td>
+              <td class="td">{{ batch.dateComposed }}</td>
+              <td class="td">{{ batch.noOfQuestions }}</td>
+              <td class="td">{{ batch.timeAllocated }}</td>
+              <td class="td">{{ batch.status }}</td>
             </tr>
           </table>
         </div>
@@ -123,7 +134,8 @@ export default {
 }
 
 #assessments {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   position: relative;
   text-align: center;
   width: 100%;
@@ -135,18 +147,18 @@ export default {
   background: #2b3c4e;
 }
 
-td {
+.td {
   padding: 20px 0px;
 }
-.table-body:hover {
+/* .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
     7px 0px 0px 0px var(--primary) inset;
   border-radius: 7px;
-}
-.table-body {
+} */
+/* .table-body {
   position: relative;
   top: 28px;
-}
+} */
 .table-frame {
   height: 476px;
   background: #ffffff;
