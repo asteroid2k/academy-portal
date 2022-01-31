@@ -25,7 +25,7 @@ const store = createStore({
       return state.batch;
     },
     batches(state) {
-      return state.batch;
+      return state.batches;
     },
     user(state) {
       return state.user;
@@ -42,7 +42,7 @@ const store = createStore({
       state.batch = payload;
     },
     SET_BATCHES(state, payload) {
-      state.batch = payload;
+      state.batches = payload;
     },
     SET_INFO(state, payload) {
       state.info = payload;

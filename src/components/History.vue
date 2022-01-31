@@ -5,19 +5,22 @@ export default {
   name: "History",
   props: { instance: Function },
   computed: {
-    ...mapGetters(["batch"]),
+    ...mapGetters(["batches"]),
   },
 };
 </script>
 
 <template>
   <div class="container">
-    <div class="elements" v-for="element in batch" :key="element.id">
-      <p>{{ element.name }}</p>
+    <div class="elements" v-for="element in batches" :key="element.id">
+      <p>{{ element.slug }}</p>
       <p>{{ element.app_count }} students</p>
       <p>
         started at
-        {{ element.started_at.substring(2, 10).split("-").reverse().join("/") }}
+        {{
+          element.started_at &&
+          element.started_at.substring(2, 10).split("-").reverse().join("/")
+        }}
       </p>
     </div>
   </div>
