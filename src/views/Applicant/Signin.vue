@@ -59,6 +59,14 @@ export default {
         }
       }
     },
+    myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
   },
 };
 </script>
@@ -88,6 +96,7 @@ export default {
       <div class="input-group">
         <label for="password">Password</label>
         <Field type="password" name="password" id="password" class="k-input" />
+        <i class="far fa-eye" v-on:click="myFunction()" id="togglePassword"></i>
         <ErrorMessage name="password" class="text-red-600 text-xs pt-1 px-2" />
       </div>
 
@@ -113,6 +122,13 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 22px;
+}
+#togglePassword {
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #4f4f4f;
+  opacity: 0.4;
 }
 body {
   background: #ffffff;
