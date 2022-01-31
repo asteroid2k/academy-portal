@@ -3,6 +3,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { object, string } from "yup";
 import { notyf, validators } from "../../helpers";
 import { mapActions } from "vuex";
+import { CubeTransparentIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "Signup",
@@ -11,6 +12,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    CubeTransparentIcon,
   },
   data() {
     const schema = object({
@@ -19,15 +21,25 @@ export default {
     });
     return {
       schema,
+      isSubmitting: false,
+      password: "",
+      conPassword: "",
     };
+  },
+  computed: {
+    match() {
+      return this.password === this.conPassword ? "" : "Passwords do not match";
+    },
   },
   methods: {
     ...mapActions(["storeToken", "storeInfo"]),
     async handleSubmit(values) {
-      if (values.password != values.conPassword) {
-        notyf.error("Passwords don't match");
-        return;
-      }
+      this.isSubmitting = true;
+      // if (values.password != values.conPassword) {
+      //   notyf.error("Passwords don't match");
+      //   this.isSubmitting = false;
+      //   return;
+      // }
       try {
         let resp = await this.instance.post("/auth/signup", values);
         if (resp.data) {
@@ -45,6 +57,23 @@ export default {
             notyf.error(message);
           }
         }
+      }
+      this.isSubmitting = false;
+    },
+    myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
+    myFunction2() {
+      var x = document.getElementById("conPassword");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
       }
     },
   },
@@ -114,11 +143,16 @@ export default {
           <div class="password">
             <div><label for="password">Password</label></div>
             <Field
-              class="k-input"
               id="password"
               type="password"
               name="password"
+              class="k-input"
             />
+            <i
+              class="far fa-eye"
+              v-on:click="myFunction()"
+              id="togglePassword"
+            ></i>
             <ErrorMessage
               name="password"
               class="flex text-red-600 text-xs pt-1 px-2"
@@ -127,7 +161,17 @@ export default {
           <div class="phone">
             <div class="confirm-password">
               <div><label for="conPassword">Confirm Password</label></div>
-              <Field class="k-input" type="password" name="conPassword" />
+              <Field
+                type="password"
+                name="conPassword"
+                id="conPassword"
+                class="k-input"
+              />
+              <i
+                class="far fa-eye"
+                v-on:click="myFunction2()"
+                id="togglePassword"
+              ></i>
               <ErrorMessage
                 name="conPassword"
                 class="text-red-600 text-xs pt-1 px-2"
@@ -137,7 +181,13 @@ export default {
         </div>
 
         <div class="bt1">
-          <button type="submit" class="sign-up">Sign Up</button>
+          <button type="submit" class="sign-up" :disabled="isSubmitting">
+            <span v-show="!isSubmitting">Sign Up</span>
+            <span v-show="isSubmitting"
+              ><CubeTransparentIcon
+                class="w-6 aspect-square text-white mx-auto animate-spin"
+            /></span>
+          </button>
         </div>
 
         <p class="end">
@@ -157,6 +207,13 @@ export default {
 .logo {
   display: flex;
   justify-content: center;
+}
+#togglePassword {
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #4f4f4f;
+  opacity: 0.4;
 }
 .logo img {
   width: 110.1px;

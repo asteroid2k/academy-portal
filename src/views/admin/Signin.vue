@@ -42,6 +42,14 @@ export default {
         }
       }
     },
+    myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
   },
 };
 </script>
@@ -77,6 +85,12 @@ export default {
             id="password"
             class="border-2 border-white h-12 w-full rounded bg-transparent p-3"
           />
+          <i
+            class="far fa-eye"
+            v-on:click="myFunction()"
+            id="togglePassword"
+          ></i>
+
           <ErrorMessage
             name="password"
             class="text-red-300 text-xs pt-1 px-2"
@@ -84,7 +98,16 @@ export default {
         </div>
         <button
           type="submit"
-          class="k-button w-full h-[50px] bg-white text-primary rounded text-base font-bold"
+          class="
+            k-button
+            w-full
+            h-[50px]
+            bg-white
+            text-primary
+            rounded
+            text-base
+            font-bold
+          "
         >
           Sign In
         </button>
@@ -103,6 +126,13 @@ export default {
 #form {
   width: 400px;
   padding: 20px;
+}
+#togglePassword {
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #ffffff;
+  opacity: 0.6;
 }
 @media screen and (max-width: 992px) {
   .main {

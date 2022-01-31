@@ -23,11 +23,13 @@ export const notyf = new Notyf({
 });
 
 export const validators = {
-  email: string().required().email("Provide a valid email"),
-  password: string().required().min(8),
-  nameR: string().required().min(2),
+  email: string()
+    .required("Provide an email address")
+    .email("Provide a valid email address"),
+  password: string().required("Enter password").min(8),
+  nameR: string().required("Fill this field").min(2),
   name: string().min(2),
-  gpa: number().required().positive(),
+  gpa: number().required("Fill this field").positive(),
   dob: date().required("Birth date is required").max(new Date()),
   image: mixed()
     .test("fileSize", "The file is too large", (value) => {
@@ -53,64 +55,4 @@ export const results = [
     testScore: "15",
     batch: "Batch 3",
   },
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 2",
-  },
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 1",
-  },
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 1",
-  },
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 1",
-  },
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 3",
-  },
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 3",
-  },
-];
+]

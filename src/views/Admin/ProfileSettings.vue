@@ -3,6 +3,8 @@ import Profile from "../../components/Profile.vue";
 import Settings from "../../components/Settings.vue";
 
 export default {
+  props: { instance: Function },
+
   data: function () {
     return {
       tabs: ["Profile", "Settings"],
@@ -33,7 +35,7 @@ export default {
             {{ tab }}
           </button>
         </div>
-        <component :is="selected"></component>
+        <component :instance="instance" :is="selected"></component>
       </div>
     </div>
   </div>

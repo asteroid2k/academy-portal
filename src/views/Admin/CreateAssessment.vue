@@ -72,14 +72,16 @@ export default {
       this.next();
     },
     previous() {
-      if (this.current >= 1) this.current--;
+      if (this.current > 1) this.current--;
     },
     next() {
       if (this.current < 30) this.current++;
     },
 
     async handleSubmit() {
-      this.addQuestion();
+      if (this.question) {
+        this.addQuestion();
+      }
       if (!this.batch.slug) {
         notyf.error("No ongoing batch/application");
         return;

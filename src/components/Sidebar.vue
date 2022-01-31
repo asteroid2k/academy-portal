@@ -51,14 +51,21 @@ export default {
       </div>
       <div class="wrapper">
         <div v-for="(data, index) in routes" :key="index">
-          <router-link class="links-container" :to="{ name: data.routeUrl }">
+          <router-link
+            class="links-container hover:bg-primary/10"
+            :to="{ name: data.routeUrl }"
+          >
             <div class="image-container">
               <img :src="imgUrl(data.image)" class="icons" />
             </div>
             <p class="link">{{ data.routeName }}</p></router-link
           >
         </div>
-        <router-link class="links-container" id="logout" to="/logout">
+        <router-link
+          class="links-container hover:bg-primary/10"
+          id="logout"
+          to="/logout"
+        >
           <div class="image-container">
             <img src="../assets/logout.svg" class="icons" />
           </div>
@@ -78,6 +85,10 @@ export default {
 </template>
 
 <style scoped>
+.router-link-active.router-link-exact-active {
+  border-left: 4px solid var(--primary);
+  font-weight: bold;
+}
 .entire-page {
   width: 100%;
   margin: 0px 0px 0px 290px;
@@ -149,11 +160,12 @@ export default {
   align-items: center;
   padding: 20px 25px;
   text-align: left;
-  border-left: 4px solid white;
+  /* border-left: 2px solid transparent; */
+  transition: all 200ms ease-in;
 }
 .links-container:hover {
-  border-left: 4px solid var(--primary);
-  font-weight: bold;
+  /* border-left: 2px solid var(--primary); */
+  /* font-weight: bold; */
 }
 
 .image-container {

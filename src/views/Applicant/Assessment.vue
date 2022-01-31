@@ -1,13 +1,20 @@
 <script>
 import { notyf } from "../../helpers";
 import { mapGetters } from "vuex";
+import { CubeTransparentIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "Assessment",
   async mounted() {
     await this.fetchAssessment();
   },
+  destroyed() {
+    clearInterval(this.intv);
+  },
   props: { instance: Function },
+  components: {
+    CubeTransparentIcon,
+  },
   data() {
     return {
       current: 1,
@@ -15,6 +22,12 @@ export default {
       questions: [],
       answers: [],
       answer: "",
+      isSubmitting: false,
+      intv: {},
+      duration: 0,
+      timer: 0,
+      endTime: 0,
+      isWarned: false,
     };
   },
   watch: {
@@ -26,14 +39,48 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["batch"]),
+    ...mapGetters(["batch", "user"]),
     question() {
       return this.questions[this.current - 1];
     },
+    approved() {
+      if (this.user && this.user.isApproved === "approved") {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
+    startTimer() {
+      notyf.open({ type: "purp", message: "Timer Started. Goodluck" });
+      this.endTime = new Date(
+        new Date().getTime() + parseInt(this.duration - 28) * 60000
+      );
+      this.intv = setInterval(this.trackTimer, 1000);
+    },
+    trackTimer() {
+      this.timer = new Date(this.endTime - new Date());
+      if (this.timer.getMinutes() <= 5 && !this.isWarned) {
+        notyf.open({
+          type: "info",
+          message: "You have less than 5 minutes. Finish hard",
+        });
+        this.isWarned = true;
+      }
+      if (this.timer.getTime() <= 2000) {
+        notyf.error("Time Up");
+        clearInterval(this.intv);
+        notyf.open({
+          type: "info",
+          message: "Assessment will be submitted automatically",
+        });
+        this.timer = null;
+        this.handleSubmit();
+      }
+    },
     confirm() {
       this.confirmed = true;
+      this.startTimer();
     },
     addAnswer() {
       this.answers[this.current - 1] = {
@@ -59,8 +106,13 @@ export default {
           `/assessment/${this.batch._id}`
         );
         if (response.data) {
-          const { assessment } = response.data;
+          const { assessment, taken } = response.data;
+          if (taken) {
+            notyf.open({ type: "purp", message: "Assessment already taken" });
+            this.$router.push({ name: "UserDashboard" });
+          }
           this.questions = assessment.questions;
+          this.duration = assessment.time_allocated;
         }
       } catch (error) {
         if (error.response) {
@@ -90,17 +142,22 @@ export default {
       }
     },
     async handleSubmit() {
-      this.addAnswer();
+      this.isSubmitting = true;
+      if (this.answer) {
+        this.addAnswer();
+      }
       try {
         let response = await this.instance.post(
           `/assessment/${this.batch._id}`,
           {
             answers: this.answers,
+            application: this.user._id,
           }
         );
         if (response.data) {
           const { message, batch } = response.data;
           notyf.success(message);
+          this.$router.push({ name: "Success" });
         }
       } catch (error) {
         // when error has response
@@ -109,23 +166,20 @@ export default {
           if (status === 401 || status === 403) {
             notyf.error(statusText);
             this.$router.push({ name: "AdminSignin" });
-            return;
-          }
-          if (data.message) {
+          } else if (data.message) {
             notyf.error(data.message);
-            return;
           }
           //validation errors
-          if (data.errors) {
+          else if (data.errors) {
             notyf.error(Object.values(data.errors)[0]);
-            return;
           }
           // other errors
-          notyf.error("A problem occured");
+          else notyf.error("A problem occured");
         } else {
           notyf.error("A problem occured");
         }
       }
+      this.isSubmitting = false;
     },
   },
 };
@@ -144,17 +198,27 @@ export default {
       <div class="timer">
         <p class="text-sm">Timer</p>
         <p class="text-xs">
-          <span class="min text-5xl font-light">00</span>min<span
-            class="sec text-5xl font-light"
-            >010</span
+          <span class="min text-5xl font-light">{{
+            (timer && timer.getMinutes()) || " 00"
+          }}</span
+          >min<span class="sec text-5xl font-light">{{
+            (timer && timer.getSeconds()) || "00"
+          }}</span
           >sec
         </p>
       </div>
     </div>
-    <div v-if="!confirmed" class="text-center">
-      <p v-if="questions.length > 0">
+    <div v-if="!confirmed" class="text-center mt-[160px]">
+      <p v-if="questions.length > 0 && approved">
         You are about to take your assessment. <br />
         Your timer will start when you click the button
+      </p>
+      <p
+        v-else-if="questions.length > 0 && !approved"
+        class="text-lg font-semibold"
+      >
+        Attention!<br />
+        Your application must be approved before you can take an assessment.
       </p>
       <div v-else class="max-w-[350px] mx-auto">
         <img
@@ -168,8 +232,8 @@ export default {
         </p>
       </div>
       <button
-        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 disabled:cursor-not-allowed font-bold rounded"
-        :disabled="questions.length <= 0"
+        class="mt-6 px-10 py-2 bg-primary text-white cursor-pointer disabled:bg-neutral-500/80 dis font-bold rounded"
+        :disabled="questions.length <= 0 || !approved"
         @click="confirm"
       >
         Take Assessment
@@ -214,7 +278,7 @@ export default {
       <div class="flex gap-4 justify-between max-w-[600px] mt-[80px] mx-auto">
         <button
           @click="previous"
-          class="w-[125px] border border-black/20 h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          class="w-[125px] border border-black/20 h-10 font-bold dis rounded"
           :disabled="current <= 1"
         >
           Prev
@@ -222,7 +286,7 @@ export default {
 
         <button
           @click="addAnswer"
-          class="w-[125px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed"
+          class="w-[125px] bg-primary text-white h-10 font-bold dis rounded"
           :disabled="current >= questions.length"
         >
           Next
@@ -231,10 +295,14 @@ export default {
       <!-- Finish button -->
       <button
         @click="handleSubmit"
-        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold disabled:opacity-70 rounded disabled:cursor-not-allowed mx-auto"
-        :disabled="current < questions.length"
+        class="block mt-[75px] w-[200px] bg-primary text-white h-10 font-bold rounded dis mx-auto"
+        :disabled="current < questions.length || isSubmitting"
       >
-        Finish
+        <span v-show="!isSubmitting">Finish</span>
+        <span v-show="isSubmitting"
+          ><CubeTransparentIcon
+            class="w-6 aspect-square text-white mx-auto animate-spin"
+        /></span>
       </button>
     </section>
   </div>
