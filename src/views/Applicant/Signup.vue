@@ -47,6 +47,22 @@ export default {
         }
       }
     },
+    myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
+    myFunction2() {
+      var x = document.getElementById("conPassword");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
   },
 };
 </script>
@@ -114,11 +130,16 @@ export default {
           <div class="password">
             <div><label for="password">Password</label></div>
             <Field
-              class="k-input"
               id="password"
               type="password"
               name="password"
+              class="k-input"
             />
+            <i
+              class="far fa-eye"
+              v-on:click="myFunction()"
+              id="togglePassword"
+            ></i>
             <ErrorMessage
               name="password"
               class="flex text-red-600 text-xs pt-1 px-2"
@@ -127,7 +148,17 @@ export default {
           <div class="phone">
             <div class="confirm-password">
               <div><label for="conPassword">Confirm Password</label></div>
-              <Field class="k-input" type="password" name="conPassword" />
+              <Field
+                type="password"
+                name="conPassword"
+                id="conPassword"
+                class="k-input"
+              />
+              <i
+                class="far fa-eye"
+                v-on:click="myFunction2()"
+                id="togglePassword"
+              ></i>
               <ErrorMessage
                 name="conPassword"
                 class="text-red-600 text-xs pt-1 px-2"
@@ -157,6 +188,13 @@ export default {
 .logo {
   display: flex;
   justify-content: center;
+}
+#togglePassword {
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #4f4f4f;
+  opacity: 0.4;
 }
 .logo img {
   width: 110.1px;
