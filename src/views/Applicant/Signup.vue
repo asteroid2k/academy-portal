@@ -3,6 +3,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { object, string } from "yup";
 import { notyf, validators } from "../../helpers";
 import { mapActions } from "vuex";
+import { CubeTransparentIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "Signup",
@@ -11,6 +12,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    CubeTransparentIcon,
   },
   data() {
     const schema = object({
@@ -19,15 +21,25 @@ export default {
     });
     return {
       schema,
+      isSubmitting: false,
+      password: "",
+      conPassword: "",
     };
+  },
+  computed: {
+    match() {
+      return this.password === this.conPassword ? "" : "Passwords do not match";
+    },
   },
   methods: {
     ...mapActions(["storeToken", "storeInfo"]),
     async handleSubmit(values) {
-      if (values.password != values.conPassword) {
-        notyf.error("Passwords don't match");
-        return;
-      }
+      this.isSubmitting = true;
+      // if (values.password != values.conPassword) {
+      //   notyf.error("Passwords don't match");
+      //   this.isSubmitting = false;
+      //   return;
+      // }
       try {
         let resp = await this.instance.post("/auth/signup", values);
         if (resp.data) {
@@ -46,6 +58,7 @@ export default {
           }
         }
       }
+      this.isSubmitting = false;
     },
     myFunction() {
       var x = document.getElementById("password");
@@ -168,7 +181,13 @@ export default {
         </div>
 
         <div class="bt1">
-          <button type="submit" class="sign-up">Sign Up</button>
+          <button type="submit" class="sign-up" :disabled="isSubmitting">
+            <span v-show="!isSubmitting">Sign Up</span>
+            <span v-show="isSubmitting"
+              ><CubeTransparentIcon
+                class="w-6 aspect-square text-white mx-auto animate-spin"
+            /></span>
+          </button>
         </div>
 
         <p class="end">

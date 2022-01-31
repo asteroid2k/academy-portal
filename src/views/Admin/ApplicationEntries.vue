@@ -207,7 +207,7 @@ export default {
               ) in filteredEntries"
               :key="index"
               :data-entry="index"
-              class="text-text-300 hover:shadow-md group transition"
+              class="text-text-300 light-shadow group transition"
             >
               <td
                 class="

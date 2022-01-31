@@ -137,9 +137,14 @@ const routes = [
     },
   },
   {
-    path: "/forgot",
+    path: "/password/forgot",
     name: "Forgot",
     component: () => import("../views/Forgot.vue"),
+  },
+  {
+    path: "/password/reset",
+    name: "Reset",
+    component: () => import("../views/Reset.vue"),
   },
 
   // ADMIN ROUTES

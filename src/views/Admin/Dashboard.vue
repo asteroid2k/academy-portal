@@ -1,17 +1,22 @@
 <script>
-import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import { notyf } from "../../helpers";
 import History from "../../components/History.vue";
+import Loading from "../../components/Loading.vue";
 
 export default {
   async mounted() {
+    this.isLoading = true;
     await this.fetchBatch();
     await this.fetchDetails();
+    this.isLoading = false;
   },
   name: "Admin",
   props: { instance: Function },
-  components: { History },
+  components: { History, Loading },
+  data() {
+    return { isLoading: false };
+  },
   computed: {
     ...mapGetters(["batches"]),
 
@@ -38,7 +43,7 @@ export default {
       try {
         let resp = await this.instance.get("/batch");
         if (resp.data) {
-          this.storeBatches(data.batches);
+          this.storeBatches(resp.data.batches);
         }
       } catch (error) {
         if (error.response) {
@@ -73,7 +78,10 @@ export default {
 </script>
 
 <template>
-  <div class="main-frame">
+  <div
+    :class="`${isLoading ? 'overflow-hidden' : 'overflow-y-auto'} main-frame`"
+  >
+    <Loading v-show="isLoading" />
     <p class="heading">Dashboard</p>
 
     <div class="stats">
@@ -115,7 +123,7 @@ export default {
         <p class="assess-description">
           Create test question for an incoming academy students
         </p>
-        <router-link to="/admin-dashboard/assessment"
+        <router-link :to="{ name: 'CreateAssessment' }"
           ><button class="assessment">Create Assessment</button></router-link
         >
       </div>

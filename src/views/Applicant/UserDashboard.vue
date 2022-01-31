@@ -43,9 +43,7 @@ export default {
         let resp = await this.instance.get("/applications/user");
         if (resp.data) {
           const { data } = resp;
-          console.log(data);
           this.storeUser(data.application);
-          console.log(getDate());
         }
       } catch (error) {
         if (error.response) {

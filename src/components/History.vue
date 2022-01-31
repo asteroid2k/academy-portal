@@ -10,7 +10,6 @@ export default {
 };
 </script>
 
-
 <template>
   <div class="container">
     <div class="elements" v-for="element in batch" :key="element.id">
@@ -23,7 +22,6 @@ export default {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .container {
@@ -41,6 +39,7 @@ export default {
   line-height: 22px;
   text-align: center;
   color: #4f4f4f;
+  border-left: 7px solid transparent;
 }
 
 .elements:hover {
