@@ -29,7 +29,7 @@ body {
     @apply disabled:opacity-60 disabled:cursor-not-allowed;
   }
   .btn-purp {
-    @apply bg-primary text-white hover:bg-primary2 hover:shadow-md shadow-sm rounded;
+    @apply bg-primary text-white hover:bg-primary2 hover:shadow-md shadow-sm rounded transition;
   }
 }
 button {

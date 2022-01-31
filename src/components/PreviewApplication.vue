@@ -15,7 +15,10 @@ export default {
     updateStatus: Function,
   },
   data() {
-    return {};
+    return {
+      confirmOpened: false,
+      action: "",
+    };
   },
   computed: {
     image() {
@@ -42,10 +45,55 @@ export default {
       return color;
     },
   },
+  methods: {
+    setConfirm(value) {
+      this.confirmOpened = value;
+    },
+    triggerConfirm(action) {
+      this.setIsOpen(false);
+      this.action = action;
+      this.setConfirm(true);
+    },
+    confirmAction() {
+      this.updateStatus({ id: this.entry._id, status: this.action + "d" });
+    },
+  },
 };
 </script>
 
 <template>
+  <Dialog
+    :open="confirmOpened"
+    @close="setConfirm"
+    class="fixed inset-0 z-30 grid place-items-center"
+  >
+    <div class="w-full">
+      <DialogOverlay class="absolute min-h-screen inset-0 bg-black/50" />
+      <DialogTitle class="sr-only">Confirm Action</DialogTitle>
+      <div
+        class="relative flex justify-center items-center bg-white p-8 w-[450px] h-[300px] mx-auto rounded"
+      >
+        <div class="flex flex-col gap-12 max-w-[260px] text-center">
+          <p>
+            Are you sure you want to
+            <span class="font-semibold capitalize">{{ action }}</span> this
+            application?
+          </p>
+          <div class="flex gap-4 font-medium">
+            <button @click="confirmAction" class="btn-purp w-[125px] h-12">
+              Yes
+            </button>
+            <button
+              @click="setConfirm(false)"
+              class="text-primary w-[125px] border border-primary/10 h-12 rounded hover:border-primary/50"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Dialog>
   <Dialog :open="isOpen" @close="setIsOpen" class="fixed inset-0">
     <div class="w-full">
       <DialogOverlay class="absolute min-h-screen inset-0 bg-black/50" />
@@ -55,7 +103,7 @@ export default {
         class="preview relative bg-white max-w-[600px] ml-auto pl-[40px] py-[50px] h-screen overflow-y-auto"
       >
         <h2
-          class="text-lg font-bold my-1 uppercase py-2 px-3 border border-gray-100 w-fit shadow-sm rounded-lg"
+          class="text-lg font-bold mb-4 uppercase py-2 px-3 border border-gray-100 w-fit shadow-sm rounded-lg"
           :class="approvedColor"
         >
           {{ entry.isApproved }}
@@ -158,13 +206,13 @@ export default {
         </div>
         <div class="flex mt-12 gap-6 justify-center">
           <button
-            @click="updateStatus({ id: entry._id, status: 'approved' })"
-            class="w-[125px] h-12 bg-primary text-white font-medium rounded"
+            @click="triggerConfirm('approve')"
+            class="w-[125px] h-12 btn-purp text-white font-medium rounded"
           >
             Approve</button
           ><button
-            @click="updateStatus({ id: entry._id, status: 'declined' })"
-            class="w-[125px] h-12 font-medium rounded border border-[#cecece]"
+            @click="triggerConfirm('decline')"
+            class="w-[125px] h-12 font-medium rounded border border-[#cecece] hover:bg-red-50 hover:border-red-400 transition"
           >
             Decline
           </button>
