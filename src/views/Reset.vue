@@ -47,14 +47,20 @@ export default {
 </script>
 
 <template>
-  <section>
-    <h2 class="text-lg font-bold text-center my-5">
+  <section class="my-10">
+    <div
+      class="w-fit mx-auto mb-12 cursor-pointer"
+      @click="$router.push({ name: 'Home' })"
+    >
+      <img src="../assets/logo.svg" width="120" alt="" />
+    </div>
+    <h2 class="text-lg font-bold text-center mb-5">
       Check your inbox for your Reset Code
     </h2>
     <Form
       @submit="handleSubmit"
       :validation-schema="schema"
-      class="flex flex-col gap-4 shadow rounded-lg border-border-100 max-w-[500px] mx-auto py-6 px-8"
+      class="flex flex-col gap-4 shadow rounded-lg border-border-100 max-w-[400px] mx-auto py-6 px-8"
     >
       <div class="flex flex-col gap-1">
         <label class="text-text-200 text-sm" for="code">Code</label>
@@ -89,7 +95,7 @@ export default {
           v-model="conPassword"
         />
         <p class="text-red-600 text-xs pt-1 px-2">
-          {{ match && conPassword ? "" : "Passwords do not match" }}
+          {{ !match && conPassword ? "Passwords do not match" : "" }}
         </p>
       </div>
       <button
