@@ -52,17 +52,36 @@ export default {
       <DialogTitle class="sr-only">View Application Entry</DialogTitle>
       <!-- PREVIEW CARD   -->
       <section
-        class="preview relative bg-white max-w-[600px] ml-auto pl-[40px] py-[50px] h-screen overflow-y-auto"
+        class="
+          preview
+          relative
+          bg-white
+          max-w-[600px]
+          ml-auto
+          pl-[40px]
+          py-[50px]
+          h-screen
+          overflow-y-auto
+        "
       >
         <h2
-          class="text-lg font-bold my-1 uppercase py-2 px-3 border border-gray-100 w-fit shadow-sm rounded-lg"
+          class="
+            text-lg
+            font-bold
+            my-1
+            uppercase
+            py-2
+            px-3
+            border border-gray-100
+            w-fit
+            shadow-sm
+            rounded-lg
+          "
           :class="approvedColor"
         >
           {{ entry.isApproved }}
         </h2>
-        <div class="img-container">
-          <img src="../assets/close.svg" />
-        </div>
+
         <input type="text" class="sr-only" />
         <div class="mb-12">
           <img class="w-[150px] aspect-square" :src="image" alt="" />
@@ -149,7 +168,13 @@ export default {
             <div class="flex gap-2">
               <span><img src="../assets/pdf.svg" alt="" /></span>
               <a
-                class="text-text-300 max-w-[230px] hover:text-primary underline hover:decoration-primary"
+                class="
+                  text-text-300
+                  max-w-[230px]
+                  hover:text-primary
+                  underline
+                  hover:decoration-primary
+                "
                 :href="entry.cv"
                 >{{ entry.firstName }}CV.pdf</a
               >

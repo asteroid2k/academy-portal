@@ -1,19 +1,19 @@
 <script>
-import Profile from "../../components/Profile.vue";
-import Settings from "../../components/Settings.vue";
+import AdminProfile from "../../components/AdminProfile.vue";
+import TimerSettings from "../../components/TimerSettings.vue";
 
 export default {
   props: { instance: Function },
 
   data: function () {
     return {
-      tabs: ["Profile", "Settings"],
-      selected: "Profile",
+      tabs: ["AdminProfile", "TimerSettings"],
+      selected: "AdminProfile",
     };
   },
   components: {
-    Profile,
-    Settings,
+    AdminProfile,
+    TimerSettings,
   },
 };
 </script>
@@ -32,7 +32,9 @@ export default {
             @click="selected = tab"
             :class="['tab-btn', { active: selected === tab }]"
           >
-            {{ tab }}
+            {{
+              tab && tab.substring(0, 5) + " " + tab.substring(5, tab.length)
+            }}
           </button>
         </div>
         <component :instance="instance" :is="selected"></component>

@@ -1,79 +1,39 @@
 <script>
-import { ref } from "vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: "Assessment History",
-  setup() {
-    // make batches variable reactive with the ref() function
-    const batches = ref([
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-      {
-        batch: "Batch 1",
-        dateComposed: "12/07/94",
-        noOfQuestions: "30",
-        timeAllocated: "30 mins",
-        status: "Taken",
-      },
-    ]);
-
-    return {
-      batches,
-    };
+  async mounted() {
+    await this.fetchAssessment();
+  },
+  name: "AssessmentHistory",
+  props: { instance: Function },
+  computed: {
+    ...mapGetters(["assessment"]),
+  },
+  methods: {
+    ...mapActions(["storeAssessment"]),
+    async fetchAssessment() {
+      try {
+        let resp = await this.instance.get("/assessment");
+        if (resp.data) {
+          console.log(resp.data);
+          this.storeAssessment(resp.data.assessments);
+        }
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            notyf.open({ type: "purp", message: "No Assessment Yet" });
+            return;
+          }
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
+        }
+      }
+    },
   },
 };
 </script>
@@ -95,19 +55,35 @@ export default {
               <td class="py-3"></td>
             </tr>
             <tr
-              v-for="batch in batches"
-              :key="batch.id"
+              v-for="data in assessment"
+              :key="data.id"
               class="table-body light-shadow group transition"
             >
               <td
-                class="td rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
+                class="
+                  td
+                  rounded-lg
+                  border-l-8 border-l-transparent
+                  group-hover:border-l-primary
+                  transition
+                "
               >
-                {{ batch.batch }}
+                {{ data.slug }}
               </td>
-              <td class="td">{{ batch.dateComposed }}</td>
-              <td class="td">{{ batch.noOfQuestions }}</td>
-              <td class="td">{{ batch.timeAllocated }}</td>
-              <td class="td">{{ batch.status }}</td>
+
+              <td class="td">
+                {{
+                  data.created_at &&
+                  data.created_at
+                    .substring(2, 10)
+                    .split("-")
+                    .reverse()
+                    .join("/")
+                }}
+              </td>
+              <td class="td">{{ data.question_count }}</td>
+              <td class="td">{{ data.time_allocated }}</td>
+              <td class="td capitalize">{{ data.status }}</td>
             </tr>
           </table>
         </div>
