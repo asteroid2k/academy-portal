@@ -15,6 +15,8 @@ const store = createStore({
       batches: [],
       info: {},
       user: {},
+      assessment: {},
+      results: {},
     };
   },
   getters: {
@@ -29,6 +31,15 @@ const store = createStore({
     },
     user(state) {
       return state.user;
+    },
+    info(state) {
+      return state.info;
+    },
+    assessment(state) {
+      return state.assessment;
+    },
+    results(state) {
+      return state.results;
     },
   },
   mutations: {
@@ -50,6 +61,12 @@ const store = createStore({
     SET_USER(state, payload) {
       state.user = payload;
     },
+    SET_ASSESSMENT(state, payload) {
+      state.assessment = payload;
+    },
+    SET_RESULTS(state, payload) {
+      state.results = payload;
+    },
   },
   actions: {
     storeToken({ commit }, payload) {
@@ -68,6 +85,12 @@ const store = createStore({
     },
     storeUser({ commit }, payload) {
       commit("SET_USER", payload);
+    },
+    storeAssessment({ commit }, payload) {
+      commit("SET_ASSESSMENT", payload);
+    },
+    storeResults({ commit }, payload) {
+      commit("SET_RESULTS", payload);
     },
   },
   modules: {},

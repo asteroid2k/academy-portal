@@ -208,6 +208,7 @@ export default {
               :key="index"
               :data-entry="index"
               class="text-text-300 light-shadow group transition"
+              style="text-align: center"
             >
               <td
                 class="
