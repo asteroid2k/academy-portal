@@ -136,6 +136,7 @@ export default {
   box-sizing: border-box;
 }
 .main-frame {
+  overflow: hidden;
 }
 .heading {
   font-style: normal;

@@ -108,9 +108,7 @@ export default {
         >
           {{ entry.isApproved }}
         </h2>
-        <div class="img-container">
-          <img src="../assets/close.svg" />
-        </div>
+
         <input type="text" class="sr-only" />
         <div class="mb-12">
           <img class="w-[150px] aspect-square" :src="image" alt="" />

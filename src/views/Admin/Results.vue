@@ -1,19 +1,49 @@
 <script>
-import { results } from "../../helpers.js";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
+  async mounted() {
+    await this.fetchResults();
+  },
   name: "Results",
-  sortBy: "dob",
-  sortDirection: "asc",
+  props: { instance: Function },
   data() {
     return {
-      results,
-      batch: "Batch 1",
+      batch: "ACAGH1",
     };
   },
   computed: {
+    ...mapGetters(["results"]),
+    ...mapGetters(["batches"]),
     filterUserByBatch: function () {
-      return this.results.filter((user) => !user.batch.indexOf(this.batch));
+      return this.results.filter(
+        (user) => !user.application.batch_slug.indexOf(this.batch)
+      );
+    },
+  },
+  methods: {
+    ...mapActions(["storeResults"]),
+    async fetchResults() {
+      try {
+        let resp = await this.instance.get("/results");
+        if (resp.data) {
+          console.log(resp.data);
+          this.storeResults(resp.data.results);
+        }
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            notyf.open({ type: "purp", message: "No Result Yet" });
+            return;
+          }
+          const { errors, message } = error.response.data;
+          if (errors) {
+            notyf.error(Object.values(errors)[0]);
+          } else if (message) {
+            notyf.error(message);
+          }
+        }
+      }
     },
   },
 };
@@ -21,11 +51,22 @@ export default {
 <template>
   <div class="entire-page">
     <div class="main-frame">
-      <label class="heading" for="entries">Results -</label>
-      <select class="heading" name="entries" id="batch" v-model="batch">
-        <option value="Batch 1">Batch 1</option>
-        <option value="Batch 2">Batch 2</option>
-        <option value="Batch 3">Batch 3</option>
+      <label class="heading" for="entries">Results - </label>
+      <select
+        class="heading"
+        name="entries"
+        id="batch"
+        v-show="batches"
+        v-model="batch"
+      >
+        <option
+          v-for="{ slug } in batches"
+          :key="slug"
+          class="font-light text-xl"
+          :value="slug"
+        >
+          {{ slug }}
+        </option>
       </select>
       <p class="description">Comprises of all that applied for {{ batch }}</p>
       <div class="wrapper">
@@ -52,18 +93,28 @@ export default {
             v-for="user in filterUserByBatch"
             :key="user.id"
             class="table-body light-shadow group transition"
+            style="text-align: center"
           >
             <td
-              class="rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition pl-3"
+              class="
+                rounded-lg
+                border-l-8 border-l-transparent
+                group-hover:border-l-primary
+                transition
+                pl-3
+              "
             >
-              {{ user.name }}
+              {{ user.application.firstName }} {{ user.application.lastName }}
             </td>
-            <td class="td">{{ user.email }}</td>
-            <td class="td">{{ user.dob }}</td>
-            <td class="td">{{ user.address }}</td>
-            <td class="td">{{ user.university }}</td>
-            <td class="td">{{ user.cgpa }}</td>
-            <td class="td">{{ user.testScore }}</td>
+            <td class="td">{{ user.application.email }}</td>
+            <td class="td">
+              {{ user.application.dob.split("-").reverse().join("/") }} -
+              <span>{{ user.application.age }}</span>
+            </td>
+            <td class="td">{{ user.application.address }}</td>
+            <td class="td">{{ user.application.university }}</td>
+            <td class="td">{{ user.application.gpa }}</td>
+            <td class="td">{{ user.score }}</td>
           </tr>
         </table>
       </div>
@@ -85,7 +136,7 @@ export default {
   font-size: 44px;
   line-height: 52px;
   letter-spacing: -0.02em;
-  width: 225px;
+  width: 250px;
   margin-bottom: 5px;
   color: #2b3c4e;
 }

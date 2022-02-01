@@ -105,7 +105,7 @@ export default {
     <div class="update-container">
       <div class="app-update">
         <p class="update-head">Updates</p>
-        <Update />
+        <Update :instance="instance" />
       </div>
       <div class="app-update">
         <p class="update-head">Take Assessment</p>

@@ -184,7 +184,7 @@ export default {
     display: flex;
     justify-content: space-between;
     position: fixed;
-    z-index: 100px;
+    z-index: 1;
     padding: 20px;
     top: 0;
     width: 100%;

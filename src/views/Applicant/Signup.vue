@@ -235,13 +235,18 @@ input {
   border: 1.5px solid #bdbdbd;
   box-sizing: border-box;
   border-radius: 4px;
-  width: 20vw;
+  width: 350px;
+  height: 48px;
   padding: 5px;
 }
 .name {
   display: flex;
   gap: 30px;
   margin-top: 22px;
+  justify-content: safe;
+}
+.password {
+  margin-right: 15px;
 }
 .form-section {
   display: flex;
@@ -295,6 +300,9 @@ label {
   .name,
   .phone {
     flex-direction: column;
+  }
+  .password {
+    margin: 0px;
   }
 }
 </style>
