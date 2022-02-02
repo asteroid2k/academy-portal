@@ -114,9 +114,18 @@ export default {
       <div class="app-update">
         <p class="update-head">Take Assessment</p>
         <div id="centerdiv">
-          <p class="assess-description">
-            We have 4 days left until the next assessment
-            <br />Watch this space
+          <p class="assess-description" v-if="user.isApproved == 'approved'">
+            You have been approved. You are eligible to take the assessment
+          </p>
+          <p
+            class="assess-description"
+            v-else-if="user.isApproved == 'pending'"
+          >
+            Your application is been reviewed. Upon approval, You will be
+            notified on the next assessment
+          </p>
+          <p class="assess-description" v-else>
+            You have been declined. You cannot take this assessment
           </p>
           <router-link to="/assessment"
             ><button class="assessment">Take Assessment</button></router-link

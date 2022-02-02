@@ -32,6 +32,15 @@ export default {
       sortedR: [],
     };
   },
+  methods: {
+    sort: function (s) {
+      //if s == current sort, reverse
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      }
+      this.currentSort = s;
+    },
+  },
   computed: {
     ...mapGetters(["results", "batches"]),
     filterUserByBatch: function () {
@@ -199,6 +208,7 @@ export default {
             <td class="td">{{ user.score }}</td>
           </tr>
         </table>
+        debug: sort={{ currentSort }}, dir={{ currentSortDir }}
       </div>
     </div>
   </div>
