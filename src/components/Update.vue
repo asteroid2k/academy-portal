@@ -1,6 +1,6 @@
 <script>
 import { formatDistanceToNow } from "date-fns";
-
+import { notyf } from "../helpers";
 export default {
   async mounted() {
     await this.fetchDetails();
@@ -18,7 +18,7 @@ export default {
       if (!date) {
         return "09.09.22";
       }
-      return formatDistanceToNow(new Date(date));
+      return formatDistanceToNow(new Date(date), { addSuffix: true });
     },
 
     async fetchDetails() {
@@ -30,7 +30,7 @@ export default {
         }
       } catch (error) {
         if (error.response) {
-          const { errors, message } = error.response.data;
+          const { errors, message, status } = error.response.data;
           if (errors) {
             notyf.error(Object.values(errors));
           } else if (message) {
@@ -45,19 +45,21 @@ export default {
 
 <template>
   <div class="container">
-    <div class="updates" v-for="data in updates" :key="data.id">
+    <div class="updates" v-for="data in updates.reverse()" :key="data.id">
       <div v-if="data.text.includes('declined')">
-        <p class="head">We are sorry but your application is declined</p>
+        <p class="head">We are sorry</p>
         <div class="flex">
           <p>{{ data.text }}</p>
-          <p>{{ formatDays(data.created_at) }}</p>
+          <p class="text-xs font-light">{{ formatDays(data.created_at) }}</p>
         </div>
       </div>
       <div v-else>
-        <p class="head">Congratulations &#127881;🥳🎊</p>
+        <p v-show="data.text.includes('approve')" class="head">
+          Congratulations &#127881;🥳🎊
+        </p>
         <div class="flex">
           <p class="body">{{ data.text }}</p>
-          <p class="time">
+          <p class="time text-xs font-light">
             {{ formatDays(data.created_at) }}
           </p>
         </div>
@@ -66,12 +68,11 @@ export default {
   </div>
 </template>
 
-
 <style scoped>
 .updates {
   font-family: Nunito Sans;
   border-bottom: 1px solid #cecece;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
 }
 
@@ -81,14 +82,15 @@ export default {
 }
 
 .head {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   text-align: left;
 }
 
 .flex {
-  font-size: 10px;
-  margin: 15px 0px;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0px;
   justify-content: space-between;
   text-align: left;
 }

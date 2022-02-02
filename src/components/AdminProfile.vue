@@ -13,6 +13,7 @@
           name="image"
           type="file"
           id="image"
+          :disabled="disabled"
         />
         <ErrorMessage name="image" class="text-red-600 text-xs pt-1 px-2" />
 
@@ -27,7 +28,7 @@
             type="text"
             id="name"
             name="name"
-            :value="user.firstName + '' + user.lastName"
+            :value="user.firstName + ' ' + user.lastName"
           />
           <ErrorMessage name="name" class="text-red-600 text-xs pt-1 px-2" />
         </div>
@@ -84,7 +85,14 @@
         </div>
       </div>
       <div class="button">
-        <button type="submit" id="save-button">Save</button>
+        <button
+          :disabled="disabled"
+          type="submit"
+          id="save-button"
+          class="btn-purp dis"
+        >
+          Save
+        </button>
       </div>
     </Form>
   </div>
@@ -119,9 +127,11 @@ export default {
   methods: {
     async handleSubmit(values) {
       if (this.disabled) {
-        notyf.open({ type: "purp", message: "Enabled edit" });
         return;
       }
+      const [fname, ...lname] = values.name.split(" ");
+      values.firstName = fname;
+      values.lastName = lname.join(" ");
       const formData = new FormData();
       for (const key in values) {
         if (key === "image") {

@@ -16,7 +16,6 @@ export default {
       try {
         let resp = await this.instance.get("/assessment");
         if (resp.data) {
-          console.log(resp.data);
           this.storeAssessment(resp.data.assessments);
         }
       } catch (error) {
@@ -60,13 +59,7 @@ export default {
               class="table-body light-shadow group transition"
             >
               <td
-                class="
-                  td
-                  rounded-lg
-                  border-l-8 border-l-transparent
-                  group-hover:border-l-primary
-                  transition
-                "
+                class="td rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
               >
                 {{ data.slug }}
               </td>
