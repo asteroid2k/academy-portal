@@ -31,6 +31,21 @@ body {
   .btn-purp {
     @apply bg-primary text-white hover:bg-primary2 hover:shadow-md shadow-sm rounded transition;
   }
+  .tableau {
+    @apply w-full table-auto border-separate;
+  }
+  .tableau thead {
+    @apply bg-text-400 text-white text-sm;
+  }
+  .tableau th {
+    @apply py-4 border-text-400;
+  }
+  .tableau .tr {
+    @apply text-text-300 light-shadow;
+  }
+  .tableau .td {
+    @apply py-6  rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition;
+  }
 }
 button {
   font-family: Lato;

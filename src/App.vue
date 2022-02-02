@@ -35,6 +35,10 @@ export default {
         }
       } catch (error) {
         if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            this.$router.push({ name: "Logout" });
+            notyf.open({ type: "purp", message: "Session expired" });
+          }
           const { errors, message } = error.response.data;
           if (errors) {
             notyf.error(Object.values(errors)[0]);

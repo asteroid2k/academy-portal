@@ -16,7 +16,7 @@ const store = createStore({
       info: {},
       user: {},
       assessment: {},
-      results: {},
+      results: [],
     };
   },
   getters: {

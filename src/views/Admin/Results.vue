@@ -1,5 +1,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
+import UpArrow from "../../assets/up.svg?component";
+import DownArrow from "../../assets/down.svg?component";
 
 export default {
   async mounted() {
@@ -7,28 +9,67 @@ export default {
   },
   name: "Results",
   props: { instance: Function },
+  components: { UpArrow, DownArrow },
   data() {
     return {
-      batch: "ACAGH1",
+      batch: "",
+      sortedR: [],
     };
   },
   computed: {
-    ...mapGetters(["results"]),
-    ...mapGetters(["batches"]),
+    ...mapGetters(["results", "batches"]),
     filterUserByBatch: function () {
       return this.results.filter(
         (user) => !user.application.batch_slug.indexOf(this.batch)
       );
     },
   },
+  watch: {
+    batch() {
+      return this.sortedR.filter(
+        (user) => !user.application.batch_slug.indexOf(this.batch)
+      );
+    },
+  },
   methods: {
     ...mapActions(["storeResults"]),
+    age(dob) {
+      return new Date().getFullYear() - new Date(dob).getFullYear();
+    },
+    sortByGpa(dir) {
+      this.sortedR.sort((a, b) => {
+        if (dir === "asc") {
+          return parseFloat(a.application.gpa) - parseFloat(b.application.gpa);
+        } else {
+          return parseFloat(b.application.gpa) - parseFloat(a.application.gpa);
+        }
+      });
+    },
+    sortByDob(dir) {
+      this.sortedR.sort((a, b) => {
+        if (dir === "asc") {
+          return new Date(b.application.dob) - new Date(a.application.dob);
+        } else {
+          return new Date(a.application.dob) - new Date(b.application.dob);
+        }
+      });
+    },
+    sortByScore(dir) {
+      this.sortedR.sort((a, b) => {
+        if (dir === "asc") {
+          return new Date(a.score) - new Date(b.score);
+        } else {
+          return new Date(b.score) - new Date(a.score);
+        }
+      });
+    },
     async fetchResults() {
       try {
         let resp = await this.instance.get("/results");
         if (resp.data) {
-          console.log(resp.data);
           this.storeResults(resp.data.results);
+          this.sortedR = resp.data.results;
+          this.batch = this.batches[0].slug;
         }
       } catch (error) {
         if (error.response) {
@@ -49,6 +90,7 @@ export default {
 };
 </script>
 <template>
+  <button @click="sort">SORT</button>
   <div class="entire-page">
     <div class="main-frame">
       <label class="heading" for="entries">Results - </label>
@@ -70,22 +112,54 @@ export default {
       </select>
       <p class="description">Comprises of all that applied for {{ batch }}</p>
       <div class="wrapper">
-        <table id="assessments">
-          <tr class="table-head">
-            <th>Name</th>
-            <th>Email</th>
-            <th class="filter">
-              <span>DOB - Age</span>
-              <img src="../../assets/ascdesc.svg" alt="" />
-            </th>
-            <th>Address</th>
-            <th>University</th>
-            <th class="filter">
-              <span>CGPA</span>
-              <img src="../../assets/ascdesc.svg" alt="" />
-            </th>
-            <th>Test Scores</th>
-          </tr>
+        <table class="tableau">
+          <thead>
+            <tr class="table-head">
+              <th>Name</th>
+              <th>Email</th>
+              <th>
+                <div class="flex items-center gap-1">
+                  <p>DOB - Age</p>
+                  <div class="flex flex-col gap-[1px]">
+                    <UpArrow @click="sortByDob('asc')" class="cursor-pointer" />
+                    <DownArrow
+                      @click="sortByDob('dsc')"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </th>
+              <th>Address</th>
+              <th>University</th>
+              <th>
+                <div class="flex items-center gap-1">
+                  <p>CGPA</p>
+                  <div class="flex flex-col gap-[1px]">
+                    <UpArrow @click="sortByGpa('asc')" class="cursor-pointer" />
+                    <DownArrow
+                      @click="sortByGpa('dsc')"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </th>
+              <th>
+                <div class="flex items-center gap-1">
+                  <p>Test Scores</p>
+                  <div class="flex flex-col gap-[1px]">
+                    <UpArrow
+                      @click="sortByScore('asc')"
+                      class="cursor-pointer"
+                    />
+                    <DownArrow
+                      @click="sortByScore('dsc')"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
           <tr>
             <td class="py-[10px]"></td>
           </tr>
@@ -95,21 +169,13 @@ export default {
             class="table-body light-shadow group transition"
             style="text-align: center"
           >
-            <td
-              class="
-                rounded-lg
-                border-l-8 border-l-transparent
-                group-hover:border-l-primary
-                transition
-                pl-3
-              "
-            >
+            <td class="td group-hover:border-l-primary transition">
               {{ user.application.firstName }} {{ user.application.lastName }}
             </td>
             <td class="td">{{ user.application.email }}</td>
             <td class="td">
               {{ user.application.dob.split("-").reverse().join("/") }} -
-              <span>{{ user.application.age }}</span>
+              <span>{{ age(user.application.dob) }}</span>
             </td>
             <td class="td">{{ user.application.address }}</td>
             <td class="td">{{ user.application.university }}</td>
@@ -153,6 +219,13 @@ select:focus {
   margin-bottom: 60px;
   line-height: 19px;
 }
+table {
+  border-spacing: 0;
+}
+th {
+  padding-inline: 0.5rem;
+}
+/*
 #assessments {
   border-collapse: separate;
   border-spacing: 0;
@@ -171,7 +244,7 @@ select:focus {
 .td {
   padding: 20px 0px;
   text-align: center;
-}
+} */
 /* .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
     7px 0px 0px 0px var(--primary) inset;
@@ -181,7 +254,7 @@ select:focus {
   position: relative;
   top: 28px;
 } */
-.table-frame {
+/* .table-frame {
   height: 476px;
   background: #ffffff;
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
@@ -201,7 +274,7 @@ select:focus {
   display: flex;
   justify-content: space-evenly;
   background: #2b3c4e;
-}
+} */
 @media screen and (max-width: 992px) {
   #assessments {
     width: 300%;
