@@ -10,15 +10,32 @@ export default {
   data() {
     return {
       batch: "ACAGH1",
+      currentSort: "gpa",
+      currentSortDir: "asc",
     };
+  },
+  methods: {
+    sort: function (s) {
+      //if s == current sort, reverse
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      }
+      this.currentSort = s;
+    },
   },
   computed: {
     ...mapGetters(["results"]),
     ...mapGetters(["batches"]),
     filterUserByBatch: function () {
-      return this.results.filter(
-        (user) => !user.application.batch_slug.indexOf(this.batch)
-      );
+      return this.results
+        .filter((user) => !user.application.batch_slug.indexOf(this.batch))
+        .sort((a, b) => {
+          let modifier = 1;
+          if (this.currentSortDir === "desc") modifier = -1;
+          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+          return 0;
+        });
     },
   },
   methods: {
@@ -51,7 +68,7 @@ export default {
 <template>
   <div class="entire-page">
     <div class="main-frame">
-      <label class="heading" for="entries">Results - </label>
+      <label class="heading" for="entries">Results -</label>
       <select
         class="heading"
         name="entries"
@@ -80,7 +97,7 @@ export default {
             </th>
             <th>Address</th>
             <th>University</th>
-            <th class="filter">
+            <th @click="sort('gpa')" class="filter">
               <span>CGPA</span>
               <img src="../../assets/ascdesc.svg" alt="" />
             </th>
@@ -117,6 +134,7 @@ export default {
             <td class="td">{{ user.score }}</td>
           </tr>
         </table>
+        debug: sort={{ currentSort }}, dir={{ currentSortDir }}
       </div>
     </div>
   </div>
