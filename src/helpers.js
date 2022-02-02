@@ -44,15 +44,6 @@ export const validators = {
     }),
 };
 
-export const results = [
-  {
-    name: "Ify Chinke",
-    email: "ify@enyata.com",
-    dob: "12/09/19 - 22",
-    address: "3 Sabo Ave, Yaba, Lagos",
-    university: "University of Nigeria",
-    cgpa: "5.0",
-    testScore: "15",
-    batch: "Batch 3",
-  },
-];
+export const calcAge = (dob) => {
+  return new Date().getFullYear() - new Date(dob).getFullYear();
+};

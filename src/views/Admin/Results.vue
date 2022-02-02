@@ -2,6 +2,14 @@
 import { mapActions, mapGetters } from "vuex";
 import UpArrow from "../../assets/up.svg?component";
 import DownArrow from "../../assets/down.svg?component";
+import { calcAge, notyf } from "../../helpers";
+import Polygon from "../../assets/polygon.svg?component";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/vue";
 
 export default {
   async mounted() {
@@ -9,7 +17,15 @@ export default {
   },
   name: "Results",
   props: { instance: Function },
-  components: { UpArrow, DownArrow },
+  components: {
+    UpArrow,
+    DownArrow,
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    Polygon,
+  },
   data() {
     return {
       batch: "",
@@ -19,23 +35,15 @@ export default {
   computed: {
     ...mapGetters(["results", "batches"]),
     filterUserByBatch: function () {
-      return this.results.filter(
-        (user) => !user.application.batch_slug.indexOf(this.batch)
-      );
-    },
-  },
-  watch: {
-    batch() {
       return this.sortedR.filter(
         (user) => !user.application.batch_slug.indexOf(this.batch)
       );
     },
   },
+
   methods: {
     ...mapActions(["storeResults"]),
-    age(dob) {
-      return new Date().getFullYear() - new Date(dob).getFullYear();
-    },
+    calcAge,
     sortByGpa(dir) {
       this.sortedR.sort((a, b) => {
         if (dir === "asc") {
@@ -90,26 +98,34 @@ export default {
 };
 </script>
 <template>
-  <button @click="sort">SORT</button>
   <div class="entire-page">
     <div class="main-frame">
-      <label class="heading" for="entries">Results - </label>
-      <select
-        class="heading"
-        name="entries"
-        id="batch"
-        v-show="batches"
-        v-model="batch"
-      >
-        <option
-          v-for="{ slug } in batches"
-          :key="slug"
-          class="font-light text-xl"
-          :value="slug"
-        >
-          {{ slug }}
-        </option>
-      </select>
+      <div class="flex">
+        <h1 class="font-light text-[44px]">Results -&nbsp;</h1>
+        <div v-show="batches">
+          <Listbox v-model="batch">
+            <ListboxButton
+              ><p class="flex items-center">
+                <span class="text-[44px] font-light">{{ batch }}</span>
+                <Polygon class="ml-[5px]" />
+              </p>
+            </ListboxButton>
+            <ListboxOptions
+              class="absolute w-[150px] z-30 bg-white min-w-[50px] py-4 shadow"
+            >
+              <ListboxOption
+                v-for="{ slug } in batches"
+                :key="slug"
+                :value="slug"
+                class="text-2xl font-light hover:bg-primary/50 py-1 px-4 cursor-pointer"
+              >
+                {{ slug }}
+              </ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        </div>
+      </div>
+
       <p class="description">Comprises of all that applied for {{ batch }}</p>
       <div class="wrapper">
         <table class="tableau">
@@ -175,7 +191,7 @@ export default {
             <td class="td">{{ user.application.email }}</td>
             <td class="td">
               {{ user.application.dob.split("-").reverse().join("/") }} -
-              <span>{{ age(user.application.dob) }}</span>
+              <span>{{ calcAge(user.application.dob) }}</span>
             </td>
             <td class="td">{{ user.application.address }}</td>
             <td class="td">{{ user.application.university }}</td>
