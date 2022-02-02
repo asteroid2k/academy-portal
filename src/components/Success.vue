@@ -10,11 +10,11 @@
 
       <div class="timer">
         <div class="min">
-          <p class="ticks">23</p>
+          <p class="ticks">00</p>
           <p>min</p>
         </div>
         <div class="secs">
-          <p class="ticks">043</p>
+          <p class="ticks">000</p>
           <p>sec</p>
         </div>
       </div>
