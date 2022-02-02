@@ -55,4 +55,4 @@ export const results = [
     testScore: "15",
     batch: "Batch 3",
   },
-]
+];
