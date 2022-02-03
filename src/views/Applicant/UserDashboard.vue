@@ -27,7 +27,7 @@ export default {
       if (!this.user.created_at) {
         return "09.09.22";
       }
-      return formatDistanceToNow(new Date(this.user.created_at));
+      return formatDistanceToNow(new Date(this.user.created_at).getTime());
     },
     approvedColor() {
       if (!this.user.isApproved) {

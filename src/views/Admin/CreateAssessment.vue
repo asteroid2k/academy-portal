@@ -95,6 +95,7 @@ export default {
         if (response.data) {
           const { message, batch } = response.data;
           notyf.success(message);
+          this.$router.push({ name: "Admin" });
         }
       } catch (error) {
         // when error has response
@@ -251,6 +252,7 @@ export default {
       <button
         class="block font-bold rounded w-[205px] h-[40px] mt-[50px] mx-auto bg-primary text-white disabled:cursor-not-allowed disabled:opacity-40"
         @click="handleSubmit"
+        :disabled="!current"
       >
         Finish
       </button>
