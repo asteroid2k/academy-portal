@@ -50,9 +50,6 @@ export default {
               <th>Time Allocated</th>
               <th>Status</th>
             </tr>
-            <tr>
-              <td class="py-3"></td>
-            </tr>
             <tr
               v-for="data in assessment"
               :key="data.id"
@@ -124,10 +121,10 @@ export default {
     7px 0px 0px 0px var(--primary) inset;
   border-radius: 7px;
 } */
-/* .table-body {
+.table-body {
   position: relative;
   top: 28px;
-} */
+}
 .table-frame {
   height: 476px;
   background: #ffffff;

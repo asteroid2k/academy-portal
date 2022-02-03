@@ -18,7 +18,9 @@ export default {
       if (!date) {
         return "09.09.22";
       }
-      return formatDistanceToNow(new Date(date), { addSuffix: true });
+      return formatDistanceToNow(new Date(date), { addSuffix: true })
+        .replace("about", "")
+        .replace("less", "");
     },
 
     async fetchDetails() {
@@ -88,7 +90,7 @@ export default {
 }
 
 .flex {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   margin: 5px 0px;
   justify-content: space-between;

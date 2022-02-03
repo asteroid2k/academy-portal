@@ -129,8 +129,8 @@ export default {
       <p class="description">Comprises of all that applied for {{ batch }}</p>
       <div class="wrapper">
         <table class="tableau">
-          <thead>
-            <tr class="table-head">
+          <thead class="table-head">
+            <tr>
               <th>Name</th>
               <th>Email</th>
               <th>
@@ -240,6 +240,10 @@ table {
 }
 th {
   padding-inline: 0.5rem;
+}
+.table-head {
+  position: sticky;
+  top: 0px;
 }
 /*
 #assessments {
