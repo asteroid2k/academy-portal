@@ -32,6 +32,7 @@ export default {
         .then((resp) => {
           if (resp.data) {
             notyf.success(resp.data.message);
+            this.$router.push({ name: "Signin" });
           }
         })
         .catch((error) => {

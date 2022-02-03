@@ -25,7 +25,7 @@ export default {
       return (
         this.entry.image ||
         `https://avatars.dicebear.com/api/initials/${
-          this.user.firstName + " " + this.user.lastName
+          this.entry.firstName + " " + this.entry.lastName
         }.svg`
       );
     },
@@ -197,6 +197,8 @@ export default {
               <a
                 class="text-text-300 max-w-[230px] hover:text-primary underline hover:decoration-primary"
                 :href="entry.cv"
+                target="_blank"
+                referrerpolicy="noreferrer"
                 >{{ entry.firstName }}CV.pdf</a
               >
             </div>
