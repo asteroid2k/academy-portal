@@ -68,41 +68,89 @@ export default {
 <template>
   <div class="entire-page">
     <div class="main-frame">
-      <label class="heading" for="entries">Results -</label>
-      <select
-        class="heading"
-        name="entries"
-        id="batch"
-        v-show="batches"
-        v-model="batch"
-      >
-        <option
-          v-for="{ slug } in batches"
-          :key="slug"
-          class="font-light text-xl"
-          :value="slug"
-        >
-          {{ slug }}
-        </option>
-      </select>
+      <div class="flex">
+        <h1 class="font-light text-[44px]">Results -&nbsp;</h1>
+        <div v-show="batches">
+          <Listbox v-model="batch">
+            <ListboxButton
+              ><p class="flex items-center">
+                <span class="text-[44px] font-light">{{ batch }}</span>
+                <Polygon class="ml-[5px]" />
+              </p>
+            </ListboxButton>
+            <ListboxOptions
+              class="absolute w-[150px] z-30 bg-white min-w-[50px] py-4 shadow"
+            >
+              <ListboxOption
+                v-for="{ slug } in batches"
+                :key="slug"
+                :value="slug"
+                class="
+                  text-2xl
+                  font-light
+                  hover:bg-primary/50
+                  py-1
+                  px-4
+                  cursor-pointer
+                "
+              >
+                {{ slug }}
+              </ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        </div>
+      </div>
+
       <p class="description">Comprises of all that applied for {{ batch }}</p>
       <div class="wrapper">
-        <table id="assessments">
-          <tr class="table-head">
-            <th>Name</th>
-            <th>Email</th>
-            <th class="filter">
-              <span>DOB - Age</span>
-              <img src="../../assets/ascdesc.svg" alt="" />
-            </th>
-            <th>Address</th>
-            <th>University</th>
-            <th @click="sort('gpa')" class="filter">
-              <span>CGPA</span>
-              <img src="../../assets/ascdesc.svg" alt="" />
-            </th>
-            <th>Test Scores</th>
-          </tr>
+        <table class="tableau">
+          <thead class="table-head">
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>
+                <div class="flex items-center gap-1">
+                  <p>DOB - Age</p>
+                  <div class="flex flex-col gap-[1px]">
+                    <UpArrow @click="sortByDob('asc')" class="cursor-pointer" />
+                    <DownArrow
+                      @click="sortByDob('dsc')"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </th>
+              <th>Address</th>
+              <th>University</th>
+              <th>
+                <div class="flex items-center gap-1">
+                  <p>CGPA</p>
+                  <div class="flex flex-col gap-[1px]">
+                    <UpArrow @click="sortByGpa('asc')" class="cursor-pointer" />
+                    <DownArrow
+                      @click="sortByGpa('dsc')"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </th>
+              <th>
+                <div class="flex items-center gap-1">
+                  <p>Test Scores</p>
+                  <div class="flex flex-col gap-[1px]">
+                    <UpArrow
+                      @click="sortByScore('asc')"
+                      class="cursor-pointer"
+                    />
+                    <DownArrow
+                      @click="sortByScore('dsc')"
+                      class="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
           <tr>
             <td class="py-[10px]"></td>
           </tr>
@@ -171,6 +219,19 @@ select:focus {
   margin-bottom: 60px;
   line-height: 19px;
 }
+table {
+  border-spacing: 0;
+}
+th {
+  padding-inline: 0.5rem;
+}
+
+.table-head {
+  position: sticky;
+  top: 0px;
+}
+
+/*
 #assessments {
   border-collapse: separate;
   border-spacing: 0;
@@ -206,15 +267,7 @@ select:focus {
   border-radius: 8px;
   padding: 40px 40px 0px;
 }
-.wrapper {
-  overflow: auto;
-  height: 400px;
-}
-.table-head {
-  position: sticky;
-  top: 0px;
-  z-index: 1;
-}
+
 .filter {
   display: flex;
   justify-content: space-evenly;
