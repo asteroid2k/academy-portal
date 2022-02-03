@@ -77,7 +77,17 @@ export default {
     <Form
       @submit="handleSubmit"
       :validation-schema="schema"
-      class="flex flex-col gap-4 shadow rounded-lg border-border-100 max-w-[400px] mx-auto py-6 px-8"
+      class="
+        flex flex-col
+        gap-4
+        shadow
+        rounded-lg
+        border-border-100
+        max-w-[400px]
+        mx-auto
+        py-6
+        px-8
+      "
     >
       <div class="flex flex-col gap-1">
         <label class="text-text-200 text-sm" for="code">Code</label>
@@ -131,7 +141,16 @@ export default {
       </div>
       <button
         type="submit"
-        class="btn-purp font-bold h-[50px] mt-2 max-w-[300px] mx-auto block w-full"
+        class="
+          btn-purp
+          font-bold
+          h-[50px]
+          mt-2
+          max-w-[300px]
+          mx-auto
+          block
+          w-full
+        "
       >
         Reset Password
       </button>
