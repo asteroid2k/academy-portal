@@ -124,10 +124,10 @@ export default {
     7px 0px 0px 0px var(--primary) inset;
   border-radius: 7px;
 } */
-/* .table-body {
+.table-body {
   position: relative;
   top: 28px;
-} */
+}
 .table-frame {
   height: 476px;
   background: #ffffff;
