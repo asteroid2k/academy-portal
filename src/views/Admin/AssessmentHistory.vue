@@ -50,9 +50,6 @@ export default {
               <th>Time Allocated</th>
               <th>Status</th>
             </tr>
-            <tr>
-              <td class="py-3"></td>
-            </tr>
             <tr
               v-for="data in assessment"
               :key="data.id"
