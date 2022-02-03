@@ -29,7 +29,7 @@ export default {
     },
 
     sumAllApplications: function () {
-      if (!this.batches.length) return "";
+      if (!this.batches.length) return 0;
 
       const sumAll = this.batches
         .map((item) => item.app_count)
@@ -92,7 +92,9 @@ export default {
       <div class="box" id="box-1">
         <p class="app-head">Current Applications</p>
         <div v-for="element in filterOpenBatch" :key="element.id">
-          <p class="app-stats">{{ element.app_count }}</p>
+          <p class="app-stats">
+            {{ filterOpenBatch.length ? element.app_count : "0" }}
+          </p>
           <div class="line"></div>
           <p class="app-subhead" v-if="!element.isClosed">{{ element.name }}</p>
           <p class="app-subhead" v-else>Application Closed</p>
