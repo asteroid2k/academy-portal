@@ -32,6 +32,7 @@ export default {
         .then((resp) => {
           if (resp.data) {
             notyf.success(resp.data.message);
+            this.$router.push({ name: "Signin" });
           }
         })
         .catch((error) => {
@@ -42,19 +43,51 @@ export default {
           } else notyf.error("An error occured");
         });
     },
+    myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
+    myFunction1() {
+      var x = document.getElementById("cpass");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    },
   },
 };
 </script>
 
 <template>
-  <section>
-    <h2 class="text-lg font-bold text-center my-5">
+  <section class="my-10">
+    <div
+      class="w-fit mx-auto mb-12 cursor-pointer"
+      @click="$router.push({ name: 'Home' })"
+    >
+      <img src="../assets/logo.svg" width="120" alt="" />
+    </div>
+    <h2 class="text-lg font-bold text-center mb-5">
       Check your inbox for your Reset Code
     </h2>
     <Form
       @submit="handleSubmit"
       :validation-schema="schema"
-      class="flex flex-col gap-4 shadow rounded-lg border-border-100 max-w-[500px] mx-auto py-6 px-8"
+      class="
+        flex flex-col
+        gap-4
+        shadow
+        rounded-lg
+        border-border-100
+        max-w-[400px]
+        mx-auto
+        py-6
+        px-8
+      "
     >
       <div class="flex flex-col gap-1">
         <label class="text-text-200 text-sm" for="code">Code</label>
@@ -68,33 +101,56 @@ export default {
       </div>
       <div class="flex flex-col gap-1">
         <label class="text-text-200 text-sm" for="password">Password</label>
-        <Field
-          name="password"
-          id="password"
-          type="password"
-          class="k-input border-border-200 h-[48px]"
-          v-model="password"
-        />
+        <div>
+          <Field
+            name="password"
+            id="password"
+            type="password"
+            class="k-input border-border-200 h-[48px]"
+            v-model="password"
+          />
+          <i
+            class="far fa-eye"
+            v-on:click="myFunction()"
+            id="togglePassword"
+          ></i>
+        </div>
         <ErrorMessage name="password" class="text-red-600 text-xs pt-1 px-2" />
       </div>
       <div class="flex flex-col gap-1">
         <label class="text-text-200 text-sm" for="cpass"
           >Confirm Password</label
         >
-        <Field
-          name="conPassword"
-          id="cpass"
-          type="password"
-          class="k-input border-border-200 h-[48px]"
-          v-model="conPassword"
-        />
+        <div>
+          <Field
+            name="conPassword"
+            id="cpass"
+            type="password"
+            class="k-input border-border-200 h-[48px]"
+            v-model="conPassword"
+          />
+          <i
+            class="far fa-eye"
+            v-on:click="myFunction1()"
+            id="togglePassword"
+          ></i>
+        </div>
         <p class="text-red-600 text-xs pt-1 px-2">
-          {{ match && conPassword ? "" : "Passwords do not match" }}
+          {{ !match && conPassword ? "Passwords do not match" : "" }}
         </p>
       </div>
       <button
         type="submit"
-        class="btn-purp font-bold h-[50px] mt-2 max-w-[300px] mx-auto block w-full"
+        class="
+          btn-purp
+          font-bold
+          h-[50px]
+          mt-2
+          max-w-[300px]
+          mx-auto
+          block
+          w-full
+        "
       >
         Reset Password
       </button>
@@ -102,4 +158,15 @@ export default {
   </section>
 </template>
 
-<style></style>
+<style scoped>
+#togglePassword {
+  margin-left: -30px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #000000;
+  opacity: 0.4;
+}
+.k-input {
+  width: 100%;
+}
+</style>
