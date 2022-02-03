@@ -1,6 +1,6 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { object } from "yup";
+import { number, object, string } from "yup";
 import { notyf, validators } from "../../helpers.js";
 import { mapGetters, mapState } from "vuex";
 import { CubeTransparentIcon } from "@heroicons/vue/outline";
@@ -28,6 +28,12 @@ export default {
       dob: validators.dob,
       firstName: validators.nameR,
       lastName: validators.nameR,
+      image: validators.imageR,
+      cv: validators.cv,
+      address: string().required("Provide your address"),
+      gpa: number().required("Provide your cgpa"),
+      course: string().required("Provide course"),
+      university: string().required("Provide university"),
     });
     return {
       schema,
@@ -129,6 +135,7 @@ export default {
             class="sr-only"
             id="cv"
             @change="fileChange"
+            required
           />
           <ErrorMessage name="cv" class="text-red-600 text-xs pt-1 px-2" />
         </div>
@@ -142,6 +149,7 @@ export default {
             class="sr-only"
             id="image"
             @change="fileChange"
+            required
           />
           <ErrorMessage name="image" class="text-red-600 text-xs pt-1 px-2" />
         </div>
