@@ -34,7 +34,7 @@ export default {
         if (error.response) {
           const { errors, message, status } = error.response.data;
           if (errors) {
-            notyf.error(Object.values(errors));
+            notyf.error(Object.values(errors)[0]);
           } else if (message) {
             notyf.error(message);
           }

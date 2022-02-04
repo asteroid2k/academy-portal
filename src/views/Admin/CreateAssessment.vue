@@ -252,7 +252,7 @@ export default {
       <button
         class="block font-bold rounded w-[205px] h-[40px] mt-[50px] mx-auto bg-primary text-white disabled:cursor-not-allowed disabled:opacity-40"
         @click="handleSubmit"
-        :disabled="!current"
+        :disabled="current < 30"
       >
         Finish
       </button>
