@@ -16,7 +16,6 @@ export default {
       try {
         let resp = await this.instance.get("/assessment");
         if (resp.data) {
-          console.log(resp.data);
           this.storeAssessment(resp.data.assessments);
         }
       } catch (error) {
@@ -51,22 +50,13 @@ export default {
               <th>Time Allocated</th>
               <th>Status</th>
             </tr>
-            <tr>
-              <td class="py-3"></td>
-            </tr>
             <tr
               v-for="data in assessment"
               :key="data.id"
               class="table-body light-shadow group transition"
             >
               <td
-                class="
-                  td
-                  rounded-lg
-                  border-l-8 border-l-transparent
-                  group-hover:border-l-primary
-                  transition
-                "
+                class="td rounded-lg border-l-8 border-l-transparent group-hover:border-l-primary transition"
               >
                 {{ data.slug }}
               </td>
@@ -131,10 +121,10 @@ export default {
     7px 0px 0px 0px var(--primary) inset;
   border-radius: 7px;
 } */
-/* .table-body {
+.table-body {
   position: relative;
   top: 28px;
-} */
+}
 .table-frame {
   height: 476px;
   background: #ffffff;

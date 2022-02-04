@@ -54,7 +54,7 @@ export default {
     startTimer() {
       notyf.open({ type: "purp", message: "Timer Started. Goodluck" });
       this.endTime = new Date(
-        new Date().getTime() + parseInt(this.duration - 28) * 60000
+        new Date().getTime() + parseInt(this.duration) * 60000
       );
       this.intv = setInterval(this.trackTimer, 1000);
     },

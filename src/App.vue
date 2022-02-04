@@ -17,7 +17,7 @@ export default {
     instance() {
       return axios.create({
         baseURL: "http://localhost:3009/api",
-        timeout: 10000,
+        timeout: 15000,
         headers: { Authorization: `token ${this.token}` },
       });
     },
@@ -35,6 +35,10 @@ export default {
         }
       } catch (error) {
         if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            this.$router.push({ name: "Logout" });
+            notyf.open({ type: "purp", message: "Session expired" });
+          }
           const { errors, message } = error.response.data;
           if (errors) {
             notyf.error(Object.values(errors)[0]);

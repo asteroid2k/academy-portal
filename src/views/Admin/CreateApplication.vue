@@ -23,7 +23,7 @@ export default {
     };
   },
   methods: {
-    async handleSubmit(values) {
+    async handleSubmit(values, { resetForm }) {
       const formData = new FormData();
       for (const key in values) {
         if (key === "image") {
@@ -39,6 +39,7 @@ export default {
         if (response.data) {
           const { data } = response;
           notyf.success(data.message);
+          resetForm();
         }
       } catch (error) {
         // when error has response

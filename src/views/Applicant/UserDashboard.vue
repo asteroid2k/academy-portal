@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 
 export default {
   async mounted() {
-    await this.fetchUser();
+    await this.fetchApplication();
   },
   name: "User",
   props: { instance: Function },
@@ -27,7 +27,7 @@ export default {
       if (!this.user.created_at) {
         return "09.09.22";
       }
-      return formatDistanceToNow(new Date(this.user.created_at));
+      return formatDistanceToNow(new Date(this.user.created_at).getTime());
     },
     approvedColor() {
       if (!this.user.isApproved) {
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     ...mapActions(["storeUser"]),
-    async fetchUser() {
+    async fetchApplication() {
       try {
         let resp = await this.instance.get("/applications/user");
         if (resp.data) {
@@ -47,6 +47,10 @@ export default {
         }
       } catch (error) {
         if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            this.$router.push({ name: "Logout" });
+            notyf.open({ type: "purp", message: "Session expired" });
+          }
           if (error.response.status === 404) {
             this.$router.push({ name: "Apply" });
             notyf.open({ type: "purp", message: "Create an application" });

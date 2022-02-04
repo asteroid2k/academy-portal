@@ -43,8 +43,11 @@ export default {
             >
             <router-link :to="{ name: 'Signup' }">
               <button
-                class="reg-button disabled:cursor-not-allowed disabled:opacity-60"
-                :disabled="isDisabled"
+                class="
+                  reg-button
+                  disabled:cursor-not-allowed disabled:opacity-60
+                "
+                v-show="!isDisabled"
               >
                 Register Now
               </button>
@@ -69,7 +72,7 @@ export default {
         <router-link to="/signup">
           <button
             class="button disabled:cursor-not-allowed disabled:opacity-60"
-            :disabled="isDisabled"
+            v-show="!isDisabled"
           >
             Register now
           </button>

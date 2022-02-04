@@ -1,5 +1,15 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
+import UpArrow from "../../assets/up.svg?component";
+import DownArrow from "../../assets/down.svg?component";
+import { calcAge, notyf } from "../../helpers";
+import Polygon from "../../assets/polygon.svg?component";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/vue";
 
 export default {
   async mounted() {
@@ -7,45 +17,67 @@ export default {
   },
   name: "Results",
   props: { instance: Function },
+  components: {
+    UpArrow,
+    DownArrow,
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    Polygon,
+  },
   data() {
     return {
-      batch: "ACAGH1",
-      currentSort: "gpa",
-      currentSortDir: "asc",
+      batch: "",
+      sortedR: [],
     };
   },
-  methods: {
-    sort: function (s) {
-      //if s == current sort, reverse
-      if (s === this.currentSort) {
-        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
-      }
-      this.currentSort = s;
-    },
-  },
   computed: {
-    ...mapGetters(["results"]),
-    ...mapGetters(["batches"]),
+    ...mapGetters(["results", "batches"]),
     filterUserByBatch: function () {
-      return this.results
-        .filter((user) => !user.application.batch_slug.indexOf(this.batch))
-        .sort((a, b) => {
-          let modifier = 1;
-          if (this.currentSortDir === "desc") modifier = -1;
-          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-          return 0;
-        });
+      return this.sortedR.filter(
+        (user) => !user.application.batch_slug.indexOf(this.batch)
+      );
     },
   },
+
   methods: {
     ...mapActions(["storeResults"]),
+    calcAge,
+    sortByGpa(dir) {
+      this.sortedR.sort((a, b) => {
+        if (dir === "asc") {
+          return parseFloat(a.application.gpa) - parseFloat(b.application.gpa);
+        } else {
+          return parseFloat(b.application.gpa) - parseFloat(a.application.gpa);
+        }
+      });
+    },
+    sortByDob(dir) {
+      this.sortedR.sort((a, b) => {
+        if (dir === "asc") {
+          return new Date(b.application.dob) - new Date(a.application.dob);
+        } else {
+          return new Date(a.application.dob) - new Date(b.application.dob);
+        }
+      });
+    },
+    sortByScore(dir) {
+      this.sortedR.sort((a, b) => {
+        if (dir === "asc") {
+          return new Date(a.score) - new Date(b.score);
+        } else {
+          return new Date(b.score) - new Date(a.score);
+        }
+      });
+    },
     async fetchResults() {
       try {
         let resp = await this.instance.get("/results");
         if (resp.data) {
-          console.log(resp.data);
           this.storeResults(resp.data.results);
+          this.sortedR = resp.data.results;
+          this.batch = this.batches[0].slug;
         }
       } catch (error) {
         if (error.response) {
@@ -160,21 +192,13 @@ export default {
             class="table-body light-shadow group transition"
             style="text-align: center"
           >
-            <td
-              class="
-                rounded-lg
-                border-l-8 border-l-transparent
-                group-hover:border-l-primary
-                transition
-                pl-3
-              "
-            >
+            <td class="td group-hover:border-l-primary transition">
               {{ user.application.firstName }} {{ user.application.lastName }}
             </td>
             <td class="td">{{ user.application.email }}</td>
             <td class="td">
               {{ user.application.dob.split("-").reverse().join("/") }} -
-              <span>{{ user.application.age }}</span>
+              <span>{{ calcAge(user.application.dob) }}</span>
             </td>
             <td class="td">{{ user.application.address }}</td>
             <td class="td">{{ user.application.university }}</td>
@@ -182,7 +206,6 @@ export default {
             <td class="td">{{ user.score }}</td>
           </tr>
         </table>
-        debug: sort={{ currentSort }}, dir={{ currentSortDir }}
       </div>
     </div>
   </div>
@@ -225,12 +248,10 @@ table {
 th {
   padding-inline: 0.5rem;
 }
-
 .table-head {
   position: sticky;
   top: 0px;
 }
-
 /*
 #assessments {
   border-collapse: separate;
@@ -250,7 +271,7 @@ th {
 .td {
   padding: 20px 0px;
   text-align: center;
-}
+} */
 /* .table-body:hover {
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05),
     7px 0px 0px 0px var(--primary) inset;
@@ -260,7 +281,7 @@ th {
   position: relative;
   top: 28px;
 } */
-.table-frame {
+/* .table-frame {
   height: 476px;
   background: #ffffff;
   box-shadow: 0px 5px 15px rgba(33, 31, 38, 0.05);
@@ -272,7 +293,7 @@ th {
   display: flex;
   justify-content: space-evenly;
   background: #2b3c4e;
-}
+} */
 @media screen and (max-width: 992px) {
   #assessments {
     width: 300%;
