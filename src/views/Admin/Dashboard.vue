@@ -96,7 +96,7 @@ export default {
             {{ filterOpenBatch.length ? element.app_count : "0" }}
           </p>
           <div class="line"></div>
-          <p class="app-subhead" v-if="!element.isClosed">{{ element.name }}</p>
+          <p class="app-subhead" v-if="!element.isClosed">{{ element.slug }}</p>
           <p class="app-subhead" v-else>Application Closed</p>
         </div>
       </div>
