@@ -54,8 +54,12 @@ export default {
       this.action = action;
       this.setConfirm(true);
     },
-    confirmAction() {
-      this.updateStatus({ id: this.entry._id, status: this.action + "d" });
+    async confirmAction() {
+      await this.updateStatus({
+        id: this.entry._id,
+        status: this.action + "d",
+      });
+      this.setConfirm(false);
     },
   },
 };

@@ -18,7 +18,7 @@ export default {
       if (!date) {
         return "09.09.22";
       }
-      return formatDistanceToNow(new Date(date), { addSuffix: true })
+      return formatDistanceToNow(new Date(date).getTime())
         .replace("about", "")
         .replace("less", "");
     },

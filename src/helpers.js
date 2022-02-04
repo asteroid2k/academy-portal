@@ -29,7 +29,6 @@ export const validators = {
   password: string().required("Enter password").min(8),
   nameR: string().required("Fill this field").min(2),
   name: string().min(2),
-  gpa: number().required("Fill this field").positive(),
   dob: date().required("Birth date is required").max(new Date()),
   image: mixed()
     .test("fileSize", "The file is too large", (value) => {
@@ -38,9 +37,26 @@ export const validators = {
     })
     .test("filetype", "File must be jpg, jpeg or png", (value) => {
       if (!value) return true;
-      return ["application/pdf", "image/jpeg", "image/png"].includes(
-        value[0].type
-      );
+      return ["image/jpeg", "image/png"].includes(value[0].type);
+    }),
+  imageR: mixed()
+    .test("fileSize", "The file is too large", (value) => {
+      if (!value) return false; // attachment is optional
+      return value[0].size <= 500000;
+    })
+    .test("filetype", "File must be jpg, jpeg or png", (value) => {
+      if (!value) return false;
+      return ["image/jpeg", "image/png"].includes(value[0].type);
+    }),
+  cv: mixed()
+    .test("fileSize", "The file is too large", (value) => {
+      if (!value) return false;
+
+      return value[0].size <= 500000;
+    })
+    .test("filetype", "File must be pdf", (value) => {
+      if (!value) return false;
+      return ["application/pdf"].includes(value[0].type);
     }),
 };
 
