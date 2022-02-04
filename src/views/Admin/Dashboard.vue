@@ -70,7 +70,7 @@ export default {
         if (error.response) {
           const { errors, message } = error.response.data;
           if (errors) {
-            notyf.error(Object.values(errors));
+            notyf.error(Object.values(errors)[0]);
           } else if (message) {
             notyf.error(message);
           }
@@ -96,7 +96,7 @@ export default {
             {{ filterOpenBatch.length ? element.app_count : "0" }}
           </p>
           <div class="line"></div>
-          <p class="app-subhead" v-if="!element.isClosed">{{ element.name }}</p>
+          <p class="app-subhead" v-if="!element.isClosed">{{ element.slug }}</p>
           <p class="app-subhead" v-else>Application Closed</p>
         </div>
       </div>
